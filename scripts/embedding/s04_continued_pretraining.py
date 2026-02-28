@@ -67,8 +67,17 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
 model = AutoModelForMaskedLM.from_pretrained(MODEL_PATH)
 
 # Load corpus as a HuggingFace dataset
+# Cap at 500k sentences to keep training time reasonable (~3-6 hrs on M4).
+# The full corpus may be 1M+ sentences; 500k is sufficient for MLM adaptation.
+MAX_SENTENCES = 500_000
 print(f"Loading corpus from {CORPUS}...")
 dataset = load_dataset("text", data_files={"train": str(CORPUS)})
+corpus_size = len(dataset["train"])
+if corpus_size > MAX_SENTENCES:
+    print(f"Corpus has {corpus_size} sentences; sampling {MAX_SENTENCES} for training")
+    dataset["train"] = dataset["train"].shuffle(seed=42).select(range(MAX_SENTENCES))
+else:
+    print(f"Corpus has {corpus_size} sentences; using all")
 
 
 # Tokenize
@@ -103,9 +112,9 @@ data_collator = DataCollatorForLanguageModeling(
 training_args = TrainingArguments(
     output_dir=str(OUTPUT_DIR),
 
-    # Batch sizing for 8-16 GB RAM
-    per_device_train_batch_size=8,
-    gradient_accumulation_steps=4,  # Effective batch = 32
+    # Batch sizing — reduced for MPS memory constraints
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=8,  # Effective batch = 32
 
     # Training duration
     num_train_epochs=3,
@@ -120,9 +129,9 @@ training_args = TrainingArguments(
     save_steps=2000,
     save_total_limit=2,
 
-    # Performance — bf16 works on M4 Apple Silicon
-    bf16=True,
-    dataloader_num_workers=2,
+    # Performance — fp32 on MPS to avoid memory spikes from mixed precision
+    bf16=False,
+    dataloader_num_workers=0,  # Avoid extra memory from multiprocessing on MPS
 
     # Reporting
     report_to="none",
