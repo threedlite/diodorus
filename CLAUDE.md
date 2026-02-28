@@ -1,0 +1,5 @@
+never modify anything on the system or outside this folder.
+only the user can run brew.
+always use a venv and never run --break-system-packages
+always be thoughtful, thorough, and truthful with yourself about what you did and didnt do
+

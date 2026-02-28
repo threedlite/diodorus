@@ -1,0 +1,19 @@
+# Data sources (large downloaded files)
+data-sources/
+
+# Python virtual environment
+.venv/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Output files
+output/
+
+# Model files
+models/
+
+# OS files
+.DS_Store
