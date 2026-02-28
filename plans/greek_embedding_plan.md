@@ -8,16 +8,16 @@ This plan follows `supplement_ancient_greek_embedding.md` but adapts it to the a
 
 ---
 
-## Step 0: Environment Setup (~5 min)
+## Step 0: Environment Setup (~5 min) — DONE 2026-02-28
 
-### 0.1 Install missing packages
+### 0.1 Install missing packages — DONE
 ```bash
 source .venv/bin/activate
 pip install datasets accelerate sentencepiece
 ```
-Verify: `python -c "import datasets, accelerate, sentencepiece; print('OK')"`
+Installed: datasets 4.6.1, accelerate 1.12.0, sentencepiece 0.2.1
 
-### 0.2 Create directories
+### 0.2 Create directories — DONE
 ```
 scripts/embedding/     — scripts (committed to git)
 models/                — trained models (gitignored)
@@ -26,30 +26,21 @@ data-sources/greek_corpus/  — monolingual corpus (gitignored)
 data-sources/parallel/      — parallel pairs (gitignored)
 ```
 
+All 9 scripts created and syntax-verified.
+
 ---
 
-## Step 1: Data Acquisition (~5-10 min, network-bound)
+## Step 1: Data Acquisition (~5-10 min, network-bound) — DONE 2026-02-28
 
 **Steps 1.1 and 1.2 can run in parallel.**
 
-### 1.1 Expand Perseus sparse checkout
-Add 7 authors with both Greek and English editions for parallel training data:
-```bash
-cd data-sources/perseus/canonical-greekLit
-git sparse-checkout set \
-  data/tlg0060 data/tlg0012 data/tlg0016 data/tlg0003 \
-  data/tlg0059 data/tlg0007 data/tlg0085 data/tlg0086
-```
-Authors: Diodorus, Homer, Herodotus, Thucydides, Polybius, Plutarch, Lysias, Demosthenes.
-Disk: ~200-300 MB.
-Verify: `ls data-sources/perseus/canonical-greekLit/data/` shows all 8 `tlg*` dirs.
+### 1.1 Expand Perseus sparse checkout — DONE
+All 8 author directories present: tlg0003, tlg0007, tlg0012, tlg0016, tlg0059, tlg0060, tlg0085, tlg0086.
+Actual disk: 101 MB for `data/`.
 
-### 1.2 Clone First1KGreek
-```bash
-git clone --depth 1 https://github.com/OpenGreekAndLatin/First1KGreek.git \
-  data-sources/greek_corpus/First1KGreek
-```
-Disk: ~500 MB. Provides 200k-500k additional Greek sentences for unsupervised pre-training.
+### 1.2 Clone First1KGreek — DONE
+Cloned to `data-sources/greek_corpus/First1KGreek/`.
+Actual disk: 988 MB.
 
 ---
 
