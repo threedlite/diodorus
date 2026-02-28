@@ -55,10 +55,11 @@ Actual disk: 988 MB.
 - **Output:** `data-sources/greek_corpus/ancient_greek_all.txt`
 - **Expected:** 200k-500k sentences, 20-60 MB
 - **Verify:** `wc -l` > 200k, `head -5` shows polytonic Greek
+- **ACTUAL (2026-02-28):** 1,186,792 unique sentences, 287.8 MB (exceeded estimates thanks to First1KGreek)
 
 ---
 
-## Step 3: Build Parallel Corpus — `s02_build_parallel_corpus.py` (~5-15 min)
+## Step 3: Build Parallel Corpus — `s02_build_parallel_corpus.py` (~5-15 min) — DONE 2026-02-28
 
 **Depends on:** Step 1.1 complete
 
@@ -69,46 +70,41 @@ Actual disk: 988 MB.
 - **Input:** `data-sources/perseus/canonical-greekLit/data/`
 - **Output:** `data-sources/parallel/grc_eng_pairs.jsonl`
 - **Expected:** 10k-30k pairs (Plutarch and Polybius contribute heavily)
-- **Verify:** `wc -l` > 5000; `head -1` shows valid JSONL with `work`, `ref`, `grc`, `eng` keys
+- **ACTUAL:** 21,263 pairs from 196 works (Thucydides 3587, Herodotus 4329, Plutarch ~11k, Polybius ~1.5k, Demosthenes ~1.5k, Lysias 37)
 
-### DECISION POINT 1: Parallel corpus size
-If < 5,000 pairs:
-- Option A: `git sparse-checkout disable` to get ALL Perseus authors (~1-2 GB more)
-- Option B: Loosen length filters (allow up to 5000 chars)
-- Option C: Accept reduced quality and proceed anyway
+**Bug fix applied:** Original `extract_sections` walked up to the edition/translation div whose `n` was a full URN (`urn:cts:greekLit:...`), making Greek and English refs always differ. Fixed to stop at `type="edition"` / `type="translation"` divs.
+
+### DECISION POINT 1: Parallel corpus size — PASSED
+21,263 pairs well above the 5,000 minimum.
 
 ---
 
-## Step 4: Tokenizer Check — `s03_check_tokenizer.py` (<1 min)
+## Step 4: Tokenizer Check — `s03_check_tokenizer.py` (<1 min) — DONE 2026-02-28
 
 **Depends on:** Nothing
 
 - Tests `xlm-roberta-base` tokenization on sample Ancient Greek text
 - Measures fragmentation ratio (tokens per word)
-- **Verify:** Prints ratio and recommendation
+- **ACTUAL:** Average fragmentation 3.48x (above 2.5 threshold)
 
-### DECISION POINT 2: Fragmentation ratio
-- **≤ 2.5x:** Skip Step 4b, proceed to Step 5 with base model
-- **> 2.5x:** Execute Step 4b to extend tokenizer
+### DECISION POINT 2: Fragmentation ratio — EXTENSION NOT EFFECTIVE
+- Fragmentation is 3.48x (above 2.5 threshold), so s03b was attempted
+- **Finding:** `add_tokens()` cannot extend SentencePiece subword tokenization — tokens are added to the vocabulary but SentencePiece's internal model doesn't use them during tokenization. Both ByteLevelBPE and corpus-frequency approaches produce 0 improvement.
+- **Decision:** Proceed with base xlm-roberta-base tokenizer. The MLM continued pre-training (Step 5) is what actually teaches the model Greek — even fragmented tokens carry context.
 
-### Step 4b (Conditional): Extend Tokenizer — `s03b_extend_tokenizer.py` (~5-10 min)
-
-- Trains small BPE on Greek corpus, adds 2000 subwords to XLM-R vocabulary
-- Resizes model embeddings
-- **Input:** `data-sources/greek_corpus/ancient_greek_all.txt`
-- **Output:** `models/xlm-r-greek-extended/`
+### Step 4b: Extend Tokenizer — SKIPPED (ineffective for SentencePiece)
 
 ---
 
 ## Step 5: MLM Continued Pre-training — `s04_continued_pretraining.py` (**3-6 hrs on M4**)
 
-**Depends on:** Step 2 (corpus) + Step 4 decision (tokenizer)
+**Depends on:** Step 2 (corpus)
 **This is the longest step — run overnight with `caffeinate -i`**
 
-- Continues training xlm-roberta-base (or extended version) on Ancient Greek corpus
+- Continues training xlm-roberta-base on Ancient Greek corpus (1.19M sentences, 288 MB)
 - Masked Language Modeling objective, 15% masking
 - Hyperparameters: batch 8, grad accum 4 (effective 32), 3 epochs, lr 5e-5, warmup 10%
-- **Input:** `data-sources/greek_corpus/ancient_greek_all.txt` + base model
+- **Input:** `data-sources/greek_corpus/ancient_greek_all.txt` + xlm-roberta-base
 - **Output:** `models/xlm-r-greek-mlm/` (~1-1.5 GB)
 
 **API fix for transformers 5.2.0:** Remove deprecated `overwrite_output_dir`, `no_cuda`, `use_mps_device` from TrainingArguments. Add `bf16=True` for M4 speedup.
@@ -118,9 +114,13 @@ If < 5,000 pairs:
 - Final loss < 3.0
 - Sanity: fill-mask pipeline produces plausible Greek words
 
+**STATUS: READY TO RUN** — `caffeinate -i .venv/bin/python scripts/embedding/s04_continued_pretraining.py`
+
 ---
 
-## Step 6: Prepare Embedding Data — `s05_prepare_embedding_data.py` (<1 min)
+## Step 6: Prepare Embedding Data — `s05_prepare_embedding_data.py` (<1 min) — DONE 2026-02-28
+
+**ACTUAL:** 19,136 train pairs, 2,127 eval pairs
 
 **Depends on:** Step 3 (parallel corpus)
 
