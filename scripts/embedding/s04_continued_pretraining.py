@@ -67,9 +67,11 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
 model = AutoModelForMaskedLM.from_pretrained(MODEL_PATH)
 
 # Load corpus as a HuggingFace dataset
-# Cap at 500k sentences to keep training time reasonable (~3-6 hrs on M4).
-# The full corpus may be 1M+ sentences; 500k is sufficient for MLM adaptation.
-MAX_SENTENCES = 500_000
+# Cap at 100k sentences to keep training time ~3-6 hrs on M4 MPS.
+# Previous attempt: 500k × grad_accum=8 × fp32 = 6.7s/step = 87 hrs (too slow).
+# 100k is sufficient for MLM adaptation — the key is seeing diverse Greek text.
+# With 1.19M sentences in the corpus, 100k sampled still provides good coverage.
+MAX_SENTENCES = 100_000
 print(f"Loading corpus from {CORPUS}...")
 dataset = load_dataset("text", data_files={"train": str(CORPUS)})
 corpus_size = len(dataset["train"])
@@ -85,7 +87,7 @@ def tokenize_fn(examples):
     return tokenizer(
         examples["text"],
         truncation=True,
-        max_length=256,
+        max_length=128,  # Reduced from 256 — halves attention compute (O(n²))
         padding=False,
         return_special_tokens_mask=True,
     )
@@ -112,12 +114,12 @@ data_collator = DataCollatorForLanguageModeling(
 training_args = TrainingArguments(
     output_dir=str(OUTPUT_DIR),
 
-    # Batch sizing — reduced for MPS memory constraints
-    per_device_train_batch_size=4,
-    gradient_accumulation_steps=8,  # Effective batch = 32
+    # Batch sizing — batch 8 OOM'd with max_length=256; should fit with 128
+    per_device_train_batch_size=8,
+    gradient_accumulation_steps=4,  # Effective batch = 32
 
-    # Training duration
-    num_train_epochs=3,
+    # Training duration — 1 epoch over 100k diverse sentences sufficient for adaptation
+    num_train_epochs=1,
 
     # Learning rate
     learning_rate=5e-5,
@@ -125,11 +127,11 @@ training_args = TrainingArguments(
     weight_decay=0.01,
 
     # Logging
-    logging_steps=100,
-    save_steps=2000,
+    logging_steps=50,
+    save_steps=1000,
     save_total_limit=2,
 
-    # Performance — fp32 on MPS to avoid memory spikes from mixed precision
+    # Performance — bf16 provides no speedup on MPS; use fp32 for stability
     bf16=False,
     dataloader_num_workers=0,  # Avoid extra memory from multiprocessing on MPS
 
@@ -146,7 +148,7 @@ trainer = Trainer(
 
 print(f"\nStarting MLM training on {len(tokenized)} examples...")
 print(f"Effective batch size: {8 * 4} = 32")
-print(f"Epochs: 3")
+print(f"Epochs: 1")
 
 trainer.train()
 trainer.save_model(str(OUTPUT_DIR))
