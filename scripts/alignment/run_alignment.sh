@@ -31,5 +31,9 @@ echo "=== Step 7: Generate Outputs ==="
 python scripts/alignment/07_generate_outputs.py
 
 echo ""
+echo "=== Step 8: Generate Perseus TEI Translation ==="
+python scripts/alignment/08_generate_perseus_tei.py
+
+echo ""
 echo "Done. All outputs in ./output/"
 ls -la output/

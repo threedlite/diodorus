@@ -6,6 +6,7 @@ Generate final output files:
   3. Quality report
 """
 
+import csv
 import json
 from pathlib import Path
 from collections import defaultdict
@@ -78,18 +79,24 @@ with open(OUT_XML, "w", encoding="utf-8") as f:
     f.write("\n".join(xml_lines))
 
 # ---- 2. TSV ----
-with open(OUT_TSV, "w", encoding="utf-8") as f:
-    f.write(
-        "book\tgreek_cts_ref\tgreek_edition\tbooth_div2\tbooth_p\t"
-        "embedding_sim\tentity_score\tcombined_score\n"
-    )
+TSV_FIELDS = [
+    "book", "greek_cts_ref", "greek_edition", "booth_div2", "booth_p",
+    "embedding_sim", "entity_score", "combined_score",
+]
+with open(OUT_TSV, "w", encoding="utf-8", newline="") as f:
+    writer = csv.DictWriter(f, fieldnames=TSV_FIELDS, delimiter="\t")
+    writer.writeheader()
     for a in alignments:
-        f.write(
-            f"{a['book']}\t{a['greek_cts_ref']}\t{a['greek_edition']}\t"
-            f"{a['booth_div2_index']}\t{a['booth_p_index']}\t"
-            f"{a['similarity']}\t{a.get('entity_overlap_score','')}\t"
-            f"{a.get('combined_score', a['similarity'])}\n"
-        )
+        writer.writerow({
+            "book": a["book"],
+            "greek_cts_ref": a["greek_cts_ref"],
+            "greek_edition": a["greek_edition"],
+            "booth_div2": a["booth_div2_index"],
+            "booth_p": a["booth_p_index"],
+            "embedding_sim": a["similarity"],
+            "entity_score": a.get("entity_overlap_score", ""),
+            "combined_score": a.get("combined_score", a["similarity"]),
+        })
 
 # ---- 3. Quality Report ----
 total = len(alignments)
@@ -138,6 +145,8 @@ report = f"""# Alignment Quality Report
 - `alignment_booth_perseus.tsv` -- tabular format with scores
 - `entity_validated_alignments.json` -- full alignment data with all metadata
 - `book_alignment.json` -- book-level correspondence table
+- `tlg0060.tlg001.perseus-eng80.xml` -- Perseus-compatible TEI English translation (step 8)
+- `__cts__eng80_fragment.xml` -- CTS catalog entry for the translation (step 8)
 """
 
 with open(OUT_REPORT, "w", encoding="utf-8") as f:

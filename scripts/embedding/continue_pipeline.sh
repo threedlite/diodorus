@@ -16,11 +16,12 @@ log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOGFILE"
 }
 
+S04_PID="${1:?Usage: $0 <s04_pid>}"
+
 log "=== Pipeline continuation started ==="
-log "Monitoring s04 (PID 87206) for completion..."
+log "Monitoring s04 (PID $S04_PID) for completion..."
 
 # Wait for s04 to finish
-S04_PID=87206
 while kill -0 "$S04_PID" 2>/dev/null; do
     # Check for checkpoints as progress indicator
     CKPTS=$(ls -d "$PROJECT_ROOT/models/xlm-r-greek-mlm/checkpoint-"* 2>/dev/null | wc -l | tr -d ' ')
