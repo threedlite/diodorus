@@ -1,0 +1,25 @@
+LEGEND,
+Y (Green),Text available in Perseus Digital Library GitHub (PerseusDL/canonical-greekLit or canonical-latinLit)
+N (Red),Text NOT available in Perseus Digital Library GitHub
+P (Yellow),PARTIALLY available — some works from the Loeb volume are in Perseus but not all
+,
+DATA SOURCES,
+Perseus GitHub,https://github.com/PerseusDL/canonical-greekLit  &  https://github.com/PerseusDL/canonical-latinLit
+Loeb Catalog,https://www.loebclassics.com/volumes  |  https://www.pagesofpages.com/loeb/loeb.html
+TLG IDs,Thesaurus Linguae Graecae identifiers (e.g. tlg0012 = Homer)
+PHI IDs,Packard Humanities Institute identifiers for Latin (e.g. phi0690 = Virgil)
+,
+COLUMN DEFINITIONS,
+Perseus Orig Text,Whether the original Greek/Latin text exists in Perseus GitHub
+Perseus Eng Trans,Whether an English translation exists in Perseus GitHub (usually older PD translations)
+,
+IMPORTANT CAVEATS,
+1,Total: ~558 Loeb volumes. This spreadsheet aims to cover all of them.
+2,Perseus availability may change. Data reflects approximate state as of early 2026.
+3,Perseus texts are different editions/translations than the Loeb (usually older public domain versions).
+4,Some Loeb volumes contain multiple authors; Perseus may have some but not all.
+5,Fragment collections are generally NOT in Perseus.
+6,Newer Loeb editions (2000s+) generally have different translations than Perseus.
+7,"Perseus English translations are typically older (pre-1930) public domain, not Loeb translations."
+8,"Late Latin authors (Augustine, Boethius, Bede, Claudian, Prudentius, Macrobius) mostly absent from Perseus."
+9,Some LCL numbers have been reused for revised editions (old/new numbering coexists).
