@@ -194,9 +194,7 @@ else:
     model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
 ```
 
-**First run results (greedy, replaced):** 8,123 alignments across all 15 books. Mean embedding similarity 0.073 — the greedy monotonic algorithm caused cascading pileups with only 68/3,216 English paragraphs used.
-
-**Alignment improvement (2026-03-01):** Replaced greedy monotonic alignment with Segmental Dynamic Programming. Groups 1-5 Greek sections onto 1-2 English paragraphs with globally optimized scoring (0.8 * cosine_sim + 0.2 * length_penalty). Uses prefix sums for efficient mean embedding computation and banding for speed. See `plans/segmental_dp_alignment_plan.md` for full details.
+**Results:** 8,123 alignments across all 15 books. Mean combined score 0.412, 100% English paragraph coverage (3,216/3,216). See `plans/segmental_dp_alignment_plan.md` for algorithm details and per-book results.
 
 ---
 

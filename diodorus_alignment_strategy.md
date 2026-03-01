@@ -1,5 +1,7 @@
 # Text Alignment Strategy: Booth English TEI ↔ Perseus Greek Diodorus Siculus
 
+> **Superseded.** See `plans/segmental_dp_alignment_plan.md` and `README.md`.
+
 ## 1. Source Identification
 
 ### English Source — Booth (1700) via OTA / EEBO-TCP

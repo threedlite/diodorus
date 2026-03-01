@@ -123,7 +123,7 @@ The script falls back to `paraphrase-multilingual-MiniLM-L12-v2` if no custom mo
 
 ### Segmental DP Alignment (Step 05)
 
-The core alignment uses Segmental Dynamic Programming rather than simple greedy matching. For each book it:
+The core alignment uses Segmental Dynamic Programming. For each book it:
 
 1. Embeds all Greek sections and English paragraphs with the trained model
 2. Runs DP over states `(i, j)` = Greek sections consumed, English paragraphs consumed
@@ -171,7 +171,5 @@ After running the full pipeline, `output/` contains:
 
 ## Plans & Design Documents
 
-- `plans/greek_embedding_plan.md` -- Full embedding training plan with timing, quality gates, decision points
+- `plans/greek_embedding_plan.md` -- Embedding training plan with timing, quality gates, decision points
 - `plans/segmental_dp_alignment_plan.md` -- DP alignment algorithm specification and results
-- `diodorus_alignment_strategy.md` -- Original project strategy
-- `supplement_ancient_greek_embedding.md` -- Embedding model research notes

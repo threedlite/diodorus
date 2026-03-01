@@ -1,28 +1,24 @@
-# Plan: Improve Alignment Quality with Segmental Dynamic Programming
+# Segmental Dynamic Programming Alignment
 
 **Status:** IMPLEMENTED 2026-03-01
 
-## Context
+## Overview
 
-The embedding model training (Steps 0-8 in `greek_embedding_plan.md`) succeeded spectacularly — 95.1% top-1 retrieval on eval pairs. But the alignment pipeline (Step 9) produced poor results: mean similarity 0.073, 91% of alignments flagged low-confidence.
+Section-level alignment of 8,123 Greek sections to 3,216 English paragraphs across 15 books of Diodorus Siculus. Uses Segmental DP to group variable numbers of Greek sections (1-5) onto English paragraphs (1-2), optimizing a global score.
 
-**Root cause:** The greedy monotonic algorithm in `05_embed_and_align.py` assigned each Greek section to the highest-similarity English paragraph *forward from the last match*. With a 2.53:1 Greek-to-English ratio (8,123 sections vs 3,216 paragraphs), this created cascading pileups — up to 717 Greek sections matched to a single English paragraph, and only 68 of 3,216 paragraphs ever used.
+## File
 
-**Solution:** Replaced the greedy scan with Segmental Dynamic Programming that groups variable numbers of Greek sections (1-5) onto English paragraphs (1-2), optimizing globally.
+- `scripts/alignment/05_embed_and_align.py` — `segmental_dp_align()` function (lines 83-222)
 
-## File Modified
-
-- `scripts/alignment/05_embed_and_align.py` — replaced greedy monotonic (old lines 129-147) with `segmental_dp_align()` function
-
-## Algorithm: Segmental DP
+## Algorithm
 
 ### State
 `DP[i][j]` = best total score for aligning Greek sections `0..i-1` to English paragraphs `0..j-1`
 
 ### Transitions
 For each state `(i, j)`, try all group sizes:
-- `g` ∈ {1, 2, 3, 4, 5} Greek sections consumed
-- `e` ∈ {1, 2} English paragraphs consumed
+- `g` in {1, 2, 3, 4, 5} Greek sections consumed
+- `e` in {1, 2} English paragraphs consumed
 - Transition: `DP[i+g][j+e] = max(DP[i+g][j+e], DP[i][j] + score(gr[i:i+g], en[j:j+e]))`
 
 ### Scoring Function
@@ -36,7 +32,7 @@ Where:
 
 ### Efficient Computation
 - **Prefix sums** on embedding arrays: `prefix_gr[i] = sum(greek_embs[0:i])`, so `mean(greek_embs[a:b]) = (prefix_gr[b] - prefix_gr[a]) / (b - a)`
-- **Banding**: Only allow `j` within `±bandwidth` of the expected position `j_expected = i * (n_en / n_gr)`. Bandwidth = `max(20, n_en * 0.15)`.
+- **Banding**: Only allow `j` within +/-bandwidth of the expected position `j_expected = i * (n_en / n_gr)`. Bandwidth = `max(20, n_en * 0.15)`.
 - **Char length arrays** precomputed for length penalty
 
 ### Backtracking
@@ -47,21 +43,20 @@ Each alignment record has `group_id`, `group_size_gr`, `group_size_en` fields. A
 
 ## Implementation Details
 
-1. Added `segmental_dp_align()` helper function (lines 73-211) returning `(gr_start, gr_end, en_start, en_end, score)` tuples
-2. Replaced greedy loop with call to `segmental_dp_align()` using per-book character ratio and embeddings
+1. `segmental_dp_align()` helper function returns `(gr_start, gr_end, en_start, en_end, score)` tuples
+2. Per-book character ratio computed for length penalty
 3. Record creation emits one record per Greek section, all sections in a group sharing the same `group_id`
-4. All existing I/O, model loading, and embedding code unchanged
-5. Removed dependency on `scipy.spatial.distance.cdist` (no longer needed since DP computes cosine sim on-the-fly via prefix sums)
+4. Cosine similarity computed on-the-fly via prefix sums (no precomputed similarity matrix needed)
 
 ## Results (2026-03-01)
 
-| Metric | Old (greedy) | Expected (DP) | Actual (DP) |
-|---|---|---|---|
-| English paragraphs used | 68 / 3,216 (2%) | ~3,216 / 3,216 (100%) | **3,216 / 3,216 (100%)** |
-| Mean combined score | 0.110 | 0.3-0.5 | **0.412** |
-| High confidence (>=0.6) | 14 (0.2%) | 500-2,000 | **1,211 (14.9%)** |
-| Medium confidence (0.3-0.6) | 692 (8.5%) | — | **4,821 (59.3%)** |
-| Low confidence (<0.3) | 7,417 (91.3%) | — | **2,091 (25.7%)** |
+| Metric | Value |
+|---|---|
+| English paragraphs used | 3,216 / 3,216 (100%) |
+| Mean combined score | 0.412 |
+| High confidence (>=0.6) | 1,211 (14.9%) |
+| Medium confidence (0.3-0.6) | 4,821 (59.3%) |
+| Low confidence (<0.3) | 2,091 (25.7%) |
 
 ### Per-Book Details
 

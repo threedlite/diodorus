@@ -1,7 +1,6 @@
 # Supplement: Training an Ancient Greek Sentence Embedding Model
 
-**For use with the Booth–Perseus Diodorus Alignment Pipeline**
-*Mac laptop, free open-source software only, no cloud services.*
+> **Superseded.** See `plans/greek_embedding_plan.md` and `README.md`.
 
 ---
 

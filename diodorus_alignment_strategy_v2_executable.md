@@ -1,5 +1,7 @@
 # Text Alignment Strategy v2: Fully Executable on a Mac Laptop
 
+> **Superseded.** See `plans/segmental_dp_alignment_plan.md` and `README.md`.
+
 **Booth English (OTA A36034) ↔ Perseus Greek Diodorus Siculus**
 *Designed for Claude to execute end-to-end using only free, open-source software.*
 
