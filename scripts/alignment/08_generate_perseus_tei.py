@@ -9,8 +9,9 @@ Reads existing alignment data and Booth's English text, produces:
 No pipeline rerun needed; works from existing output files.
 """
 
+import csv
 import json
-import math
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -20,8 +21,10 @@ from lxml import etree
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 ALIGNMENTS_PATH = PROJECT_ROOT / "output" / "entity_validated_alignments.json"
 BOOTH_PATH = PROJECT_ROOT / "output" / "booth_normalised.json"
+GREEK_PATH = PROJECT_ROOT / "output" / "perseus_extracted.json"
 OUT_TEI = PROJECT_ROOT / "output" / "tlg0060.tlg001.perseus-eng80.xml"
 OUT_CTS = PROJECT_ROOT / "output" / "__cts__eng80_fragment.xml"
+OUT_CSV = PROJECT_ROOT / "output" / "chapter_sentence_counts.csv"
 
 TEI_NS = "http://www.tei-c.org/ns/1.0"
 XML_NS = "http://www.w3.org/XML/1998/namespace"
@@ -31,8 +34,12 @@ URN_BASE = "urn:cts:greekLit:tlg0060.tlg001.perseus-eng80"
 
 
 def load_inputs():
-    """Load alignment and Booth data, exit on missing files."""
-    for path, label in [(ALIGNMENTS_PATH, "alignments"), (BOOTH_PATH, "Booth text")]:
+    """Load alignment, Booth, and Greek data, exit on missing files."""
+    for path, label in [
+        (ALIGNMENTS_PATH, "alignments"),
+        (BOOTH_PATH, "Booth text"),
+        (GREEK_PATH, "Greek sections"),
+    ]:
         if not path.exists():
             print(f"Error: {label} not found at {path}")
             sys.exit(1)
@@ -41,21 +48,10 @@ def load_inputs():
         alignments = json.load(f)
     with open(BOOTH_PATH) as f:
         booth = json.load(f)
+    with open(GREEK_PATH) as f:
+        greek = json.load(f)
 
-    return alignments, booth
-
-
-def build_booth_lookup(booth):
-    """Build a lookup: (book_n, div2_index, p_index) -> paragraph text."""
-    lookup = {}
-    for book in booth["books"]:
-        book_n = book["div1_n"]
-        for chapter in book["chapters"]:
-            div2_idx = chapter["div2_index"]
-            for para in chapter["paragraphs"]:
-                p_idx = para["p_index"]
-                lookup[(book_n, div2_idx, p_idx)] = para["text"]
-    return lookup
+    return alignments, booth, greek
 
 
 def normalise_long_s(text):
@@ -81,24 +77,22 @@ def section_sort_key(sec):
     return int(sec)
 
 
-def build_section_text_map(alignments, booth_lookup):
+def build_para_milestones(alignments):
     """
-    Build a map: (book, chapter, section) -> list of paragraph texts.
+    Map each Booth paragraph to its Greek section milestones.
 
-    Handles the N:M alignment distribution:
-      - N:1 (multiple Greek sections -> 1 English paragraph): repeat at each section
-      - 1:1: one paragraph per section
-      - N:M where M>1: distribute paragraphs across sections using floor(i * M / N)
-      - 1:M: all M paragraphs go into the single section
+    Returns:
+        para_milestones: dict (book, div2, p_index) -> list of "chapter.section"
+            strings, present only for the FIRST paragraph of each alignment group.
+        total_milestones: int — total milestone count.
     """
-    # First, group alignment records by (book, group_id)
+    # Group alignment records by (book, group_id)
     groups = defaultdict(list)
     for rec in alignments:
         groups[(rec["book"], rec["group_id"])].append(rec)
 
-    section_texts = {}  # (book, chapter, section) -> [para_texts]
-    section_scores = {}  # (book, chapter, section) -> combined_score
-    section_group_info = {}  # (book, chapter, section) -> (group_id, score)
+    para_milestones = {}
+    total_milestones = 0
 
     for (book, group_id), recs in groups.items():
         # Sort records by CTS ref to get consistent ordering
@@ -107,41 +101,20 @@ def build_section_text_map(alignments, booth_lookup):
             section_sort_key(parse_cts_ref(r["greek_cts_ref"])[2]),
         ))
 
-        gr_size = recs[0]["group_size_gr"]
-        en_size = recs[0]["group_size_en"]
+        # Build milestone labels: "chapter.section"
+        milestones = []
+        for rec in recs:
+            _, ch, sec = parse_cts_ref(rec["greek_cts_ref"])
+            milestones.append(f"{ch}.{sec}")
+
+        total_milestones += len(milestones)
+
+        # Attach milestones to the first Booth paragraph of the group
         base_div2 = recs[0]["booth_div2_index"]
         base_p = recs[0]["booth_p_index"]
+        para_milestones[(book, base_div2, base_p)] = milestones
 
-        # Collect all English paragraphs for this group
-        en_paras = []
-        for offset in range(en_size):
-            key = (book, base_div2, base_p + offset)
-            text = booth_lookup.get(key, "")
-            if text:
-                en_paras.append(normalise_long_s(text))
-
-        if not en_paras:
-            continue
-
-        for i, rec in enumerate(recs):
-            _, ch, sec = parse_cts_ref(rec["greek_cts_ref"])
-            score = rec.get("combined_score", rec["similarity"])
-
-            if en_size == 1:
-                # N:1 — every section gets the same paragraph
-                section_texts[(book, ch, sec)] = en_paras
-            elif gr_size == 1:
-                # 1:M — the single section gets all paragraphs
-                section_texts[(book, ch, sec)] = en_paras
-            else:
-                # N:M — distribute paragraphs across sections
-                para_idx = math.floor(i * en_size / gr_size)
-                section_texts[(book, ch, sec)] = [en_paras[para_idx]]
-
-            section_scores[(book, ch, sec)] = score
-            section_group_info[(book, ch, sec)] = (group_id, score)
-
-    return section_texts, section_group_info
+    return para_milestones, total_milestones
 
 
 def build_tei_header():
@@ -202,18 +175,8 @@ def build_tei_header():
     refs_decl = etree.SubElement(encoding_desc, f"{{{TEI_NS}}}refsDecl")
     refs_decl.set("n", "CTS")
 
-    # Three cRefPatterns: section, chapter, book (most specific first)
-    section_pat = etree.SubElement(refs_decl, f"{{{TEI_NS}}}cRefPattern")
-    section_pat.set("n", "section")
-    section_pat.set("matchPattern", r"(\w+)\.(\w+)\.(\w+)")
-    section_pat.set(
-        "replacementPattern",
-        "#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1']"
-        "/tei:div[@n='$2']/tei:div[@n='$3'])",
-    )
-    section_p = etree.SubElement(section_pat, f"{{{TEI_NS}}}p")
-    section_p.text = "This pointer pattern extracts book, chapter, and section."
-
+    # Two cRefPatterns: chapter and book (most specific first)
+    # Chapters are Booth's chapter divisions. Greek sections are milestones.
     chapter_pat = etree.SubElement(refs_decl, f"{{{TEI_NS}}}cRefPattern")
     chapter_pat.set("n", "chapter")
     chapter_pat.set("matchPattern", r"(\w+)\.(\w+)")
@@ -243,16 +206,18 @@ def build_tei_header():
         "aligned to the Perseus Greek section structure by the Diodorus "
         "Alignment Project using cross-lingual embedding similarity and "
         "named-entity anchoring. Long-s characters have been normalised to "
-        "modern s. Where multiple Greek sections map to a single English "
-        "paragraph, the paragraph is repeated at each section reference for "
-        "CTS completeness."
+        "modern s. The text is organised following Booth's own chapter "
+        "divisions. Greek section boundaries are marked with milestone "
+        "elements (unit='section', n='chapter.section') indicating where "
+        "each Greek section begins within the English text. Each Booth "
+        "paragraph appears exactly once in its original position."
     )
 
     return header
 
 
-def build_tei(section_texts, group_info):
-    """Build the complete TEI XML tree."""
+def build_tei(booth, para_milestones):
+    """Build TEI XML following Booth's chapter structure with Greek milestones."""
     tei = etree.Element(f"{{{TEI_NS}}}TEI", nsmap=NSMAP)
 
     # Header
@@ -269,17 +234,8 @@ def build_tei(section_texts, group_info):
     trans_div.set(f"{{{XML_NS}}}lang", "eng")
     trans_div.set("n", URN_BASE)
 
-    # Organise sections by book -> chapter -> section
-    hierarchy = defaultdict(lambda: defaultdict(dict))
-    for (book, chapter, section), texts in section_texts.items():
-        hierarchy[book][chapter][section] = texts
-
-    # Book ordering
-    book_order = [str(b) for b in [1, 2, 3, 4, 5, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]]
-
-    for book_n in book_order:
-        if book_n not in hierarchy:
-            continue
+    for book_data in booth["books"]:
+        book_n = book_data["div1_n"]
 
         book_div = etree.SubElement(trans_div, f"{{{TEI_NS}}}div")
         book_div.set("type", "textpart")
@@ -289,33 +245,28 @@ def build_tei(section_texts, group_info):
         head = etree.SubElement(book_div, f"{{{TEI_NS}}}head")
         head.text = f"BOOK {roman(int(book_n))}"
 
-        chapters = hierarchy[book_n]
-        ch_keys = sorted(chapters.keys(), key=chapter_sort_key)
+        for chapter in book_data["chapters"]:
+            div2 = chapter["div2_index"]
 
-        for ch_n in ch_keys:
             ch_div = etree.SubElement(book_div, f"{{{TEI_NS}}}div")
             ch_div.set("type", "textpart")
             ch_div.set("subtype", "chapter")
-            ch_div.set("n", ch_n)
+            ch_div.set("n", str(div2 + 1))
 
-            sections = chapters[ch_n]
-            sec_keys = sorted(sections.keys(), key=section_sort_key)
+            for para in chapter["paragraphs"]:
+                p_idx = para["p_index"]
+                p_key = (book_n, div2, p_idx)
 
-            for sec_n in sec_keys:
-                sec_div = etree.SubElement(ch_div, f"{{{TEI_NS}}}div")
-                sec_div.set("type", "textpart")
-                sec_div.set("subtype", "section")
-                sec_div.set("n", sec_n)
+                # Emit milestones before the first paragraph of each group
+                milestones = para_milestones.get(p_key, [])
+                for ms_label in milestones:
+                    ms = etree.SubElement(ch_div, f"{{{TEI_NS}}}milestone")
+                    ms.set("unit", "section")
+                    ms.set("n", ms_label)
 
-                # Add alignment metadata as ana attribute
-                info = group_info.get((book_n, ch_n, sec_n))
-                if info:
-                    gid, score = info
-                    sec_div.set("ana", f"alignment:group={gid} score={score:.3f}")
-
-                for para_text in sections[sec_n]:
-                    p = etree.SubElement(sec_div, f"{{{TEI_NS}}}p")
-                    p.text = para_text
+                # Emit the paragraph
+                p = etree.SubElement(ch_div, f"{{{TEI_NS}}}p")
+                p.text = normalise_long_s(para["text"])
 
     return tei
 
@@ -360,22 +311,21 @@ def generate_cts_fragment():
     return root
 
 
-def print_summary(alignments, section_texts, hierarchy_books):
+def print_summary(alignments, booth, para_milestones, total_milestones):
     """Print verification summary."""
     print("\n=== TEI Generation Summary ===\n")
 
-    total_sections = len(section_texts)
-    print(f"Total section divs: {total_sections}")
+    total_booth_paras = sum(
+        len(ch["paragraphs"])
+        for book in booth["books"]
+        for ch in book["chapters"]
+    )
+    total_booth_chapters = sum(len(book["chapters"]) for book in booth["books"])
+
+    print(f"Booth chapters: {total_booth_chapters}")
+    print(f"Booth paragraphs: {total_booth_paras}")
+    print(f"Total milestone markers: {total_milestones}")
     print(f"Total alignment records: {len(alignments)}")
-
-    # Sections per book
-    book_counts = defaultdict(int)
-    for (book, _, _) in section_texts:
-        book_counts[book] += 1
-
-    print("\nSections per book:")
-    for b in sorted(book_counts, key=lambda x: int(x)):
-        print(f"  Book {b:>2}: {book_counts[b]:>4} sections")
 
     # Group distribution
     from collections import Counter
@@ -393,33 +343,122 @@ def print_summary(alignments, section_texts, hierarchy_books):
     print("  Greek section group sizes:", dict(sorted(gr_sizes.items())))
     print("  English paragraph group sizes:", dict(sorted(en_sizes.items())))
 
-    # Verify every CTS ref has a section
+    # Verify every CTS ref is covered by a milestone
     cts_refs = set()
     for a in alignments:
         _, ch, sec = parse_cts_ref(a["greek_cts_ref"])
-        cts_refs.add((a["book"], ch, sec))
+        cts_refs.add((a["book"], f"{ch}.{sec}"))
 
-    missing = cts_refs - set(section_texts.keys())
+    all_ms = set()
+    for (book, _, _), milestones in para_milestones.items():
+        for ms in milestones:
+            all_ms.add((book, ms))
+
+    missing = cts_refs - all_ms
     if missing:
-        print(f"\nWARNING: {len(missing)} CTS refs have no section div!")
+        print(f"\nWARNING: {len(missing)} Greek sections have no milestone!")
         for m in sorted(missing)[:10]:
             print(f"  {m}")
     else:
-        print("\nAll CTS refs have corresponding section divs.")
+        print("\nAll Greek sections have corresponding milestones.")
+
+
+def count_english_sentences(text):
+    """Count English sentences (split on . ? !)."""
+    sentences = re.findall(r'[^.!?]+[.!?]', text)
+    return max(len(sentences), 1) if text.strip() else 0
+
+
+def count_greek_sentences(text):
+    """Count Greek sentences (split on . · ;)."""
+    sentences = re.findall(r'[^.·;]+[.·;]', text)
+    return max(len(sentences), 1) if text.strip() else 0
+
+
+def write_chapter_csv(alignments, booth, greek_sections):
+    """Write CSV comparing Greek and English sentence counts per Greek chapter."""
+    # Build Greek chapter -> concatenated text
+    greek_by_chapter = defaultdict(lambda: {"text": "", "sections": 0})
+    for sec in greek_sections:
+        key = (sec["book"], sec["chapter"])
+        greek_by_chapter[key]["text"] += " " + sec["text"]
+        greek_by_chapter[key]["sections"] += 1
+
+    # Build Booth lookup: (book, div2, p_index) -> text
+    booth_lookup = {}
+    for book in booth["books"]:
+        for ch in book["chapters"]:
+            for para in ch["paragraphs"]:
+                booth_lookup[(book["div1_n"], ch["div2_index"], para["p_index"])] = para["text"]
+
+    # Map Greek chapter -> set of Booth paragraph keys via alignment groups
+    groups = defaultdict(list)
+    for rec in alignments:
+        groups[(rec["book"], rec["group_id"])].append(rec)
+
+    greek_ch_to_booth = defaultdict(set)
+    for (book, gid), recs in groups.items():
+        # Collect unique Booth paragraphs for this group
+        en_size = recs[0]["group_size_en"]
+        base_div2 = recs[0]["booth_div2_index"]
+        base_p = recs[0]["booth_p_index"]
+        booth_keys = set()
+        for offset in range(en_size):
+            bk = (book, base_div2, base_p + offset)
+            if bk in booth_lookup:
+                booth_keys.add(bk)
+
+        # Each Greek section in the group maps to these Booth paragraphs
+        for rec in recs:
+            _, ch, _ = parse_cts_ref(rec["greek_cts_ref"])
+            greek_ch_to_booth[(rec["book"], ch)].update(booth_keys)
+
+    # Build rows
+    rows = []
+    for (book, ch), gdata in sorted(
+        greek_by_chapter.items(),
+        key=lambda x: (int(x[0][0]), chapter_sort_key(x[0][1])),
+    ):
+        greek_text = gdata["text"]
+        greek_secs = gdata["sections"]
+        greek_sents = count_greek_sentences(greek_text)
+
+        booth_keys = greek_ch_to_booth.get((book, ch), set())
+        en_texts = [booth_lookup[k] for k in booth_keys if k in booth_lookup]
+        en_paras = len(en_texts)
+        en_combined = " ".join(normalise_long_s(t) for t in en_texts)
+        en_sents = count_english_sentences(en_combined)
+
+        rows.append({
+            "book": book,
+            "greek_chapter": ch,
+            "greek_sections": greek_secs,
+            "greek_sentences": greek_sents,
+            "english_paragraphs": en_paras,
+            "english_sentences": en_sents,
+        })
+
+    fieldnames = [
+        "book", "greek_chapter", "greek_sections", "greek_sentences",
+        "english_paragraphs", "english_sentences",
+    ]
+    with open(OUT_CSV, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    print(f"Wrote: {OUT_CSV} ({len(rows)} rows)")
 
 
 def main():
     print("Loading input files...")
-    alignments, booth = load_inputs()
+    alignments, booth, greek = load_inputs()
 
-    print("Building Booth text lookup...")
-    booth_lookup = build_booth_lookup(booth)
+    print("Mapping alignment groups to Booth paragraphs...")
+    para_milestones, total_milestones = build_para_milestones(alignments)
 
-    print("Mapping sections to English text...")
-    section_texts, group_info = build_section_text_map(alignments, booth_lookup)
-
-    print("Building TEI XML...")
-    tei = build_tei(section_texts, group_info)
+    print("Building TEI XML (Booth structure with Greek milestones)...")
+    tei = build_tei(booth, para_milestones)
 
     # Serialize with XML declaration and processing instruction
     tree = etree.ElementTree(tei)
@@ -446,8 +485,12 @@ def main():
 
     print(f"Wrote: {OUT_CTS}")
 
+    # Chapter sentence counts CSV
+    print("\nWriting chapter sentence counts...")
+    write_chapter_csv(alignments, booth, greek["sections"])
+
     # Verification
-    print_summary(alignments, section_texts, None)
+    print_summary(alignments, booth, para_milestones, total_milestones)
 
     # Quick well-formedness check
     print("\nValidating XML well-formedness...")
