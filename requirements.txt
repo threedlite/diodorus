@@ -1,0 +1,25 @@
+# Diodorus Alignment Project - Direct Dependencies
+# Install: pip install -r requirements.txt
+# Full reproducible freeze: requirements-freeze.txt
+
+# Core NLP / ML
+torch>=2.10.0
+transformers>=5.2.0
+sentence-transformers>=5.2.3
+datasets>=4.6.1
+accelerate>=1.12.0
+sentencepiece>=0.2.1
+scikit-learn>=1.8.0
+
+# Embedding training
+numpy>=2.4.0
+
+# Alignment pipeline
+lxml>=6.0.2
+spacy>=3.8.11
+rapidfuzz>=3.14.3
+Unidecode>=1.4.0
+beautifulsoup4>=4.14.3
+
+# After install, also run:
+#   python -m spacy download en_core_web_sm
