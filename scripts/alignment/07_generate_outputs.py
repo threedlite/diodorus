@@ -44,7 +44,7 @@ xml_lines = [
     "      </titleStmt>",
     "      <publicationStmt><p>Generated automatically.</p></publicationStmt>",
     "      <sourceDesc>",
-    '        <bibl xml:id="booth">OTA A36034 -- G. Booth, The Historical Library (1700)</bibl>',
+    '        <bibl xml:id="booth">G. Booth, The Historical Library (1700). Source: EEBO-TCP (Early English Books Online Text Creation Partnership), OTA A36034. Licensed under CC0 1.0 Universal (public domain dedication).</bibl>',
     '        <bibl xml:id="perseus">PerseusDL canonical-greekLit tlg0060.tlg001</bibl>',
     "      </sourceDesc>",
     "    </fileDesc>",
@@ -110,7 +110,9 @@ avg_score = sum(scores) / len(scores) if scores else 0
 report = f"""# Alignment Quality Report
 
 **Date:** {date.today().isoformat()}
-**English source:** Booth (1700) -- OTA A36034
+**English source:** G. Booth (1700) — The Historical Library of Diodorus the Sicilian
+**English transcription:** EEBO-TCP (Early English Books Online Text Creation Partnership), OTA A36034
+**English transcription license:** CC0 1.0 Universal (public domain dedication)
 **Greek source:** Perseus canonical-greekLit tlg0060.tlg001
 **Embedding model:** {model_name}
 

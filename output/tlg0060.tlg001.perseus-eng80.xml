@@ -7,10 +7,10 @@
         <title type="work">The Historical Library of Diodorus Siculus</title>
         <author>Diodorus Siculus</author>
         <editor role="translator">G. Booth</editor>
-        <sponsor>Diodorus Alignment Project</sponsor>
+        <sponsor>Alignment Project</sponsor>
       </titleStmt>
       <publicationStmt>
-        <publisher>Diodorus Alignment Project</publisher>
+        <publisher>Alignment Project</publisher>
         <idno type="filename">tlg0060.tlg001.perseus-eng80.xml</idno>
         <availability>
           <licence target="https://creativecommons.org/licenses/by-sa/4.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</licence>
@@ -23,7 +23,7 @@
           <editor role="translator">G. Booth</editor>
           <pubPlace>London</pubPlace>
           <date>1700</date>
-          <note>Oxford Text Archive A36034</note>
+          <note>Source: EEBO-TCP (Early English Books Online Text Creation Partnership), Oxford Text Archive A36034. Licensed under CC0 1.0 Universal (public domain dedication).</note>
         </bibl>
       </sourceDesc>
     </fileDesc>
@@ -37,7 +37,7 @@
         </cRefPattern>
       </refsDecl>
       <editorialDecl>
-        <p>English text from G. Booth's 1700 translation (OTA A36034), aligned to the Perseus Greek section structure by the Diodorus Alignment Project using cross-lingual embedding similarity and named-entity anchoring. Long-s characters have been normalised to modern s. The text is organised following Booth's own chapter divisions. Greek section boundaries are marked with milestone elements (unit='section', n='chapter.section') indicating where each Greek section begins within the English text. Each Booth paragraph appears exactly once in its original position.</p>
+        <p>English text from G. Booth's 1700 translation, sourced from EEBO-TCP (OTA A36034, CC0 1.0 Universal). Aligned to the Perseus Greek section structure by the Alignment Project using cross-lingual embedding similarity and named-entity anchoring. Long-s characters have been normalised to modern s. The text is organised following Booth's own chapter divisions. Greek section boundaries are marked with milestone elements (unit='section', n='chapter.section') indicating where each Greek section begins within the English text. Each Booth paragraph appears exactly once in its original position.</p>
       </editorialDecl>
     </encodingDesc>
   </teiHeader>

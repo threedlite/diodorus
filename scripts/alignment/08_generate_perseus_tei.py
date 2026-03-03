@@ -136,12 +136,12 @@ def build_tei_header():
     editor.set("role", "translator")
     editor.text = "G. Booth"
     sponsor = etree.SubElement(title_stmt, f"{{{TEI_NS}}}sponsor")
-    sponsor.text = "Diodorus Alignment Project"
+    sponsor.text = "Alignment Project"
 
     # publicationStmt
     pub_stmt = etree.SubElement(file_desc, f"{{{TEI_NS}}}publicationStmt")
     publisher = etree.SubElement(pub_stmt, f"{{{TEI_NS}}}publisher")
-    publisher.text = "Diodorus Alignment Project"
+    publisher.text = "Alignment Project"
     pub_id = etree.SubElement(pub_stmt, f"{{{TEI_NS}}}idno")
     pub_id.set("type", "filename")
     pub_id.text = "tlg0060.tlg001.perseus-eng80.xml"
@@ -168,7 +168,11 @@ def build_tei_header():
     bibl_date = etree.SubElement(bibl, f"{{{TEI_NS}}}date")
     bibl_date.text = "1700"
     bibl_note = etree.SubElement(bibl, f"{{{TEI_NS}}}note")
-    bibl_note.text = "Oxford Text Archive A36034"
+    bibl_note.text = (
+        "Source: EEBO-TCP (Early English Books Online Text Creation Partnership), "
+        "Oxford Text Archive A36034. Licensed under CC0 1.0 Universal "
+        "(public domain dedication)."
+    )
 
     # encodingDesc with refsDecl for CTS
     encoding_desc = etree.SubElement(header, f"{{{TEI_NS}}}encodingDesc")
@@ -202,8 +206,9 @@ def build_tei_header():
     editorial_decl = etree.SubElement(encoding_desc, f"{{{TEI_NS}}}editorialDecl")
     ed_p = etree.SubElement(editorial_decl, f"{{{TEI_NS}}}p")
     ed_p.text = (
-        "English text from G. Booth's 1700 translation (OTA A36034), "
-        "aligned to the Perseus Greek section structure by the Diodorus "
+        "English text from G. Booth's 1700 translation, sourced from "
+        "EEBO-TCP (OTA A36034, CC0 1.0 Universal). "
+        "Aligned to the Perseus Greek section structure by the "
         "Alignment Project using cross-lingual embedding similarity and "
         "named-entity anchoring. Long-s characters have been normalised to "
         "modern s. The text is organised following Booth's own chapter "
@@ -305,7 +310,7 @@ def generate_cts_fragment():
     desc.text = (
         "Diodorus Siculus. The Historical Library. "
         "Booth, G., translator. London, 1700. Aligned to Greek section "
-        "structure by the Diodorus Alignment Project."
+        "structure by the Alignment Project."
     )
 
     return root

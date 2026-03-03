@@ -233,11 +233,37 @@ All in `scripts/embedding_latin/`:
 
 ---
 
+## V2 Improvement (2026-03-02)
+
+Full corpus retrain using all 60 directories of canonical-latinLit (was 17 sparse-checkout).
+
+### Changes
+- Monolingual corpus: 206K → 349K sentences (+69%)
+- Parallel pairs: 4,263 → 12,207 (+186%)
+- MLM MAX_SENTENCES: 100K → 200K
+- Embedding epochs: 5 → 10, batch: 16 → 32
+- Training stopped early at ~60% (step ~2100/3440) — accuracy plateau reached
+
+### V2 Results
+
+| Metric | v1 | v2 | Change |
+|---|---|---|---|
+| Top-1 accuracy | 84.8% | **92.6%** | +7.8pp |
+| Top-5 accuracy | 90.2% | **95.7%** | +5.5pp |
+| Top-10 accuracy | 93.2% | **96.3%** | +3.1pp |
+| MRR | 0.873 | **0.940** | +0.067 |
+
+Gap with Greek narrowed from ~10pp to ~2.5pp on Top-1.
+
+Full details: `plans/latin_embedding_v2_improvement.md`
+
+---
+
 ## Fallback Strategy (if quality gates fail)
 
 Same hierarchy as Greek:
 1. Tune hyperparameters: more epochs, lower LR
-2. More data: disable sparse checkout for all of canonical-latinLit
+2. More data: disable sparse checkout for all of canonical-latinLit — **DONE in v2**
 3. Architecture change: try different pooling or loss
 4. Accept baseline: MiniLM may actually work better for Latin than Greek
    (since Latin is closer to modern Romance languages in XLM-R's training)
