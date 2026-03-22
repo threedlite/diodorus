@@ -46,8 +46,18 @@ for i, r in enumerate(["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "
     ROMAN[r] = i
 
 # Find chapter markers: "CHAPTER I", "CHAPTER II", etc.
+# The source has a CONTENTS section with chapter summaries formatted identically
+# to the body text, so we see 60 markers (30 CONTENTS + 30 body).
+# Skip to the second "CHAPTER I" which is where the body begins.
 chapter_pattern = re.compile(r'^CHAPTER\s+([IVXL]+)\s*$', re.MULTILINE)
-matches = list(chapter_pattern.finditer(text))
+all_matches = list(chapter_pattern.finditer(text))
+# Find second "CHAPTER I" — start of body text
+ch1_positions = [m for m in all_matches if m.group(1) == "I"]
+if len(ch1_positions) >= 2:
+    body_start = ch1_positions[1].start()
+    matches = [m for m in all_matches if m.start() >= body_start]
+else:
+    matches = all_matches
 
 print(f"Found {len(matches)} chapter markers")
 

@@ -121,12 +121,21 @@ for filename, book_nums in VOLUMES:
         chapter_pattern = re.compile(r'^\s*([IVXL]+)\s*$', re.MULTILINE)
         matches = list(chapter_pattern.finditer(book_text))
 
-        # Filter to valid sequential Roman numerals
+        # Filter to valid sequential Roman numerals.
+        # Handle OCR errors where a chapter number goes backwards (e.g.
+        # XVIII, XI, XX — the "XI" is really "XIX").  When a number is
+        # lower than the previous, use previous + 1 instead.
         chapters = []
         for m in matches:
             r = m.group(1).strip()
             if r in ROMAN:
-                chapters.append((ROMAN[r], m.end()))
+                num = ROMAN[r]
+                if chapters and num <= chapters[-1][0]:
+                    corrected = chapters[-1][0] + 1
+                    print(f"    Warning: chapter {r} ({num}) follows {chapters[-1][0]}, "
+                          f"correcting to {corrected}")
+                    num = corrected
+                chapters.append((num, m.end()))
 
         print(f"  Book {book_num}: {len(chapters)} chapters")
 

@@ -197,6 +197,19 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
     gr_by_ref = {s["cts_ref"]: s for s in greek_data["sections"]}
     en_by_ref = {str(s["cts_ref"]): s for s in english_data["sections"]}
 
+    # For multi-work, map work_id to work names using Greek sections
+    wid_to_work_names = {}
+    if len(work_ids) > 1:
+        for s in greek_data["sections"]:
+            w = s.get("work", "")
+            sid = s.get("work_id", "")
+            if not sid and s.get("edition", ""):
+                parts = s["edition"].split(".")
+                if len(parts) >= 2:
+                    sid = parts[1]
+            if sid and w:
+                wid_to_work_names.setdefault(sid, set()).add(w)
+
     # Group alignments by book
     by_book = defaultdict(list)
     for a in alignments:
@@ -225,22 +238,11 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
         # Determine which books belong to this work_id
         # For single-work configs, include all books
         # For multi-work, filter by work name
-        if len(work_ids) > 1:
-            # Multi-work: need to figure out which books go with this wid
-            # The sections have a "work" field
-            work_names_for_wid = set()
-            for s in greek_data["sections"]:
-                if s.get("work"):
-                    work_names_for_wid.add(s["work"])
-            # Map work_id to work_name by checking which sections use this edition
-            # This is approximate — filter books that have sections with matching edition
+        if len(work_ids) > 1 and wid in wid_to_work_names:
+            work_names = wid_to_work_names[wid]
             relevant_books = set()
             for s in greek_data["sections"]:
-                if wid in s.get("edition", ""):
-                    relevant_books.add(s["book"])
-            # If that didn't work, use work name matching
-            if not relevant_books:
-                for s in greek_data["sections"]:
+                if s.get("work", "") in work_names:
                     relevant_books.add(s["book"])
         else:
             relevant_books = set(by_book.keys())

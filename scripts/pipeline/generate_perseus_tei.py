@@ -129,6 +129,27 @@ def main(work_name):
     author = config.get("author", "")
     work_title = config.get("work_title", "")
 
+    # For multi-work configs, build a mapping from work_id to work_name
+    # using the Greek/Latin sections data (which have both fields).
+    wid_to_work_names = {}
+    if len(work_ids) > 1:
+        gr_path = out_dir / "greek_sections.json"
+        if gr_path.exists():
+            with open(gr_path) as gf:
+                gr_data = json.load(gf)
+            for s in gr_data["sections"]:
+                w = s.get("work", "")
+                # Try work_id field first, then extract from edition
+                sid = s.get("work_id", "")
+                if not sid and s.get("edition", ""):
+                    # e.g. "phi1020.phi001.perseus-lat2" -> "phi001"
+                    parts = s["edition"].split(".")
+                    if len(parts) >= 2:
+                        sid = parts[1]
+                if sid and w:
+                    wid_to_work_names.setdefault(sid, set()).add(w)
+        print(f"  Multi-work mapping: {dict((k, sorted(v)) for k, v in wid_to_work_names.items())}")
+
     for wid in work_ids:
         cts_work = f"{tlg_id}.{wid}"
         urn = f"urn:cts:greekLit:{cts_work}.perseus-eng80"
@@ -186,13 +207,10 @@ def main(work_name):
         en_by_book = defaultdict(list)
         for s in english_data["sections"]:
             # Only include sections from this work (for multi-work configs)
-            s_work = s.get("work", "")
-            if work_ids and len(work_ids) > 1:
-                # Multi-work: match by work name or work_id
-                # For Iamblichus: work_ids = ["tlg001", "tlg006"]
-                # sections have work = "De Vita Pythagorica" or "De Mysteriis"
-                # We need to map work_id to work name — skip if not matching
-                pass  # TODO: filter for multi-work
+            if len(work_ids) > 1 and wid in wid_to_work_names:
+                s_work = s.get("work", "")
+                if s_work and s_work not in wid_to_work_names[wid]:
+                    continue  # skip sections belonging to a different work
             en_by_book[s["book"]].append(s)
 
         # Build alignment lookup: english cts_ref -> greek cts_ref

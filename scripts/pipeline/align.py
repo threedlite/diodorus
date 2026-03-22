@@ -207,24 +207,100 @@ def load_model(source_language="greek"):
         return SentenceTransformer(baseline)
 
 
-def _refine_group(sentences, sent_embs, n_gr, gr_embs):
-    """Split pre-computed English sentences optimally across Greek sections.
+def _refine_group(model, en_text, n_gr, gr_embs):
+    """Split English text at sentence boundaries to match Greek sections.
 
-    Uses DP on pre-computed sentence embeddings — no model.encode calls.
-    Only refines when there are enough sentences to give each Greek section
-    a meaningful chunk (at least 1.5 sentences per section on average).
+    Tries progressively finer splitting until enough sentences are found.
+    Uses DP on sentence embeddings to find optimal partition.
 
     Returns list of (sub_text, similarity) tuples, or None.
     """
-    if n_gr < 2 or len(sentences) < n_gr:
+    if n_gr < 2 or len(en_text) < 50:
         return None
-    # Already checked len(sentences) >= n_gr above
 
+    # Split at sentence boundaries, progressively finer.
+    # Keep the best split found (most sentences), even if < n_gr.
+    best_sentences = None
+    for pattern in [
+        r'(?<=[.!?])\s+(?=[A-Z])',
+        r'(?<=[.!?;])\s+(?=[A-Z])',
+        r'(?<=[.!?;])\s+(?=[A-Z])|\band\s+',
+    ]:
+        parts = re.split(pattern, en_text)
+        parts = [p.strip() for p in parts if p and p.strip()]
+        # Merge tiny fragments (<60 chars) with neighbor
+        merged = []
+        for p in parts:
+            if merged and len(p) < 60:
+                merged[-1] = merged[-1] + " " + p
+            else:
+                merged.append(p)
+        if len(merged) >= n_gr:
+            best_sentences = merged
+            break
+        if best_sentences is None or len(merged) > len(best_sentences):
+            best_sentences = merged
+
+    if best_sentences is None or len(best_sentences) < 2:
+        return None
+
+    sentences = best_sentences
+
+    # If fewer sentences than Greek sections, assign each sentence to exactly
+    # one Greek section using order-preserving DP.  Unassigned Greek sections
+    # get None, which the caller renders as arrows in the HTML.
+    if len(sentences) < n_gr:
+        m = len(sentences)
+        sent_embs = model.encode(sentences, show_progress_bar=False, batch_size=32)
+        # sim_matrix[si][gi] = cosine similarity of sentence si to Greek gi
+        sim_matrix = np.zeros((m, n_gr))
+        for si in range(m):
+            ns = np.linalg.norm(sent_embs[si])
+            for gi in range(n_gr):
+                ng = np.linalg.norm(gr_embs[gi])
+                if ns > 1e-10 and ng > 1e-10:
+                    sim_matrix[si, gi] = float(np.dot(sent_embs[si], gr_embs[gi]) / (ns * ng))
+        # DP: assign m sentences to m of n_gr Greek slots, preserving order.
+        # dp[si][gi] = best total similarity assigning sentences 0..si to
+        # Greek slots where sentence si is assigned to Greek gi.
+        NEG_INF = -1e18
+        dp = np.full((m, n_gr), NEG_INF)
+        parent = np.full((m, n_gr), -1, dtype=int)
+        # Base case: sentence 0 can go to any Greek slot
+        for gi in range(n_gr):
+            dp[0][gi] = sim_matrix[0, gi]
+        # Fill: sentence si goes to Greek gi, previous sentence went to < gi
+        for si in range(1, m):
+            best_prev = NEG_INF
+            best_prev_gi = -1
+            for gi in range(si, n_gr):
+                # Best previous from any gi' < gi
+                if gi > 0 and dp[si - 1][gi - 1] > best_prev:
+                    best_prev = dp[si - 1][gi - 1]
+                    best_prev_gi = gi - 1
+                if best_prev > NEG_INF:
+                    dp[si][gi] = best_prev + sim_matrix[si, gi]
+                    parent[si][gi] = best_prev_gi
+        # Backtrack: find best final assignment
+        best_gi = int(np.argmax(dp[m - 1]))
+        assignment = [0] * m  # assignment[si] = Greek index
+        assignment[m - 1] = best_gi
+        for si in range(m - 2, -1, -1):
+            assignment[si] = parent[si + 1][assignment[si + 1]]
+        # Build result
+        result = [None] * n_gr
+        for si in range(m):
+            gi = assignment[si]
+            result[gi] = (sentences[si], sim_matrix[si, gi])
+        return result
+
+    # Encode sentences and run DP
+    sent_embs = model.encode(sentences, show_progress_bar=False, batch_size=32)
     splits = _optimal_split(sentences, sent_embs, n_gr, gr_embs)
     if splits is None:
         return None
 
-    # Compute similarity per piece using prefix sums
+    # Compute similarity per piece
     dim = sent_embs.shape[1]
     prefix = np.zeros((len(sentences) + 1, dim), dtype=np.float64)
     for i in range(len(sentences)):
@@ -382,36 +458,6 @@ def run_dp_alignment(config, greek_data, english_data, model):
         greek_lens = [s["char_count"] for s in greek_secs]
         english_lens = [s["char_count"] for s in english_secs]
 
-        # Pre-split all English sections into sentences and encode once
-        # for use in refinement. Avoids re-encoding per group.
-        en_sentence_data = []  # [(sentences, sent_embs, prefix_sums)] per English section
-        all_en_sentences = []
-        en_sent_ranges = []  # (start_idx, end_idx) in all_en_sentences
-        for es in english_secs:
-            en_text = es.get("text_for_embedding", es["text"])
-            sents = None
-            for pattern in [
-                r'(?<=[.!?])\s+(?=[A-Z])',
-                r'(?<=[.!?;])\s+(?=[A-Z])',
-            ]:
-                parts = re.split(pattern, en_text)
-                parts = [p.strip() for p in parts if p and p.strip()]
-                if len(parts) >= 2:
-                    sents = parts
-                    break
-            if sents is None:
-                sents = [en_text] if en_text else [""]
-            start = len(all_en_sentences)
-            all_en_sentences.extend(sents)
-            en_sent_ranges.append((start, len(all_en_sentences), sents))
-
-        # Encode all sentences at once
-        if all_en_sentences:
-            all_sent_embs = embed_with_cache(
-                model, all_en_sentences, cache_dir,
-                f"en_sents_{book_label}")
-        else:
-            all_sent_embs = np.zeros((0, greek_embs.shape[1]))
 
         total_gr = sum(greek_lens)
         total_en = sum(english_lens)
@@ -448,36 +494,51 @@ def run_dp_alignment(config, greek_data, english_data, model):
             if n_gr > 1 and n_en == 1:
                 ej = en_start
                 es = english_secs[ej]
+                en_text = es.get("text_for_embedding", es["text"])
                 gr_emb_group = greek_embs[gr_start:gr_end]
 
-                # Use pre-computed sentence data for this English section
-                sent_start, sent_end, sents = en_sent_ranges[ej]
-                sent_emb_slice = all_sent_embs[sent_start:sent_end]
+                refined = _refine_group(model, en_text, n_gr, gr_emb_group)
 
-                refined = _refine_group(sents, sent_emb_slice, n_gr, gr_emb_group)
-
-                if refined:
+                if refined and any(r is not None for r in refined):
                     refined_count += 1
                     if ej not in en_to_greek:
                         en_to_greek[ej] = []
-                    for gi_offset, (sub_text, sub_sim) in enumerate(refined):
+                    for gi_offset, entry in enumerate(refined):
                         gs = greek_secs[gr_start + gi_offset]
-                        en_to_greek[ej].append({
-                            "book": str(book),
-                            "greek_cts_ref": gs["cts_ref"],
-                            "greek_edition": gs.get("edition", ""),
-                            "english_cts_ref": es["cts_ref"],
-                            "english_section": es.get("section", ""),
-                            "similarity": round(sub_sim, 4),
-                            "greek_preview": gs["text"][:80],
-                            "english_preview": sub_text[:80],
-                            "english_refined_text": sub_text,
-                            "group_id": group_id,
-                            "group_size_gr": 1,
-                            "group_size_en": 1,
-                            "match_type": "dp_refined",
-                            "refined_part": gi_offset,
-                        })
+                        if entry is not None:
+                            sub_text, sub_sim = entry
+                            en_to_greek[ej].append({
+                                "book": str(book),
+                                "greek_cts_ref": gs["cts_ref"],
+                                "greek_edition": gs.get("edition", ""),
+                                "english_cts_ref": es["cts_ref"],
+                                "english_section": es.get("section", ""),
+                                "similarity": round(sub_sim, 4),
+                                "greek_preview": gs["text"][:80],
+                                "english_preview": sub_text[:80],
+                                "english_refined_text": sub_text,
+                                "group_id": group_id,
+                                "group_size_gr": 1,
+                                "group_size_en": 1,
+                                "match_type": "dp_refined",
+                                "refined_part": gi_offset,
+                            })
+                        else:
+                            # No refined text for this Greek section — show arrow
+                            en_to_greek[ej].append({
+                                "book": str(book),
+                                "greek_cts_ref": gs["cts_ref"],
+                                "greek_edition": gs.get("edition", ""),
+                                "english_cts_ref": es["cts_ref"],
+                                "english_section": es.get("section", ""),
+                                "similarity": round(score, 4),
+                                "greek_preview": gs["text"][:80],
+                                "english_preview": es["text"][:80],
+                                "group_id": group_id,
+                                "group_size_gr": n_gr,
+                                "group_size_en": 1,
+                                "match_type": "dp_aligned",
+                            })
                     continue
 
             # Default: no refinement — all Greek sections point to same English
