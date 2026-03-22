@@ -1,0 +1,20 @@
+{
+  "name": "theophrastus",
+  "author": "Theophrastus",
+  "work_title": "Characters",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0093",
+    "work_id": "tlg009"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_id": 58242,
+    "translator": "Charles E. Bennett & William A. Hammond",
+    "date": 1902
+  },
+  "output_dir": "build/theophrastus",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0093.tlg009"
+}

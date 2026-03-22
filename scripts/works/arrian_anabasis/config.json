@@ -1,0 +1,20 @@
+{
+  "name": "arrian_anabasis",
+  "author": "Arrian",
+  "work_title": "Anabasis of Alexander",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0074",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_id": 46976,
+    "translator": "E. J. Chinnock",
+    "date": 1884
+  },
+  "output_dir": "build/arrian_anabasis",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0074.tlg001"
+}

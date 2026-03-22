@@ -1,0 +1,20 @@
+{
+  "name": "arrian_cynegeticus",
+  "author": "Arrian",
+  "work_title": "Cynegeticus",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0074",
+    "work_id": "tlg003"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_id": 78013,
+    "translator": "William Dansey",
+    "date": 1831
+  },
+  "output_dir": "build/arrian_cynegeticus",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0074.tlg003"
+}

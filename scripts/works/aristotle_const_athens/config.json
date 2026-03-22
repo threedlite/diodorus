@@ -1,0 +1,20 @@
+{
+  "name": "aristotle_const_athens",
+  "author": "Aristotle",
+  "work_title": "Constitution of the Athenians",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0086",
+    "work_id": "tlg003"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_id": 26095,
+    "translator": "Sir Frederic G. Kenyon",
+    "date": 1920
+  },
+  "output_dir": "build/aristotle_const_athens",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0086.tlg003"
+}

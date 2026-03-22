@@ -1,0 +1,19 @@
+{
+  "name": "aristophanes_ecclesiazusae",
+  "author": "Aristophanes",
+  "work_title": "Ecclesiazusae",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0019",
+    "work_id": "tlg010"
+  },
+  "english_source": {
+    "type": "eng_trans_dev",
+    "translator": "Benjamin Bickley Rogers",
+    "date": 1919
+  },
+  "output_dir": "build/aristophanes_ecclesiazusae",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0019.tlg010"
+}

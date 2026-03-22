@@ -1,0 +1,19 @@
+{
+  "name": "aristophanes_acharnians",
+  "author": "Aristophanes",
+  "work_title": "Acharnians",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0019",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "eng_trans_dev",
+    "translator": "William James Hickie",
+    "date": 1853
+  },
+  "output_dir": "build/aristophanes_acharnians",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0019.tlg001"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "apollonius",
+  "author": "Apollonius Rhodius",
+  "work_title": "Argonautica",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0001",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "eng_trans_dev",
+    "translator": "Edward P. Coleridge",
+    "date": 1889
+  },
+  "output_dir": "build/apollonius",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0001.tlg001"
+}

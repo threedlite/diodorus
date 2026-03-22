@@ -1,0 +1,19 @@
+{
+  "name": "alciphron",
+  "author": "Alciphron",
+  "work_title": "Epistulae",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "first1kgreek",
+    "tlg_id": "tlg0640",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "eng_trans_dev",
+    "translator": "Unknown",
+    "date": 1896
+  },
+  "output_dir": "build/alciphron",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0640.tlg001"
+}

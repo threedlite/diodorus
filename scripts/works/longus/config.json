@@ -1,0 +1,19 @@
+{
+  "name": "longus",
+  "author": "Longus",
+  "work_title": "Daphnis and Chloe",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0561",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "eng_trans_dev",
+    "translator": "Rowland Smith",
+    "date": 1901
+  },
+  "output_dir": "build/longus",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0561.tlg001"
+}

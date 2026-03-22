@@ -1,0 +1,20 @@
+{
+  "name": "achilles_tatius",
+  "author": "Achilles Tatius",
+  "work_title": "Leucippe and Clitophon",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0532",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_id": 55406,
+    "translator": "Rowland Smith",
+    "date": 1901
+  },
+  "output_dir": "build/achilles_tatius",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0532.tlg001"
+}

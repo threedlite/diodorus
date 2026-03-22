@@ -1,0 +1,19 @@
+{
+  "name": "heliodorus",
+  "author": "Heliodorus",
+  "work_title": "Aethiopica",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "first1kgreek",
+    "tlg_id": "tlg0658",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "eng_trans_dev",
+    "translator": "Rowland Smith",
+    "date": 1901
+  },
+  "output_dir": "build/heliodorus",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0658.tlg001"
+}

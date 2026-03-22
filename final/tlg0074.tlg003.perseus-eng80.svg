@@ -1,0 +1,247 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="978" viewBox="0 0 1220 978">
+<rect width="1220" height="978" fill="#f5f5f5"/>
+<style>
+  text { font-family: "SF Mono", "Menlo", "Monaco", monospace; }
+  .title { font-size: 16px; font-weight: bold; }
+  .subtitle { font-size: 11px; fill: #888; }
+  .label { font-size: 11px; fill: #333; }
+  .stats { font-size: 10px; fill: #666; }
+  .warn { font-size: 9px; fill: #c9493b; }
+  .total { font-size: 12px; font-weight: bold; fill: #333; }
+  .legend-text { font-size: 10px; fill: #555; }
+</style>
+<text x="20" y="38" class="title">Alignment Quality Map — Arrian — Cynegeticus</text>
+<rect x="20" y="50" width="12" height="12" fill="#2d8a4e" rx="2"/>
+<text x="36" y="60" class="legend-text">High (≥0.6)</text>
+<rect x="160" y="50" width="12" height="12" fill="#e8b83d" rx="2"/>
+<text x="176" y="60" class="legend-text">Medium (0.3–0.6)</text>
+<rect x="300" y="50" width="12" height="12" fill="#c9493b" rx="2"/>
+<text x="316" y="60" class="legend-text">Low (&lt;0.3)</text>
+<text x="20" y="92" class="label">Book 0</text>
+<text x="988" y="92" class="stats">n=1  avg=0.000  H=0%  M=0%  L=100%</text>
+<rect x="180" y="80" width="4" height="15" fill="#c9493b"/>
+<text x="20" y="114" class="label">Book 1</text>
+<text x="988" y="114" class="stats">n=5  avg=0.591  H=60%  M=40%  L=0%</text>
+<rect x="180" y="102" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="102" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="102" width="4" height="15" fill="#2d8a4e"/>
+<rect x="192" y="102" width="4" height="15" fill="#e8b83d"/>
+<rect x="196" y="102" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="136" class="label">Book 2</text>
+<text x="988" y="136" class="stats">n=5  avg=0.442  H=0%  M=80%  L=20%</text>
+<rect x="180" y="124" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="124" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="124" width="4" height="15" fill="#c9493b"/>
+<rect x="192" y="124" width="4" height="15" fill="#e8b83d"/>
+<rect x="196" y="124" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="158" class="label">Book 3</text>
+<text x="988" y="158" class="stats">n=7  avg=0.544  H=29%  M=71%  L=0%</text>
+<rect x="180" y="146" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="146" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="146" width="4" height="15" fill="#e8b83d"/>
+<rect x="192" y="146" width="4" height="15" fill="#e8b83d"/>
+<rect x="196" y="146" width="4" height="15" fill="#e8b83d"/>
+<rect x="200" y="146" width="4" height="15" fill="#e8b83d"/>
+<rect x="204" y="146" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="180" class="label">Book 4</text>
+<text x="988" y="180" class="stats">n=5  avg=0.639  H=80%  M=20%  L=0%</text>
+<rect x="180" y="168" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="168" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="168" width="4" height="15" fill="#2d8a4e"/>
+<rect x="192" y="168" width="4" height="15" fill="#2d8a4e"/>
+<rect x="196" y="168" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="202" class="label">Book 5</text>
+<text x="988" y="202" class="stats">n=11  avg=0.566  H=45%  M=55%  L=0%</text>
+<rect x="180" y="190" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="190" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="190" width="4" height="15" fill="#2d8a4e"/>
+<rect x="192" y="190" width="4" height="15" fill="#e8b83d"/>
+<rect x="196" y="190" width="4" height="15" fill="#2d8a4e"/>
+<rect x="200" y="190" width="4" height="15" fill="#e8b83d"/>
+<rect x="204" y="190" width="4" height="15" fill="#e8b83d"/>
+<rect x="208" y="190" width="4" height="15" fill="#e8b83d"/>
+<rect x="212" y="190" width="4" height="15" fill="#2d8a4e"/>
+<rect x="216" y="190" width="4" height="15" fill="#e8b83d"/>
+<rect x="220" y="190" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="224" class="label">Book 6</text>
+<text x="988" y="224" class="stats">n=3  avg=0.698  H=67%  M=33%  L=0%</text>
+<rect x="180" y="212" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="212" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="212" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="246" class="label">Book 7</text>
+<text x="988" y="246" class="stats">n=7  avg=0.607  H=71%  M=29%  L=0%</text>
+<rect x="180" y="234" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="234" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="234" width="4" height="15" fill="#2d8a4e"/>
+<rect x="192" y="234" width="4" height="15" fill="#2d8a4e"/>
+<rect x="196" y="234" width="4" height="15" fill="#2d8a4e"/>
+<rect x="200" y="234" width="4" height="15" fill="#2d8a4e"/>
+<rect x="204" y="234" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="268" class="label">Book 8</text>
+<text x="988" y="268" class="stats">n=4  avg=0.607  H=50%  M=50%  L=0%</text>
+<rect x="180" y="256" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="256" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="256" width="4" height="15" fill="#2d8a4e"/>
+<rect x="192" y="256" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="290" class="label">Book 9</text>
+<text x="988" y="290" class="stats">n=3  avg=0.565  H=33%  M=67%  L=0%</text>
+<rect x="180" y="278" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="278" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="278" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="312" class="label">Book 10</text>
+<text x="988" y="312" class="stats">n=4  avg=0.699  H=75%  M=25%  L=0%</text>
+<rect x="180" y="300" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="300" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="300" width="4" height="15" fill="#2d8a4e"/>
+<rect x="192" y="300" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="334" class="label">Book 11</text>
+<text x="988" y="334" class="stats">n=2  avg=0.571  H=0%  M=100%  L=0%</text>
+<rect x="180" y="322" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="322" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="356" class="label">Book 12</text>
+<text x="988" y="356" class="stats">n=5  avg=0.623  H=80%  M=20%  L=0%</text>
+<rect x="180" y="344" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="344" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="344" width="4" height="15" fill="#e8b83d"/>
+<rect x="192" y="344" width="4" height="15" fill="#2d8a4e"/>
+<rect x="196" y="344" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="378" class="label">Book 13</text>
+<text x="988" y="378" class="stats">n=3  avg=0.636  H=67%  M=33%  L=0%</text>
+<rect x="180" y="366" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="366" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="366" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="400" class="label">Book 14</text>
+<text x="988" y="400" class="stats">n=6  avg=0.606  H=67%  M=33%  L=0%</text>
+<rect x="180" y="388" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="388" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="388" width="4" height="15" fill="#2d8a4e"/>
+<rect x="192" y="388" width="4" height="15" fill="#2d8a4e"/>
+<rect x="196" y="388" width="4" height="15" fill="#2d8a4e"/>
+<rect x="200" y="388" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="422" class="label">Book 15</text>
+<text x="988" y="422" class="stats">n=2  avg=0.620  H=50%  M=50%  L=0%</text>
+<rect x="180" y="410" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="410" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="444" class="label">Book 16</text>
+<text x="988" y="444" class="stats">n=8  avg=0.640  H=62%  M=38%  L=0%</text>
+<rect x="180" y="432" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="432" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="432" width="4" height="15" fill="#e8b83d"/>
+<rect x="192" y="432" width="4" height="15" fill="#2d8a4e"/>
+<rect x="196" y="432" width="4" height="15" fill="#e8b83d"/>
+<rect x="200" y="432" width="4" height="15" fill="#2d8a4e"/>
+<rect x="204" y="432" width="4" height="15" fill="#2d8a4e"/>
+<rect x="208" y="432" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="466" class="label">Book 17</text>
+<text x="988" y="466" class="stats">n=4  avg=0.615  H=75%  M=25%  L=0%</text>
+<rect x="180" y="454" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="454" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="454" width="4" height="15" fill="#e8b83d"/>
+<rect x="192" y="454" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="488" class="label">Book 18</text>
+<text x="988" y="488" class="stats">n=2  avg=0.750  H=100%  M=0%  L=0%</text>
+<rect x="180" y="476" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="476" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="510" class="label">Book 19</text>
+<text x="988" y="510" class="stats">n=2  avg=0.625  H=50%  M=50%  L=0%</text>
+<rect x="180" y="498" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="498" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="532" class="label">Book 20</text>
+<text x="988" y="532" class="stats">n=4  avg=0.626  H=50%  M=50%  L=0%</text>
+<rect x="180" y="520" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="520" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="520" width="4" height="15" fill="#e8b83d"/>
+<rect x="192" y="520" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="554" class="label">Book 21</text>
+<text x="988" y="554" class="stats">n=3  avg=0.631  H=67%  M=33%  L=0%</text>
+<rect x="180" y="542" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="542" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="542" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="576" class="label">Book 22</text>
+<text x="988" y="576" class="stats">n=2  avg=0.577  H=0%  M=100%  L=0%</text>
+<rect x="180" y="564" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="564" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="598" class="label">Book 23</text>
+<text x="988" y="598" class="stats">n=4  avg=0.592  H=25%  M=75%  L=0%</text>
+<rect x="180" y="586" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="586" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="586" width="4" height="15" fill="#e8b83d"/>
+<rect x="192" y="586" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="620" class="label">Book 24</text>
+<text x="988" y="620" class="stats">n=5  avg=0.703  H=80%  M=20%  L=0%</text>
+<rect x="180" y="608" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="608" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="608" width="4" height="15" fill="#2d8a4e"/>
+<rect x="192" y="608" width="4" height="15" fill="#2d8a4e"/>
+<rect x="196" y="608" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="642" class="label">Book 25</text>
+<text x="988" y="642" class="stats">n=9  avg=0.517  H=33%  M=67%  L=0%</text>
+<rect x="180" y="630" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="630" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="630" width="4" height="15" fill="#2d8a4e"/>
+<rect x="192" y="630" width="4" height="15" fill="#e8b83d"/>
+<rect x="196" y="630" width="4" height="15" fill="#e8b83d"/>
+<rect x="200" y="630" width="4" height="15" fill="#e8b83d"/>
+<rect x="204" y="630" width="4" height="15" fill="#e8b83d"/>
+<rect x="208" y="630" width="4" height="15" fill="#e8b83d"/>
+<rect x="212" y="630" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="664" class="label">Book 26</text>
+<text x="988" y="664" class="stats">n=4  avg=0.554  H=25%  M=75%  L=0%</text>
+<rect x="180" y="652" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="652" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="652" width="4" height="15" fill="#e8b83d"/>
+<rect x="192" y="652" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="686" class="label">Book 27</text>
+<text x="988" y="686" class="stats">n=2  avg=0.609  H=50%  M=50%  L=0%</text>
+<rect x="180" y="674" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="674" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="708" class="label">Book 28</text>
+<text x="988" y="708" class="stats">n=3  avg=0.639  H=67%  M=33%  L=0%</text>
+<rect x="180" y="696" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="696" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="696" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="730" class="label">Book 29</text>
+<text x="988" y="730" class="stats">n=1  avg=0.671  H=100%  M=0%  L=0%</text>
+<rect x="180" y="718" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="752" class="label">Book 30</text>
+<text x="988" y="752" class="stats">n=2  avg=0.668  H=100%  M=0%  L=0%</text>
+<rect x="180" y="740" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="740" width="4" height="15" fill="#2d8a4e"/>
+<text x="20" y="774" class="label">Book 31</text>
+<text x="988" y="774" class="stats">n=5  avg=0.605  H=60%  M=40%  L=0%</text>
+<rect x="180" y="762" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="762" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="762" width="4" height="15" fill="#e8b83d"/>
+<rect x="192" y="762" width="4" height="15" fill="#2d8a4e"/>
+<rect x="196" y="762" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="796" class="label">Book 32</text>
+<text x="988" y="796" class="stats">n=2  avg=0.588  H=50%  M=50%  L=0%</text>
+<rect x="180" y="784" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="784" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="818" class="label">Book 33</text>
+<text x="988" y="818" class="stats">n=1  avg=0.427  H=0%  M=100%  L=0%</text>
+<rect x="180" y="806" width="4" height="15" fill="#e8b83d"/>
+<text x="20" y="840" class="label">Book 34</text>
+<text x="988" y="840" class="stats">n=3  avg=0.297  H=0%  M=33%  L=67%</text>
+<rect x="180" y="828" width="4" height="15" fill="#c9493b"/>
+<rect x="184" y="828" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="828" width="4" height="15" fill="#c9493b"/>
+<text x="20" y="862" class="label">Book 35</text>
+<text x="988" y="862" class="stats">n=4  avg=0.345  H=0%  M=75%  L=25%</text>
+<rect x="180" y="850" width="4" height="15" fill="#e8b83d"/>
+<rect x="184" y="850" width="4" height="15" fill="#e8b83d"/>
+<rect x="188" y="850" width="4" height="15" fill="#e8b83d"/>
+<rect x="192" y="850" width="4" height="15" fill="#c9493b"/>
+<text x="20" y="884" class="label">Book 36</text>
+<text x="988" y="884" class="stats">n=4  avg=0.037  H=0%  M=0%  L=100%</text>
+<rect x="180" y="872" width="4" height="15" fill="#c9493b"/>
+<rect x="184" y="872" width="4" height="15" fill="#c9493b"/>
+<rect x="188" y="872" width="4" height="15" fill="#c9493b"/>
+<rect x="192" y="872" width="4" height="15" fill="#c9493b"/>
+<text x="180" y="899" class="warn">⚠ 36.1 → 36.4  (4 sections, avg=0.037)</text>
+<line x1="20" y1="913" x2="1200" y2="913" stroke="#ccc" stroke-width="1"/>
+<text x="20" y="933" class="total">TOTAL: 147 sections   avg=0.568   High=49%   Med=45%   Low=6%</text>
+<rect x="20" y="940" width="577.9591836734694" height="10" fill="#2d8a4e" rx="2"/>
+<rect x="597.9591836734694" y="940" width="529.795918367347" height="10" fill="#e8b83d"/>
+<rect x="1127.7551020408164" y="940" width="72.24489795918367" height="10" fill="#c9493b" rx="2"/>
+</svg>

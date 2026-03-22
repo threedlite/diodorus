@@ -1,0 +1,19 @@
+{
+  "name": "julian_mother",
+  "author": "Julian",
+  "work_title": "Hymn to the Mother of the Gods",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg2003",
+    "work_id": "tlg008"
+  },
+  "english_source": {
+    "type": "eng_trans_dev",
+    "translator": "C. W. King",
+    "date": 1888
+  },
+  "output_dir": "build/julian_mother",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg2003.tlg008"
+}

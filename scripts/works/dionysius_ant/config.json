@@ -1,0 +1,19 @@
+{
+  "name": "dionysius_ant",
+  "author": "Dionysius of Halicarnassus",
+  "work_title": "Roman Antiquities",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0081",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "lacuscurtius",
+    "translator": "Earnest Cary",
+    "date": 1937
+  },
+  "output_dir": "build/dionysius_ant",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0081.tlg001"
+}

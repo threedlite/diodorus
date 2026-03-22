@@ -1,0 +1,19 @@
+{
+  "name": "aristophanes_peace",
+  "author": "Aristophanes",
+  "work_title": "Peace (Pax)",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0019",
+    "work_id": "tlg005"
+  },
+  "english_source": {
+    "type": "eng_trans_dev",
+    "translator": "Benjamin Bickley Rogers",
+    "date": 1919
+  },
+  "output_dir": "build/aristophanes_peace",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0019.tlg005"
+}

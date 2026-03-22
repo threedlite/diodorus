@@ -1,0 +1,20 @@
+{
+  "name": "bion",
+  "author": "Bion of Phlossa",
+  "work_title": "Idylls",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0036",
+    "work_ids": ["tlg001", "tlg002", "tlg003"]
+  },
+  "english_source": {
+    "type": "eng_trans_dev",
+    "translator": "J. Banks",
+    "date": 1878
+  },
+  "output_dir": "build/bion",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0036",
+  "multi_work": true
+}

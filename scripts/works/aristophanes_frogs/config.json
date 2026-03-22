@@ -1,0 +1,19 @@
+{
+  "name": "aristophanes_frogs",
+  "author": "Aristophanes",
+  "work_title": "Frogs (Ranae)",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0019",
+    "work_id": "tlg009"
+  },
+  "english_source": {
+    "type": "eng_trans_dev",
+    "translator": "Benjamin Bickley Rogers",
+    "date": 1919
+  },
+  "output_dir": "build/aristophanes_frogs",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0019.tlg009"
+}
