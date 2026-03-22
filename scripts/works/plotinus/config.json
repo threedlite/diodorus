@@ -1,0 +1,21 @@
+{
+  "name": "plotinus",
+  "author": "Plotinus",
+  "work_title": "Enneads",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "first1kgreek",
+    "tlg_id": "tlg2000",
+    "work_id": "tlg001",
+    "preferred_edition": "1st1K-grc1"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_ids": [42930, 42931, 42932, 42933],
+    "translator": "Kenneth Sylvan Guthrie",
+    "date": 1918
+  },
+  "output_dir": "build/plotinus",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg2000.tlg001"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "procopius_secret",
+  "author": "Procopius",
+  "work_title": "Secret History (Anecdota)",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg4029",
+    "work_id": "tlg002"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_id": 12916,
+    "translator": "Anonymous",
+    "date": 1896
+  },
+  "output_dir": "build/procopius_secret",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg4029.tlg002"
+}

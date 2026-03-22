@@ -11,6 +11,7 @@ markers linking to the source language CTS references.
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 from lxml import etree
@@ -26,6 +27,72 @@ def load_config(work_name):
     config_path = PROJECT_ROOT / "scripts" / "works" / work_name / "config.json"
     with open(config_path) as f:
         return json.load(f)
+
+
+def _build_p_with_notes(p_elem, text, notes, ns):
+    """Build a <p> element with footnote bodies wrapped in <note> tags.
+
+    Uses the extracted notes from strip_notes to find where each note's
+    marker appears in the text and insert the note body as a <note> child.
+    """
+    # Build a mapping of marker -> note text
+    note_map = {}
+    for n in notes:
+        note_map[n["marker"]] = n["text"]
+
+    # Find all [A], [B], [1], [2] markers in the text and split around them
+    pattern = re.compile(r'(\[[A-Za-z]\]|\[\d+\])')
+    parts = pattern.split(text)
+
+    p_elem.text = parts[0] if parts else text
+
+    prev = p_elem
+    for i in range(1, len(parts), 2):
+        marker = parts[i]
+        after = parts[i + 1] if i + 1 < len(parts) else ""
+
+        note_text = note_map.get(marker, "")
+        if note_text:
+            note_elem = etree.SubElement(p_elem, f"{{{ns}}}note")
+            note_elem.set("type", "translator")
+            note_elem.set("n", marker.strip("[]"))
+            note_elem.text = note_text
+            note_elem.tail = after
+        else:
+            # No note body found — keep marker as text
+            if prev == p_elem:
+                p_elem.text = (p_elem.text or "") + marker + after
+            else:
+                prev.tail = (prev.tail or "") + marker + after
+            continue
+
+        prev = note_elem
+
+
+def _build_p_with_inline_notes(p_elem, text, ns):
+    """Build a <p> element, wrapping any [A]/[1] markers as empty <note> refs.
+
+    For sections where strip_notes didn't extract note bodies (e.g. notes
+    were in a separate FOOTNOTES section already removed by extraction),
+    we still wrap the reference markers in <note> tags.
+    """
+    pattern = re.compile(r'(\[[A-Za-z]\]|\[\d+\])')
+    parts = pattern.split(text)
+
+    if len(parts) <= 1:
+        # No markers found — plain text
+        p_elem.text = text
+        return
+
+    p_elem.text = parts[0]
+    for i in range(1, len(parts), 2):
+        marker = parts[i]
+        after = parts[i + 1] if i + 1 < len(parts) else ""
+
+        note_elem = etree.SubElement(p_elem, f"{{{ns}}}note")
+        note_elem.set("type", "translator")
+        note_elem.set("n", marker.strip("[]"))
+        note_elem.tail = after
 
 
 def main(work_name):
@@ -157,7 +224,14 @@ def main(work_name):
 
                 p = etree.SubElement(book_div, f"{{{TEI_NS}}}p")
                 p.set("n", str(sec_n))
-                p.text = s["text"]
+
+                # If the section has extracted notes, build mixed content
+                # with <note> elements. Otherwise use plain text.
+                section_notes = s.get("notes", [])
+                if section_notes:
+                    _build_p_with_notes(p, s["text"], section_notes, TEI_NS)
+                else:
+                    _build_p_with_inline_notes(p, s["text"], TEI_NS)
 
         # Write
         tree = etree.ElementTree(tei)

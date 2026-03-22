@@ -4,7 +4,10 @@ always use a venv and never run --break-system-packages
 always be thoughtful, thorough, and truthful with yourself about what you did and didnt do
 always document your plans in md files in the project
 always update md doc files if something changes
-dont be lazy, be thourough and careful
+dont be lazy; be thorough and careful
+avoid quick fixes; make fixes as general as possible
+never run rm -rf
+
 
 ## Project goal
 Add English translations to ancient Greek works that currently only have Greek

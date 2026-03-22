@@ -133,3 +133,35 @@ This project's alignment outputs are licensed under CC BY-SA 4.0,
 consistent with the ShareAlike requirement of the Perseus and Wikisource sources.
 
 Any derivative works must maintain CC BY-SA 4.0 or a compatible license.
+
+#### F.C. Legge — Philosophumena of Hippolytus (1921)
+- Path: data-sources/gutenberg/hippolytus/
+- Source: Project Gutenberg, ebooks #65478, #67116
+  https://www.gutenberg.org/ebooks/65478
+- Translator: F.C. Legge (Francis Legge)
+- License: Public domain in the US (published 1921)
+- Contents: Plain text of Legge's translation of the Refutatio, 2 volumes
+
+#### Kenneth Sylvan Guthrie — Plotinos: Complete Works (1918)
+- Path: data-sources/gutenberg/plotinus/
+- Source: Project Gutenberg, ebooks #42930-42933
+  https://www.gutenberg.org/ebooks/42930
+- Translator: Kenneth Sylvan Guthrie (1871-1940)
+- License: Public domain in the US (published 1918)
+- Contents: Plain text of Guthrie's translation of the Enneads, 4 volumes
+
+#### H.B. Dewing — Procopius History of the Wars (1914)
+- Path: data-sources/gutenberg/procopius/wars_*.txt
+- Source: Project Gutenberg, ebooks #16764, #16765, #20298
+  https://www.gutenberg.org/ebooks/16764
+- Translator: H.B. Dewing (Henry Bronson Dewing, 1882-1956)
+- License: Public domain in the US (published 1914, Loeb Classical Library)
+- Contents: Plain text of Dewing's translation of Wars Books I-VI
+
+#### Anonymous — The Secret History of Procopius (1896)
+- Path: data-sources/gutenberg/procopius/secret_history_12916.txt
+- Source: Project Gutenberg, ebook #12916
+  https://www.gutenberg.org/ebooks/12916
+- Translator: Anonymous (Athenian Society, 1896)
+- License: Public domain in the US (published 1896)
+- Contents: Plain text translation of Procopius Secret History (Anecdota)

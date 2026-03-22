@@ -85,37 +85,39 @@ for book_num, book_text in books:
     # parts[1] = "2", parts[2] = section 2 text
     # parts[3] = "3", parts[4] = section 3 text, etc.
 
-    # Section 1
-    sec1_text = parts[0].strip()
-    # Remove footnotes (indented blocks starting with [A], [B], etc.)
-    sec1_text = re.sub(r"\n    \[.*?\n\n", "\n\n", sec1_text, flags=re.DOTALL)
-    sec1_text = " ".join(sec1_text.split())
+    import sys
+    sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+    from pipeline.strip_notes import strip_notes
 
-    if sec1_text:
-        all_sections.append({
+    def process_section(raw_text, book_num, sec_num):
+        """Process a raw section: strip notes, normalize, return section dict."""
+        # strip_notes needs raw text with indentation preserved
+        clean, notes = strip_notes(raw_text)
+        full = " ".join(raw_text.split())   # original with footnotes, normalized
+        clean = " ".join(clean.split())      # without footnotes, for embedding
+        if not clean:
+            return None
+        return {
             "book": str(book_num),
-            "section": "1",
-            "cts_ref": f"{book_num}.1",
-            "text": sec1_text,
-            "char_count": len(sec1_text),
-        })
+            "section": str(sec_num),
+            "cts_ref": f"{book_num}.{sec_num}",
+            "text": full,
+            "text_for_embedding": clean,
+            "notes": notes,
+            "char_count": len(full),
+        }
+
+    # Section 1
+    sec = process_section(parts[0].strip(), book_num, "1")
+    if sec:
+        all_sections.append(sec)
 
     # Remaining sections
     for j in range(1, len(parts) - 1, 2):
         sec_num = parts[j]
-        sec_text = parts[j + 1].strip()
-        # Remove footnotes
-        sec_text = re.sub(r"\n    \[.*?\n\n", "\n\n", sec_text, flags=re.DOTALL)
-        sec_text = " ".join(sec_text.split())
-
-        if sec_text:
-            all_sections.append({
-                "book": str(book_num),
-                "section": sec_num,
-                "cts_ref": f"{book_num}.{sec_num}",
-                "text": sec_text,
-                "char_count": len(sec_text),
-            })
+        sec = process_section(parts[j + 1].strip(), book_num, sec_num)
+        if sec:
+            all_sections.append(sec)
 
 # Sort
 all_sections.sort(key=lambda s: (int(s["book"]), int(s["section"])))

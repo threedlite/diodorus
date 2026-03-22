@@ -1,0 +1,20 @@
+{
+  "name": "procopius_wars",
+  "author": "Procopius",
+  "work_title": "History of the Wars",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg4029",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_ids": [16764, 16765, 20298],
+    "translator": "H. B. Dewing",
+    "date": 1914
+  },
+  "output_dir": "build/procopius_wars",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg4029.tlg001"
+}

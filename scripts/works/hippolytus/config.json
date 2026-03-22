@@ -1,0 +1,21 @@
+{
+  "name": "hippolytus",
+  "author": "Hippolytus",
+  "work_title": "Refutatio Omnium Haeresium (Philosophumena)",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "first1kgreek",
+    "tlg_id": "tlg2115",
+    "work_id": "tlg060",
+    "preferred_edition": "perseus-grc1"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_ids": [65478, 67116],
+    "translator": "F. Legge",
+    "date": 1921
+  },
+  "output_dir": "build/hippolytus",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg2115.tlg060"
+}

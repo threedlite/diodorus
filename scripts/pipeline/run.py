@@ -27,6 +27,44 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 WORKS_DIR = PROJECT_ROOT / "scripts" / "works"
 
 
+def save_metrics(work_name, out_dir):
+    """Append quality metrics for this work to build/quality_metrics.json."""
+    from datetime import datetime
+
+    align_path = PROJECT_ROOT / out_dir / "entity_validated_alignments.json"
+    if not align_path.exists():
+        return
+
+    with open(align_path) as f:
+        data = json.load(f)
+
+    scores = [a.get("combined_score", a.get("similarity", 0)) for a in data]
+    n = len(scores)
+    if n == 0:
+        return
+
+    entry = {
+        "sections": n,
+        "high_pct": round(sum(1 for s in scores if s >= 0.6) / n * 100, 1),
+        "med_pct": round(sum(1 for s in scores if 0.3 <= s < 0.6) / n * 100, 1),
+        "low_pct": round(sum(1 for s in scores if s < 0.3) / n * 100, 1),
+        "avg": round(sum(scores) / n, 3),
+        "timestamp": datetime.now().isoformat(),
+    }
+
+    metrics_path = PROJECT_ROOT / "build" / "quality_metrics.json"
+    if metrics_path.exists():
+        with open(metrics_path) as f:
+            metrics = json.load(f)
+    else:
+        metrics = {"works": {}}
+
+    metrics["works"][work_name] = entry
+
+    with open(metrics_path, "w") as f:
+        json.dump(metrics, f, indent=2)
+
+
 def list_works():
     """List all available works."""
     works = []
@@ -121,6 +159,9 @@ def run_work(work_name):
     # Step 8: Publish to final/
     run_step("Publish to final/",
              [sys.executable, "scripts/publish_to_final.py", work_name, out_dir])
+
+    # Step 9: Save quality metrics
+    save_metrics(work_name, out_dir)
 
     print(f"\n{'='*60}")
     print(f"  {work_name}: COMPLETE")

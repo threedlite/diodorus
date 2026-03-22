@@ -18,7 +18,7 @@
 <rect x="300" y="50" width="12" height="12" fill="#c9493b" rx="2"/>
 <text x="316" y="60" class="legend-text">Low (&lt;0.3)</text>
 <text x="20" y="92" class="label">Book 1</text>
-<text x="988" y="92" class="stats">n=26  avg=0.789  H=88%  M=12%  L=0%</text>
+<text x="988" y="92" class="stats">n=29  avg=0.753  H=83%  M=17%  L=0%</text>
 <rect x="180" y="80" width="4" height="15" fill="#2d8a4e"/>
 <rect x="184" y="80" width="4" height="15" fill="#2d8a4e"/>
 <rect x="188" y="80" width="4" height="15" fill="#2d8a4e"/>
@@ -45,9 +45,12 @@
 <rect x="272" y="80" width="4" height="15" fill="#2d8a4e"/>
 <rect x="276" y="80" width="4" height="15" fill="#2d8a4e"/>
 <rect x="280" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="284" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="288" y="80" width="4" height="15" fill="#e8b83d"/>
+<rect x="292" y="80" width="4" height="15" fill="#e8b83d"/>
 <line x1="20" y1="107" x2="1200" y2="107" stroke="#ccc" stroke-width="1"/>
-<text x="20" y="127" class="total">TOTAL: 26 sections   avg=0.789   High=88%   Med=12%   Low=0%</text>
-<rect x="20" y="134" width="1043.8461538461538" height="10" fill="#2d8a4e" rx="2"/>
-<rect x="1063.8461538461538" y="134" width="136.15384615384616" height="10" fill="#e8b83d"/>
+<text x="20" y="127" class="total">TOTAL: 29 sections   avg=0.753   High=83%   Med=17%   Low=0%</text>
+<rect x="20" y="134" width="976.551724137931" height="10" fill="#2d8a4e" rx="2"/>
+<rect x="996.551724137931" y="134" width="203.44827586206898" height="10" fill="#e8b83d"/>
 <rect x="1200.0" y="134" width="0.0" height="10" fill="#c9493b" rx="2"/>
 </svg>

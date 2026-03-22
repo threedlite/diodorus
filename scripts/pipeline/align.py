@@ -14,6 +14,7 @@ Outputs:
   <output_dir>/section_alignments.json
 """
 
+import hashlib
 import json
 import sys
 import numpy as np
@@ -26,6 +27,118 @@ from align_core import segmental_dp_align, pairwise_match
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
+_model_dir_path = None  # set by load_model
+
+
+def embed_with_cache(model, texts, cache_dir, label):
+    """Embed texts, caching results based on content hash.
+
+    Cache invalidates if:
+    - Text content changes (different hash)
+    - Model directory is newer than cached embeddings
+    - Number of texts doesn't match cached array shape
+    """
+    cache_dir = Path(cache_dir)
+    cache_dir.mkdir(parents=True, exist_ok=True)
+
+    content_hash = hashlib.sha256("\n".join(texts).encode("utf-8")).hexdigest()[:16]
+    cache_file = cache_dir / f"emb_{label}_{content_hash}.npy"
+
+    if cache_file.exists():
+        cache_mtime = cache_file.stat().st_mtime
+        # Check model hasn't been retrained since cache was written
+        if _model_dir_path and _model_dir_path.exists():
+            model_mtime = _model_dir_path.stat().st_mtime
+            if model_mtime > cache_mtime:
+                print(f"  {label}: model newer than cache, re-embedding")
+                cache_file.unlink()
+            else:
+                embs = np.load(cache_file)
+                if embs.shape[0] == len(texts):
+                    print(f"  {label}: cached ({len(texts)} texts)")
+                    return embs
+        else:
+            embs = np.load(cache_file)
+            if embs.shape[0] == len(texts):
+                print(f"  {label}: cached ({len(texts)} texts)")
+                return embs
+
+    embs = model.encode(texts, show_progress_bar=len(texts) > 100, batch_size=32)
+    np.save(cache_file, embs)
+    print(f"  {label}: embedded {len(texts)} texts")
+    return embs
+
+
+def split_large_sections(sections, max_chars=2000):
+    """Split sections larger than max_chars into paragraph-sized chunks.
+
+    Large sections produce blurred embeddings that align poorly. Splitting
+    them into ~500-2000 char chunks gives the DP finer-grained units to
+    work with, improving alignment quality.
+
+    Splits on sentence boundaries (. ? ! ;) near the midpoint, falling back
+    to any whitespace. Preserves all text — no content is lost.
+    """
+    import re
+
+    result = []
+    split_count = 0
+
+    for s in sections:
+        if s["char_count"] <= max_chars:
+            result.append(s)
+            continue
+
+        text = s["text"]
+        book = s["book"]
+        base_ref = s["cts_ref"]
+        edition = s.get("edition", "")
+        work = s.get("work", "")
+
+        # Split into chunks at sentence boundaries
+        chunks = []
+        while len(text) > max_chars:
+            # Find a sentence boundary near the midpoint
+            mid = max_chars
+            # Look for sentence-ending punctuation followed by space
+            best = -1
+            for punct in ['. ', '? ', '! ', '; ', '· ']:
+                idx = text.rfind(punct, max_chars // 2, mid + 200)
+                if idx > best:
+                    best = idx + len(punct)
+
+            if best <= 0:
+                # No sentence boundary found — split on any space
+                best = text.rfind(' ', max_chars // 2, mid + 200)
+                if best <= 0:
+                    best = max_chars
+
+            chunks.append(text[:best].strip())
+            text = text[best:].strip()
+
+        if text:
+            chunks.append(text)
+
+        for ci, chunk in enumerate(chunks):
+            result.append({
+                "book": book,
+                "section": f"{s.get('section', '')}.{ci}" if len(chunks) > 1 else s.get("section", ""),
+                "cts_ref": f"{base_ref}.{ci}" if len(chunks) > 1 else base_ref,
+                "edition": edition,
+                "text": chunk,
+                "char_count": len(chunk),
+                **({"work": work} if work else {}),
+            })
+
+        if len(chunks) > 1:
+            split_count += 1
+
+    if split_count > 0:
+        print(f"  Split {split_count} oversized sections ({len(sections)} → {len(result)})")
+
+    return result
+
+
 def load_config(work_name):
     config_path = PROJECT_ROOT / "scripts" / "works" / work_name / "config.json"
     with open(config_path) as f:
@@ -33,21 +146,26 @@ def load_config(work_name):
 
 
 def load_model(source_language="greek"):
+    global _model_dir_path
     custom_greek = PROJECT_ROOT / "models" / "ancient-greek-embedding"
     custom_latin = PROJECT_ROOT / "models" / "latin-embedding"
     baseline = "paraphrase-multilingual-MiniLM-L12-v2"
 
     if source_language == "latin" and custom_latin.exists():
         print(f"  Using custom Latin model")
+        _model_dir_path = custom_latin
         return SentenceTransformer(str(custom_latin))
     elif source_language == "greek" and custom_greek.exists():
         print(f"  Using custom Ancient Greek model")
+        _model_dir_path = custom_greek
         return SentenceTransformer(str(custom_greek))
     elif custom_greek.exists():
         print(f"  Using custom Ancient Greek model (fallback)")
+        _model_dir_path = custom_greek
         return SentenceTransformer(str(custom_greek))
     else:
         print(f"  Using baseline: {baseline}")
+        _model_dir_path = None
         return SentenceTransformer(baseline)
 
 
@@ -55,36 +173,80 @@ def run_dp_alignment(config, greek_data, english_data, model):
     """Run segmental DP alignment, book by book or work by work."""
     all_alignments = []
 
-    # Determine grouping key — if multi_work, group by work name; otherwise by book
+    # Group sections by alignment unit (work for multi_work, book otherwise)
+    # Build lookup tables for both sides
+    gr_by_key = {}
+    en_by_key = {}
+
     if config.get("multi_work"):
-        works = sorted(set(s.get("work", "") for s in greek_data["sections"]))
-        groups = []
-        for work in works:
-            gr = [s for s in greek_data["sections"] if s.get("work", "") == work]
-            en = [s for s in english_data["sections"] if s.get("work", "") == work]
-            if gr and en:
-                groups.append((work, gr, en))
-    else:
-        # Group by book
-        gr_by_book = {}
         for s in greek_data["sections"]:
-            gr_by_book.setdefault(s["book"], []).append(s)
-        en_by_book = {}
+            gr_by_key.setdefault(s.get("work", ""), []).append(s)
         for s in english_data["sections"]:
-            en_by_book.setdefault(s["book"], []).append(s)
-        all_books = sorted(
-            set(gr_by_book.keys()) & set(en_by_book.keys()),
-            key=lambda x: int(x) if x.isdigit() else x
-        )
-        groups = [(b, gr_by_book[b], en_by_book[b]) for b in all_books]
+            en_by_key.setdefault(s.get("work", ""), []).append(s)
+    else:
+        for s in greek_data["sections"]:
+            gr_by_key.setdefault(s["book"], []).append(s)
+        for s in english_data["sections"]:
+            en_by_key.setdefault(s["book"], []).append(s)
+
+    matched_keys = sorted(
+        set(gr_by_key.keys()) & set(en_by_key.keys()),
+        key=lambda x: int(x) if x.isdigit() else x
+    )
+    groups = [(k, gr_by_key[k], en_by_key[k]) for k in matched_keys]
+
+    # Handle unmatched books/works — NEVER skip text
+    greek_only = set(gr_by_key.keys()) - set(en_by_key.keys())
+    english_only = set(en_by_key.keys()) - set(gr_by_key.keys())
+
+    for key in sorted(greek_only, key=lambda x: int(x) if x.isdigit() else x):
+        for gs in gr_by_key[key]:
+            all_alignments.append({
+                "book": str(key),
+                "greek_cts_ref": gs["cts_ref"],
+                "greek_edition": gs.get("edition", ""),
+                "english_cts_ref": None,
+                "english_section": "",
+                "similarity": 0.0,
+                "greek_preview": gs["text"][:80],
+                "english_preview": "",
+                "group_id": None,
+                "group_size_gr": 1,
+                "group_size_en": 0,
+                "match_type": "unmatched_greek",
+            })
+        print(f"\n  {key}: {len(gr_by_key[key])} source sections (no English)")
+
+    for key in sorted(english_only, key=lambda x: int(x) if x.isdigit() else x):
+        for es in en_by_key[key]:
+            all_alignments.append({
+                "book": str(key),
+                "greek_cts_ref": None,
+                "greek_edition": None,
+                "english_cts_ref": es["cts_ref"],
+                "english_section": es.get("section", ""),
+                "similarity": 0.0,
+                "greek_preview": "",
+                "english_preview": es["text"][:80],
+                "group_id": None,
+                "group_size_gr": 0,
+                "group_size_en": 1,
+                "match_type": "unmatched_english",
+            })
+        print(f"\n  {key}: {len(en_by_key[key])} English sections (no source)")
+
+    cache_dir = PROJECT_ROOT / config["output_dir"] / ".embed_cache"
 
     for book, greek_secs, english_secs in groups:
         print(f"\n=== {book}: {len(greek_secs)} source, {len(english_secs)} target ===")
 
-        greek_embs = model.encode([s["text"] for s in greek_secs],
-                                  show_progress_bar=False, batch_size=32)
-        english_embs = model.encode([s["text"] for s in english_secs],
-                                    show_progress_bar=False, batch_size=32)
+        book_label = str(book).replace(" ", "_").replace("/", "_")
+        greek_embs = embed_with_cache(
+            model, [s.get("text_for_embedding", s["text"]) for s in greek_secs],
+            cache_dir, f"gr_{book_label}")
+        english_embs = embed_with_cache(
+            model, [s.get("text_for_embedding", s["text"]) for s in english_secs],
+            cache_dir, f"en_{book_label}")
 
         greek_lens = [s["char_count"] for s in greek_secs]
         english_lens = [s["char_count"] for s in english_secs]
@@ -168,10 +330,11 @@ def run_pairwise_alignment(config, greek_data, english_data, model):
 
     print(f"Source: {len(greek_secs)}, Target: {len(english_secs)}")
 
-    greek_embs = model.encode([s["text"] for s in greek_secs],
-                              show_progress_bar=True, batch_size=32)
-    english_embs = model.encode([s["text"] for s in english_secs],
-                                show_progress_bar=True, batch_size=32)
+    cache_dir = PROJECT_ROOT / config["output_dir"] / ".embed_cache"
+    greek_embs = embed_with_cache(
+        model, [s.get("text_for_embedding", s["text"]) for s in greek_secs], cache_dir, "gr_pairwise")
+    english_embs = embed_with_cache(
+        model, [s.get("text_for_embedding", s["text"]) for s in english_secs], cache_dir, "en_pairwise")
 
     many_to_one = config.get("pairwise_many_to_one", False)
     matches, sim_matrix = pairwise_match(
@@ -279,6 +442,34 @@ def main(work_name):
         greek_data = {"sections": greek_data}
     if isinstance(english_data, list):
         english_data = {"sections": english_data}
+
+    # Split sections that are extreme outliers on their own side.
+    # Uses text_for_embedding length (excludes footnotes).
+    # Only splits sections >4x their side's median AND >3000 chars.
+    # The DP already handles moderate size differences via grouping.
+    for label, data in [("source", greek_data), ("English", english_data)]:
+        content_lens = sorted(len(s.get("text_for_embedding", s["text"]))
+                              for s in data["sections"])
+        if not content_lens:
+            continue
+        median = content_lens[len(content_lens) // 2]
+        threshold = max(median * 4, 3000)
+        oversized = sum(1 for c in content_lens if c > threshold)
+        if oversized > 0:
+            data["sections"] = split_large_sections(data["sections"], max_chars=threshold)
+            print(f"  Split {label} outliers > {threshold} chars "
+                  f"(median {median}, {oversized} oversized)")
+
+    # Strip footnotes for embedding — keeps original text for hashing and output
+    from pipeline.strip_notes import strip_notes_from_sections
+    strip_notes_from_sections(greek_data["sections"])
+    strip_notes_from_sections(english_data["sections"])
+
+    # Save the post-split sections so integrity checker compares against these
+    with open(greek_path, "w", encoding="utf-8") as f:
+        json.dump(greek_data, f, ensure_ascii=False, indent=2)
+    with open(english_path, "w", encoding="utf-8") as f:
+        json.dump(english_data, f, ensure_ascii=False, indent=2)
 
     print("Loading embedding model...")
     source_lang = config.get("source_language", "greek")

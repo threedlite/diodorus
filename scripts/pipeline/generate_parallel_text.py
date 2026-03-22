@@ -47,6 +47,31 @@ def esc(s):
     return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def render_with_footnotes(text, notes=None):
+    """HTML-escape text and render footnotes distinctly.
+
+    Footnote reference markers [A], [1] become superscript links.
+    If notes list is provided, footnote bodies are rendered as
+    italic blocks after the main text.
+    """
+    import re
+    t = esc(text)
+    # Wrap [A], [B], [1], [2] markers as superscript
+    t = re.sub(r'\[([A-Z])\]', r'<sup class="fn-ref">[\1]</sup>', t)
+    t = re.sub(r'\[(\d+)\]', r'<sup class="fn-ref">[\1]</sup>', t)
+
+    # Append footnote bodies if available
+    if notes:
+        t += '<div class="fn-body">'
+        for n in notes:
+            marker = esc(n["marker"])
+            body = esc(n["text"])
+            t += f'<p class="fn"><span class="fn-marker">{marker}</span> {body}</p>'
+        t += '</div>'
+
+    return t
+
+
 CSS = """
 @page {
     size: A4 landscape;
@@ -105,6 +130,26 @@ td.empty {
     color: #ccc;
     font-style: italic;
     font-size: 9pt;
+}
+.fn-ref {
+    color: #999;
+    font-size: 8pt;
+}
+.fn-body {
+    margin-top: 6px;
+    padding-top: 4px;
+    border-top: 1px solid #ddd;
+}
+.fn {
+    font-size: 9pt;
+    color: #777;
+    font-style: italic;
+    margin: 2px 0;
+}
+.fn-marker {
+    font-style: normal;
+    font-weight: bold;
+    color: #999;
 }
 tr.high td { background-color: #e8f5e9; }
 tr.med td { background-color: #fff8e1; }
@@ -236,13 +281,17 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
 
                 en_text = ""
                 if en_ref and en_ref in en_by_ref:
-                    en_text = en_by_ref[en_ref]["text"]
+                    # Use cleaned text (no footnotes) for display; notes rendered separately
+                    en_text = en_by_ref[en_ref].get("text_for_embedding", en_by_ref[en_ref]["text"])
 
                 # Build row
                 score_str = f'<span class="score">{score:.2f}</span>' if score > 0 else ""
 
                 gr_cell = f'<td class="source">{esc(gr_text)}{score_str}</td>' if gr_text else '<td class="empty">—</td>'
-                en_cell = f'<td class="english">{esc(en_text)}</td>' if en_text else '<td class="empty">—</td>'
+                en_notes = None
+                if en_ref and en_ref in en_by_ref:
+                    en_notes = en_by_ref[en_ref].get("notes")
+                en_cell = f'<td class="english">{render_with_footnotes(en_text, en_notes)}</td>' if en_text else '<td class="empty">—</td>'
                 ref_cell = f'<td class="ref">{esc(gr_ref or en_ref or "")}</td>'
 
                 lines.append(f'<tr class="{css_class}">{ref_cell}{gr_cell}{en_cell}</tr>')

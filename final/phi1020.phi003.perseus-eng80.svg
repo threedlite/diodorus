@@ -115,7 +115,7 @@
 <rect x="552" y="80" width="4" height="15" fill="#e8b83d"/>
 <rect x="556" y="80" width="4" height="15" fill="#e8b83d"/>
 <text x="20" y="114" class="label">Book Thebaid</text>
-<text x="988" y="114" class="stats">n=829  avg=0.513  H=15%  M=83%  L=2%</text>
+<text x="988" y="114" class="stats">n=829  avg=0.513  H=15%  M=83%  L=3%</text>
 <rect x="180" y="102" width="4" height="15" fill="#2d8a4e"/>
 <rect x="184" y="102" width="4" height="15" fill="#e8b83d"/>
 <rect x="188" y="102" width="4" height="15" fill="#e8b83d"/>
@@ -382,10 +382,10 @@
 <rect x="432" y="118" width="4" height="15" fill="#e8b83d"/>
 <rect x="436" y="118" width="4" height="15" fill="#e8b83d"/>
 <rect x="440" y="118" width="4" height="15" fill="#e8b83d"/>
-<rect x="444" y="118" width="4" height="15" fill="#e8b83d"/>
-<rect x="448" y="118" width="4" height="15" fill="#e8b83d"/>
-<rect x="452" y="118" width="4" height="15" fill="#e8b83d"/>
-<rect x="456" y="118" width="4" height="15" fill="#2d8a4e"/>
+<rect x="444" y="118" width="4" height="15" fill="#c9493b"/>
+<rect x="448" y="118" width="4" height="15" fill="#2d8a4e"/>
+<rect x="452" y="118" width="4" height="15" fill="#2d8a4e"/>
+<rect x="456" y="118" width="4" height="15" fill="#e8b83d"/>
 <rect x="460" y="118" width="4" height="15" fill="#e8b83d"/>
 <rect x="464" y="118" width="4" height="15" fill="#e8b83d"/>
 <rect x="468" y="118" width="4" height="15" fill="#e8b83d"/>
@@ -949,8 +949,8 @@
 <text x="180" y="207" class="warn">⚠ 4.165 → 4.204  (5 sections, avg=0.215)</text>
 <text x="180" y="221" class="warn">⚠ 9.110 → 9.142  (4 sections, avg=0.298)</text>
 <line x1="20" y1="235" x2="1200" y2="235" stroke="#ccc" stroke-width="1"/>
-<text x="20" y="255" class="total">TOTAL: 924 sections   avg=0.526   High=21%   Med=77%   Low=2%</text>
-<rect x="20" y="262" width="243.91774891774892" height="10" fill="#2d8a4e" rx="2"/>
-<rect x="263.9177489177489" y="262" width="910.5411255411256" height="10" fill="#e8b83d"/>
-<rect x="1174.4588744588746" y="262" width="25.541125541125542" height="10" fill="#c9493b" rx="2"/>
+<text x="20" y="255" class="total">TOTAL: 924 sections   avg=0.525   High=21%   Med=77%   Low=2%</text>
+<rect x="20" y="262" width="245.1948051948052" height="10" fill="#2d8a4e" rx="2"/>
+<rect x="265.1948051948052" y="262" width="907.9870129870129" height="10" fill="#e8b83d"/>
+<rect x="1173.181818181818" y="262" width="26.81818181818182" height="10" fill="#c9493b" rx="2"/>
 </svg>
