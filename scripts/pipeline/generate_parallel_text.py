@@ -16,6 +16,7 @@ Outputs:
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 from collections import defaultdict
@@ -54,7 +55,6 @@ def render_with_footnotes(text, notes=None):
     If notes list is provided, footnote bodies are rendered as
     italic blocks after the main text.
     """
-    import re
     t = esc(text)
     # Wrap [A], [B], [1], [2] markers as superscript
     t = re.sub(r'\[([A-Z])\]', r'<sup class="fn-ref">[\1]</sup>', t)
@@ -150,6 +150,15 @@ td.empty {
     font-style: normal;
     font-weight: bold;
     color: #999;
+}
+.heading-text {
+    font-size: 9pt;
+    color: #888;
+    font-style: italic;
+    display: block;
+    margin-bottom: 4px;
+    padding-bottom: 3px;
+    border-bottom: 1px dotted #ddd;
 }
 tr.high td { background-color: #e8f5e9; }
 tr.med td { background-color: #fff8e1; }
@@ -279,19 +288,38 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
                 if gr_ref and gr_ref in gr_by_ref:
                     gr_text = gr_by_ref[gr_ref]["text"]
 
+                # For refined sections, each Greek section has its own English
+                # fragment in english_preview — show it directly.
+                # For unrefined, show English only on first occurrence.
                 en_text = ""
-                if en_ref and en_ref in en_by_ref:
-                    # Use cleaned text (no footnotes) for display; notes rendered separately
-                    en_text = en_by_ref[en_ref].get("text_for_embedding", en_by_ref[en_ref]["text"])
+                en_notes = None
+                show_english = False
+                en_heading = None
+                if match_type == "dp_refined":
+                    en_text = a.get("english_refined_text", a.get("english_preview", ""))
+                    show_english = True
+                    seen_en.add(en_ref)
+                elif en_ref and en_ref in en_by_ref and en_ref not in seen_en:
+                    en_section = en_by_ref[en_ref]
+                    en_text = en_section.get("text_for_embedding", en_section["text"])
+                    en_notes = en_section.get("notes")
+                    en_heading = en_section.get("heading_text")
+                    seen_en.add(en_ref)
+                    show_english = True
 
                 # Build row
                 score_str = f'<span class="score">{score:.2f}</span>' if score > 0 else ""
 
                 gr_cell = f'<td class="source">{esc(gr_text)}{score_str}</td>' if gr_text else '<td class="empty">—</td>'
-                en_notes = None
-                if en_ref and en_ref in en_by_ref:
-                    en_notes = en_by_ref[en_ref].get("notes")
-                en_cell = f'<td class="english">{render_with_footnotes(en_text, en_notes)}</td>' if en_text else '<td class="empty">—</td>'
+                if show_english:
+                    heading_html = ""
+                    if en_heading:
+                        heading_html = f'<span class="heading-text">{esc(en_heading)}</span>'
+                    en_cell = f'<td class="english">{heading_html}{render_with_footnotes(en_text, en_notes)}</td>'
+                elif en_ref and en_ref in seen_en:
+                    en_cell = '<td class="empty">↑</td>'  # points up to the English above
+                else:
+                    en_cell = '<td class="empty">—</td>'
                 ref_cell = f'<td class="ref">{esc(gr_ref or en_ref or "")}</td>'
 
                 lines.append(f'<tr class="{css_class}">{ref_cell}{gr_cell}{en_cell}</tr>')

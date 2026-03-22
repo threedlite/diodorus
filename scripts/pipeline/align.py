@@ -16,6 +16,7 @@ Outputs:
 
 import hashlib
 import json
+import re
 import sys
 import numpy as np
 from pathlib import Path
@@ -26,6 +27,11 @@ from align_core import segmental_dp_align, pairwise_match
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
+# Alignment thresholds (can be overridden in config)
+MIN_PAIRWISE_SIMILARITY = 0.3
+OUTLIER_MULTIPLIER = 4          # split sections > median * this
+OUTLIER_FLOOR = 3000            # minimum chars before splitting
+MAX_REFINE_GROUP = 8            # max Greek sections per refinement group
 
 _model_dir_path = None  # set by load_model
 
@@ -79,7 +85,6 @@ def split_large_sections(sections, max_chars=2000):
     Splits on sentence boundaries (. ? ! ;) near the midpoint, falling back
     to any whitespace. Preserves all text — no content is lost.
     """
-    import re
 
     result = []
     split_count = 0
@@ -90,45 +95,78 @@ def split_large_sections(sections, max_chars=2000):
             continue
 
         text = s["text"]
+        embed_text = s.get("text_for_embedding", text)
         book = s["book"]
         base_ref = s["cts_ref"]
         edition = s.get("edition", "")
         work = s.get("work", "")
+        notes = s.get("notes", [])
 
-        # Split into chunks at sentence boundaries
-        chunks = []
-        while len(text) > max_chars:
-            # Find a sentence boundary near the midpoint
-            mid = max_chars
-            # Look for sentence-ending punctuation followed by space
-            best = -1
-            for punct in ['. ', '? ', '! ', '; ', '· ']:
-                idx = text.rfind(punct, max_chars // 2, mid + 200)
-                if idx > best:
-                    best = idx + len(punct)
-
-            if best <= 0:
-                # No sentence boundary found — split on any space
-                best = text.rfind(' ', max_chars // 2, mid + 200)
+        # Split text_for_embedding at sentence boundaries (this is the clean
+        # text without footnotes). Then find the corresponding ranges in the
+        # full text by matching boundary words.
+        def split_at_sentences(t, max_c):
+            chunks = []
+            while len(t) > max_c:
+                mid = max_c
+                best = -1
+                for punct in ['. ', '? ', '! ', '; ', '· ']:
+                    idx = t.rfind(punct, max_c // 2, mid + 200)
+                    if idx > best:
+                        best = idx + len(punct)
                 if best <= 0:
-                    best = max_chars
+                    best = t.rfind(' ', max_c // 2, mid + 200)
+                    if best <= 0:
+                        best = max_c
+                chunks.append(t[:best].strip())
+                t = t[best:].strip()
+            if t:
+                chunks.append(t)
+            return chunks
 
-            chunks.append(text[:best].strip())
-            text = text[best:].strip()
+        embed_chunks = split_at_sentences(embed_text, max_chars)
 
-        if text:
-            chunks.append(text)
+        # Map each embed chunk back to the full text by finding where
+        # the first ~30 chars of each chunk appear in the remaining text.
+        chunks = []
+        remaining = text
+        for ec in embed_chunks[:-1]:
+            # Find boundary: the start of the NEXT chunk in embed_text
+            # corresponds to some position in the full text
+            boundary_words = ec.split()[-3:]  # last 3 words of this chunk
+            boundary_str = " ".join(boundary_words)
+            pos = remaining.find(boundary_str)
+            if pos >= 0:
+                cut = pos + len(boundary_str)
+                # Advance past any trailing whitespace/footnote text to next sentence
+                while cut < len(remaining) and remaining[cut] in ' \t\n':
+                    cut += 1
+                chunks.append(remaining[:cut].strip())
+                remaining = remaining[cut:].strip()
+            else:
+                # Boundary not found — take proportional amount
+                ratio = len(ec) / max(len(embed_text), 1)
+                cut = int(ratio * len(text))
+                chunks.append(remaining[:cut].strip())
+                remaining = remaining[cut:].strip()
+        chunks.append(remaining.strip())
 
         for ci, chunk in enumerate(chunks):
-            result.append({
+            new_section = {
                 "book": book,
                 "section": f"{s.get('section', '')}.{ci}" if len(chunks) > 1 else s.get("section", ""),
                 "cts_ref": f"{base_ref}.{ci}" if len(chunks) > 1 else base_ref,
                 "edition": edition,
                 "text": chunk,
+                "text_for_embedding": embed_chunks[ci] if ci < len(embed_chunks) else chunk,
                 "char_count": len(chunk),
-                **({"work": work} if work else {}),
-            })
+            }
+            if work:
+                new_section["work"] = work
+            # Only first chunk gets the notes
+            if ci == 0 and notes:
+                new_section["notes"] = notes
+            result.append(new_section)
 
         if len(chunks) > 1:
             split_count += 1
@@ -167,6 +205,99 @@ def load_model(source_language="greek"):
         print(f"  Using baseline: {baseline}")
         _model_dir_path = None
         return SentenceTransformer(baseline)
+
+
+def _refine_group(sentences, sent_embs, n_gr, gr_embs):
+    """Split pre-computed English sentences optimally across Greek sections.
+
+    Uses DP on pre-computed sentence embeddings — no model.encode calls.
+    Only refines when there are enough sentences to give each Greek section
+    a meaningful chunk (at least 1.5 sentences per section on average).
+
+    Returns list of (sub_text, similarity) tuples, or None.
+    """
+    if n_gr < 2 or len(sentences) < n_gr:
+        return None
+    # Already checked len(sentences) >= n_gr above
+
+    splits = _optimal_split(sentences, sent_embs, n_gr, gr_embs)
+    if splits is None:
+        return None
+
+    # Compute similarity per piece using prefix sums
+    dim = sent_embs.shape[1]
+    prefix = np.zeros((len(sentences) + 1, dim), dtype=np.float64)
+    for i in range(len(sentences)):
+        prefix[i + 1] = prefix[i] + sent_embs[i]
+
+    result = []
+    idx = 0
+    for i, piece in enumerate(splits):
+        n = len(piece)
+        mean_emb = (prefix[idx + n] - prefix[idx]) / max(n, 1)
+        idx += n
+        norm_p = np.linalg.norm(mean_emb)
+        norm_g = np.linalg.norm(gr_embs[i])
+        sim = float(np.dot(mean_emb, gr_embs[i]) / (norm_p * norm_g)) if norm_p > 1e-10 and norm_g > 1e-10 else 0.0
+        result.append((" ".join(piece), sim))
+
+    return result
+
+
+
+def _optimal_split(sentences, sent_embs, n_gr, gr_embs):
+    """Find optimal split of sentences into n_gr groups using DP.
+
+    Uses pre-computed sentence embeddings with prefix sums for O(1) range
+    similarity. DP over split positions: O(n_sents² × n_gr).
+    """
+    n_sents = len(sentences)
+    dim = sent_embs.shape[1]
+
+    # Prefix sums for O(1) mean embedding of any range
+    prefix = np.zeros((n_sents + 1, dim), dtype=np.float64)
+    for i in range(n_sents):
+        prefix[i + 1] = prefix[i] + sent_embs[i]
+
+    # Precompute norms for Greek embeddings
+    gr_norms = [np.linalg.norm(gr_embs[k]) for k in range(n_gr)]
+
+    def range_sim(start, end, gr_idx):
+        n = end - start
+        if n == 0:
+            return -1e9
+        mean_emb = (prefix[end] - prefix[start]) / n
+        norm_m = np.linalg.norm(mean_emb)
+        if norm_m < 1e-10 or gr_norms[gr_idx] < 1e-10:
+            return 0.0
+        return float(np.dot(mean_emb, gr_embs[gr_idx]) / (norm_m * gr_norms[gr_idx]))
+
+    # DP: dp[k][j] = best total similarity using first k Greek sections
+    # covering sentences 0..j-1
+    NEG_INF = -1e18
+    dp = [[NEG_INF] * (n_sents + 1) for _ in range(n_gr + 1)]
+    parent = [[0] * (n_sents + 1) for _ in range(n_gr + 1)]
+    dp[0][0] = 0.0
+
+    for k in range(1, n_gr + 1):
+        for j in range(k, n_sents - (n_gr - k) + 1):
+            # Try all possible starts for group k
+            for prev_j in range(k - 1, j):
+                sim = range_sim(prev_j, j, k - 1)
+                total = dp[k - 1][prev_j] + sim
+                if total > dp[k][j]:
+                    dp[k][j] = total
+                    parent[k][j] = prev_j
+
+    # Backtrack
+    bounds = [n_sents]
+    j = n_sents
+    for k in range(n_gr, 0, -1):
+        j = parent[k][j]
+        bounds.append(j)
+    bounds.reverse()
+
+    return [sentences[bounds[i]:bounds[i + 1]] for i in range(n_gr)]
 
 
 def run_dp_alignment(config, greek_data, english_data, model):
@@ -251,6 +382,37 @@ def run_dp_alignment(config, greek_data, english_data, model):
         greek_lens = [s["char_count"] for s in greek_secs]
         english_lens = [s["char_count"] for s in english_secs]
 
+        # Pre-split all English sections into sentences and encode once
+        # for use in refinement. Avoids re-encoding per group.
+        en_sentence_data = []  # [(sentences, sent_embs, prefix_sums)] per English section
+        all_en_sentences = []
+        en_sent_ranges = []  # (start_idx, end_idx) in all_en_sentences
+        for es in english_secs:
+            en_text = es.get("text_for_embedding", es["text"])
+            sents = None
+            for pattern in [
+                r'(?<=[.!?])\s+(?=[A-Z])',
+                r'(?<=[.!?;])\s+(?=[A-Z])',
+            ]:
+                parts = re.split(pattern, en_text)
+                parts = [p.strip() for p in parts if p and p.strip()]
+                if len(parts) >= 2:
+                    sents = parts
+                    break
+            if sents is None:
+                sents = [en_text] if en_text else [""]
+            start = len(all_en_sentences)
+            all_en_sentences.extend(sents)
+            en_sent_ranges.append((start, len(all_en_sentences), sents))
+
+        # Encode all sentences at once
+        if all_en_sentences:
+            all_sent_embs = embed_with_cache(
+                model, all_en_sentences, cache_dir,
+                f"en_sents_{book_label}")
+        else:
+            all_sent_embs = np.zeros((0, greek_embs.shape[1]))
+
         total_gr = sum(greek_lens)
         total_en = sum(english_lens)
         expected_ratio = total_gr / total_en if total_en > 0 else 1.0
@@ -275,7 +437,50 @@ def run_dp_alignment(config, greek_data, english_data, model):
         en_skipped = len(english_secs) - len(en_used)
 
         en_to_greek = {}
+        refined_count = 0
         for group_id, (gr_start, gr_end, en_start, en_end, score) in enumerate(groups_result):
+            n_gr = gr_end - gr_start
+            n_en = en_end - en_start
+
+            # Refinement: when multiple Greek sections map to 1 English section,
+            # split the English at sentence boundaries and match each piece to a
+            # Greek section using embedding similarity.
+            if n_gr > 1 and n_en == 1:
+                ej = en_start
+                es = english_secs[ej]
+                gr_emb_group = greek_embs[gr_start:gr_end]
+
+                # Use pre-computed sentence data for this English section
+                sent_start, sent_end, sents = en_sent_ranges[ej]
+                sent_emb_slice = all_sent_embs[sent_start:sent_end]
+
+                refined = _refine_group(sents, sent_emb_slice, n_gr, gr_emb_group)
+
+                if refined:
+                    refined_count += 1
+                    if ej not in en_to_greek:
+                        en_to_greek[ej] = []
+                    for gi_offset, (sub_text, sub_sim) in enumerate(refined):
+                        gs = greek_secs[gr_start + gi_offset]
+                        en_to_greek[ej].append({
+                            "book": str(book),
+                            "greek_cts_ref": gs["cts_ref"],
+                            "greek_edition": gs.get("edition", ""),
+                            "english_cts_ref": es["cts_ref"],
+                            "english_section": es.get("section", ""),
+                            "similarity": round(sub_sim, 4),
+                            "greek_preview": gs["text"][:80],
+                            "english_preview": sub_text[:80],
+                            "english_refined_text": sub_text,
+                            "group_id": group_id,
+                            "group_size_gr": 1,
+                            "group_size_en": 1,
+                            "match_type": "dp_refined",
+                            "refined_part": gi_offset,
+                        })
+                    continue
+
+            # Default: no refinement — all Greek sections point to same English
             for ej in range(en_start, en_end):
                 if ej not in en_to_greek:
                     en_to_greek[ej] = []
@@ -296,6 +501,9 @@ def run_dp_alignment(config, greek_data, english_data, model):
                         "group_size_en": en_end - en_start,
                         "match_type": "dp_aligned",
                     })
+
+        if refined_count > 0:
+            print(f"  Refined {refined_count} groups (split English to match Greek)")
 
         for ej in range(len(english_secs)):
             if ej in en_to_greek:
@@ -338,7 +546,7 @@ def run_pairwise_alignment(config, greek_data, english_data, model):
 
     many_to_one = config.get("pairwise_many_to_one", False)
     matches, sim_matrix = pairwise_match(
-        greek_embs, english_embs, min_similarity=0.3,
+        greek_embs, english_embs, min_similarity=MIN_PAIRWISE_SIMILARITY,
         many_to_one=many_to_one
     )
 
@@ -443,6 +651,35 @@ def main(work_name):
     if isinstance(english_data, list):
         english_data = {"sections": english_data}
 
+    # Merge heading/non-content sections into the next section.
+    # Headings (is_heading=True) and sections with empty text_for_embedding
+    # are editorial content (chapter summaries, footnotes) that shouldn't
+    # take up DP slots. Merge them into the next real section so all text
+    # is preserved but the DP only sees translation content.
+    for data in [greek_data, english_data]:
+        merged = []
+        pending_text = ""
+        for s in data["sections"]:
+            is_non_content = (s.get("is_heading") or
+                              s.get("text_for_embedding", None) == "")
+            if is_non_content:
+                pending_text += " " + s["text"] if pending_text else s["text"]
+            else:
+                if pending_text:
+                    s["heading_text"] = pending_text.strip()
+                    s["text"] = pending_text + " " + s["text"]
+                    s["char_count"] = len(s["text"])
+                    pending_text = ""
+                merged.append(s)
+        # If trailing pending text, append to last section
+        if pending_text and merged:
+            merged[-1]["text"] += " " + pending_text
+            merged[-1]["char_count"] = len(merged[-1]["text"])
+        elif pending_text:
+            # Edge case: all sections are headings — keep them
+            merged = data["sections"]
+        data["sections"] = merged
+
     # Split sections that are extreme outliers on their own side.
     # Uses text_for_embedding length (excludes footnotes).
     # Only splits sections >4x their side's median AND >3000 chars.
@@ -453,7 +690,7 @@ def main(work_name):
         if not content_lens:
             continue
         median = content_lens[len(content_lens) // 2]
-        threshold = max(median * 4, 3000)
+        threshold = max(median * OUTLIER_MULTIPLIER, OUTLIER_FLOOR)
         oversized = sum(1 for c in content_lens if c > threshold)
         if oversized > 0:
             data["sections"] = split_large_sections(data["sections"], max_chars=threshold)

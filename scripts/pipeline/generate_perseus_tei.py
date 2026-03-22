@@ -222,11 +222,18 @@ def main(work_name):
                     ms.set("unit", "section")
                     ms.set("n", str(gr_ref))
 
+                # Emit chapter heading if present
+                heading_text = s.get("heading_text")
+                if heading_text:
+                    head = etree.SubElement(book_div, f"{{{TEI_NS}}}head")
+                    head.text = heading_text
+
                 p = etree.SubElement(book_div, f"{{{TEI_NS}}}p")
                 p.set("n", str(sec_n))
 
-                # If the section has extracted notes, build mixed content
-                # with <note> elements. Otherwise use plain text.
+                # Build mixed content with <note> elements for footnotes.
+                # Uses text_for_embedding (translation only) for <p> content,
+                # with footnotes wrapped in <note> tags.
                 section_notes = s.get("notes", [])
                 if section_notes:
                     _build_p_with_notes(p, s["text"], section_notes, TEI_NS)

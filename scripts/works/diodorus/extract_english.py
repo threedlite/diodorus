@@ -128,20 +128,33 @@ for body in bodies:
             chapter_divs = [book_div]
 
         for ch_idx, ch_div in enumerate(chapter_divs):
+            # Check for chapter heading in the TEI <head> element
+            ch_head = ch_div.find(f"{NS}head")
+
             for p_idx, p in enumerate(ch_div.findall(f".//{NS}p")):
                 raw = clean(get_text(p))
                 if not raw:
                     continue
                 text = normalise(raw)
                 cts_ref = f"{book_str}.{ch_idx}.{p_idx}"
-                all_sections.append({
+
+                # Detect Booth's chapter argument/summary headings:
+                # First paragraph of each chapter, short and terse.
+                # These list topics ("Of X. The Y. How Z.") not narrative.
+                is_heading = p_idx == 0 and len(text) < 500
+
+                section = {
                     "book": book_str,
                     "section": f"{ch_idx}.{p_idx}",
                     "cts_ref": cts_ref,
                     "text": text,
                     "text_original": raw,
                     "char_count": len(text),
-                })
+                }
+                if is_heading:
+                    section["is_heading"] = True
+                    section["text_for_embedding"] = ""
+                all_sections.append(section)
 
 print(f"Extracted {len(all_sections)} English paragraphs")
 books = sorted(set(s["book"] for s in all_sections))

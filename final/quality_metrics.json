@@ -1,0 +1,186 @@
+{
+  "works": {
+    "aesop": {
+      "author": "Aesop",
+      "work_title": "Fabulae",
+      "source_type": "first1kgreek",
+      "english_source": "gutenberg",
+      "translator": "George Fyler Townsend",
+      "english_date": 1867,
+      "xml_files": [
+        "tlg0096.tlg002.perseus-eng80.xml"
+      ],
+      "sections": 600,
+      "high_pct": 17.3,
+      "med_pct": 69.0,
+      "low_pct": 13.7,
+      "avg": 0.455,
+      "build_time_seconds": 4.0,
+      "timestamp": "2026-03-22T12:39:31.931502"
+    },
+    "diodorus": {
+      "author": "Diodorus Siculus",
+      "work_title": "Bibliotheca Historica",
+      "source_type": "perseus",
+      "english_source": "ota",
+      "translator": "G. Booth",
+      "english_date": 1700,
+      "xml_files": [
+        "tlg0060.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 8187,
+      "high_pct": 33.7,
+      "med_pct": 51.1,
+      "low_pct": 15.2,
+      "avg": 0.506,
+      "build_time_seconds": 25.5,
+      "timestamp": "2026-03-22T12:39:57.418311"
+    },
+    "dionysius": {
+      "author": "Dionysius of Halicarnassus",
+      "work_title": "De Compositione Verborum",
+      "source_type": "perseus",
+      "english_source": "gutenberg",
+      "translator": "W. Rhys Roberts",
+      "english_date": 1910,
+      "xml_files": [
+        "tlg0081.tlg012.perseus-eng80.xml"
+      ],
+      "sections": 29,
+      "high_pct": 82.8,
+      "med_pct": 17.2,
+      "low_pct": 0.0,
+      "avg": 0.753,
+      "build_time_seconds": 4.0,
+      "timestamp": "2026-03-22T12:40:01.454262"
+    },
+    "hippolytus": {
+      "author": "Hippolytus",
+      "work_title": "Refutatio Omnium Haeresium (Philosophumena)",
+      "source_type": "first1kgreek",
+      "english_source": "gutenberg",
+      "translator": "F. Legge",
+      "english_date": 1921,
+      "xml_files": [
+        "tlg2115.tlg060.perseus-eng80.xml"
+      ],
+      "sections": 1440,
+      "high_pct": 29.2,
+      "med_pct": 55.5,
+      "low_pct": 15.3,
+      "avg": 0.488,
+      "build_time_seconds": 5.9,
+      "timestamp": "2026-03-22T12:40:07.364458"
+    },
+    "iamblichus": {
+      "author": "Iamblichus",
+      "work_title": "De Vita Pythagorica / De Mysteriis",
+      "source_type": "first1kgreek",
+      "english_source": "gutenberg",
+      "translator": "Thomas Taylor",
+      "english_date": 1818,
+      "xml_files": [
+        "tlg2023.tlg001.perseus-eng80.xml",
+        "tlg2023.tlg006.perseus-eng80.xml"
+      ],
+      "sections": 468,
+      "high_pct": 15.4,
+      "med_pct": 54.3,
+      "low_pct": 30.3,
+      "avg": 0.4,
+      "build_time_seconds": 11.2,
+      "timestamp": "2026-03-22T12:40:18.617908"
+    },
+    "marcus": {
+      "author": "Marcus Aurelius",
+      "work_title": "Meditations (Ad Se Ipsum)",
+      "source_type": "perseus",
+      "english_source": "gutenberg",
+      "translator": "George Long",
+      "english_date": 1862,
+      "xml_files": [
+        "tlg0562.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 578,
+      "high_pct": 69.2,
+      "med_pct": 29.4,
+      "low_pct": 1.4,
+      "avg": 0.648,
+      "build_time_seconds": 4.5,
+      "timestamp": "2026-03-22T12:40:23.167289"
+    },
+    "plotinus": {
+      "author": "Plotinus",
+      "work_title": "Enneads",
+      "source_type": "first1kgreek",
+      "english_source": "gutenberg",
+      "translator": "Kenneth Sylvan Guthrie",
+      "english_date": 1918,
+      "xml_files": [
+        "tlg2000.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 678,
+      "high_pct": 32.6,
+      "med_pct": 49.6,
+      "low_pct": 17.8,
+      "avg": 0.491,
+      "build_time_seconds": 6.2,
+      "timestamp": "2026-03-22T12:40:29.336517"
+    },
+    "procopius_secret": {
+      "author": "Procopius",
+      "work_title": "Secret History (Anecdota)",
+      "source_type": "perseus",
+      "english_source": "gutenberg",
+      "translator": "Anonymous",
+      "english_date": 1896,
+      "xml_files": [
+        "tlg4029.tlg002.perseus-eng80.xml"
+      ],
+      "sections": 1020,
+      "high_pct": 22.3,
+      "med_pct": 57.3,
+      "low_pct": 20.5,
+      "avg": 0.449,
+      "build_time_seconds": 4.4,
+      "timestamp": "2026-03-22T12:40:33.759176"
+    },
+    "procopius_wars": {
+      "author": "Procopius",
+      "work_title": "History of the Wars",
+      "source_type": "perseus",
+      "english_source": "gutenberg",
+      "translator": "H. B. Dewing",
+      "english_date": 1914,
+      "xml_files": [
+        "tlg4029.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 7384,
+      "high_pct": 10.1,
+      "med_pct": 25.5,
+      "low_pct": 64.4,
+      "avg": 0.26,
+      "build_time_seconds": 27.8,
+      "timestamp": "2026-03-22T12:41:01.596678"
+    },
+    "statius": {
+      "author": "Statius",
+      "work_title": "Thebaid / Achilleid",
+      "source_type": "perseus",
+      "english_source": "wikisource",
+      "translator": "J.H. Mozley",
+      "english_date": 1928,
+      "xml_files": [
+        "phi1020.phi001.perseus-eng80.xml",
+        "phi1020.phi003.perseus-eng80.xml"
+      ],
+      "sections": 924,
+      "high_pct": 10.6,
+      "med_pct": 81.0,
+      "low_pct": 8.4,
+      "avg": 0.457,
+      "build_time_seconds": 7.5,
+      "timestamp": "2026-03-22T12:41:09.082588"
+    }
+  }
+}

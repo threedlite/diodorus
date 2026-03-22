@@ -174,10 +174,8 @@ def get_section_label(rec, fmt):
         if ref:
             return ref
         # Unmatched English — use whatever English ref is available
-        en_ref = rec.get("english_cts_ref")
-        if en_ref:
-            return f"en:{en_ref}"
-        return f"en:{rec.get('booth_div2_index', '?')}/{rec.get('booth_p_index', '?')}"
+        en_ref = rec.get("english_cts_ref") or rec.get("english_section")
+        return f"en:{en_ref}" if en_ref else "en:?"
     elif fmt == "prose_latin":
         return rec.get("latin_cts_ref", str(rec.get("group_id", "?")))
     else:

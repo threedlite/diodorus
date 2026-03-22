@@ -27,7 +27,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 WORKS_DIR = PROJECT_ROOT / "scripts" / "works"
 
 
-def save_metrics(work_name, out_dir):
+def save_metrics(work_name, out_dir, build_time=None):
     """Append quality metrics for this work to build/quality_metrics.json."""
     from datetime import datetime
 
@@ -43,12 +43,36 @@ def save_metrics(work_name, out_dir):
     if n == 0:
         return
 
+    # Load config for source info
+    config_path = WORKS_DIR / work_name / "config.json"
+    source_info = {}
+    xml_files = []
+    if config_path.exists():
+        with open(config_path) as cf:
+            cfg = json.load(cf)
+        source_info = {
+            "author": cfg.get("author", ""),
+            "work_title": cfg.get("work_title", ""),
+            "source_type": cfg.get("greek_source", {}).get("type", ""),
+            "english_source": cfg.get("english_source", {}).get("type", ""),
+            "translator": cfg.get("english_source", {}).get("translator", ""),
+            "english_date": cfg.get("english_source", {}).get("date", ""),
+        }
+        gr = cfg.get("greek_source", {})
+        tlg = gr.get("tlg_id", gr.get("phi_id", ""))
+        wid = gr.get("work_id", "")
+        wids = gr.get("work_ids", [wid] if wid else [])
+        xml_files = [f"{tlg}.{w}.perseus-eng80.xml" for w in wids]
+
     entry = {
+        **source_info,
+        "xml_files": xml_files,
         "sections": n,
         "high_pct": round(sum(1 for s in scores if s >= 0.6) / n * 100, 1),
         "med_pct": round(sum(1 for s in scores if 0.3 <= s < 0.6) / n * 100, 1),
         "low_pct": round(sum(1 for s in scores if s < 0.3) / n * 100, 1),
         "avg": round(sum(scores) / n, 3),
+        "build_time_seconds": round(build_time, 1) if build_time else None,
         "timestamp": datetime.now().isoformat(),
     }
 
@@ -97,6 +121,8 @@ def run_work(work_name):
 
     with open(config_path) as f:
         config = json.load(f)
+
+    build_start = __import__('time').time()
 
     author = config["author"]
     title = config["work_title"]
@@ -161,7 +187,8 @@ def run_work(work_name):
              [sys.executable, "scripts/publish_to_final.py", work_name, out_dir])
 
     # Step 9: Save quality metrics
-    save_metrics(work_name, out_dir)
+    build_end = __import__('time').time()
+    save_metrics(work_name, out_dir, build_time=build_end - build_start)
 
     print(f"\n{'='*60}")
     print(f"  {work_name}: COMPLETE")
@@ -189,6 +216,14 @@ def main():
         works = list_works()
         for name, _, _, _ in works:
             run_work(name)
+        # Copy quality metrics to final/ if all passed
+        import shutil
+        metrics_path = PROJECT_ROOT / "build" / "quality_metrics.json"
+        if metrics_path.exists():
+            final_dir = PROJECT_ROOT / "final"
+            final_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(metrics_path, final_dir / "quality_metrics.json")
+            print(f"\nPublished quality_metrics.json to final/")
         return
 
     run_work(arg)

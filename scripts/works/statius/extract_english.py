@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
-LEGACY_DIR = PROJECT_ROOT / "scripts" / "alignment_statius"
+LEGACY_DIR = Path(__file__).resolve().parent / "legacy"
 OUT_DIR = PROJECT_ROOT / "build" / "statius"
 
 OUT_DIR.mkdir(parents=True, exist_ok=True)

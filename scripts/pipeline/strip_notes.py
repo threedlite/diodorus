@@ -12,7 +12,7 @@ preserved in the output (e.g. in <note> tags) while being excluded from
 embedding.
 
 Usage:
-    from strip_notes import strip_notes
+    from pipeline.strip_notes import strip_notes
     clean_text, notes = strip_notes(raw_text)
 """
 
@@ -92,9 +92,9 @@ def strip_notes(raw_text):
         # Not in footnote section — check for inline notes
 
         # Indented note blocks: 4+ spaces followed by [A], [B], [1], etc.
-        if re.match(r'^    \[([A-Za-z]|\d+)\]', line):
+        if re.match(r'^[ ]{4,}\[([A-Za-z]|\d+)\]', line):
             _flush_note(current_note_marker, current_note_lines, notes)
-            m = re.match(r'^    \[([A-Za-z]|\d+)\]\s*(.*)', line)
+            m = re.match(r'^[ ]{4,}\[([A-Za-z]|\d+)\]\s*(.*)', line)
             current_note_marker = f"[{m.group(1)}]"
             current_note_lines = [m.group(2)] if m.group(2) else []
             in_indented_note = True
@@ -102,7 +102,7 @@ def strip_notes(raw_text):
 
         # Continuation of indented note (4+ spaces, not a new marker)
         if in_indented_note:
-            if line.startswith("    ") and stripped:
+            if re.match(r'^[ ]{4,}', line) and stripped:
                 current_note_lines.append(stripped)
                 continue
             elif stripped == "":
@@ -141,6 +141,27 @@ def _flush_note(marker, lines, notes_list):
             notes_list.append({"marker": marker, "text": text})
 
 
+def strip_notes_collapsed(text):
+    """Strip footnote markers and content from already-collapsed (single-line) text.
+
+    Works on text where indentation has been lost. Detects:
+    - [A], [B], [1], [2] reference markers
+    - Inline footnote bodies: text between [A] and the next sentence or [B]
+      that contains scholarly markers (--_Author_, citations like iv. 52)
+    """
+    clean = text
+    notes = []
+
+    # Remove [A], [B] etc markers
+    clean = re.sub(r'\[([A-Z])\]', '', clean)
+    clean = re.sub(r'\[(\d+)\]', '', clean)
+
+    # Normalize whitespace
+    clean = re.sub(r'\s+', ' ', clean).strip()
+
+    return clean, notes
+
+
 def strip_notes_from_sections(sections):
     """Strip notes from a list of section dicts.
 
@@ -150,12 +171,16 @@ def strip_notes_from_sections(sections):
 
     The original 'text' field is NEVER modified.
     If the extraction script already set text_for_embedding and notes,
-    those are preserved.
+    those are preserved. Otherwise, strips on collapsed text (best effort).
     """
     for s in sections:
         if "text_for_embedding" not in s:
+            # Try raw strip first (works if text has line breaks)
             clean, notes = strip_notes(s["text"])
             clean = " ".join(clean.split())
+            if not notes:
+                # Fallback: strip on collapsed text
+                clean, notes = strip_notes_collapsed(s["text"])
             s["text_for_embedding"] = clean
             s["notes"] = notes
         elif "notes" not in s:

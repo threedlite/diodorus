@@ -61,10 +61,11 @@ for i, m in enumerate(book_matches):
     start = m.end()
     end = book_matches[i + 1].start() if i + 1 < len(book_matches) else len(text)
 
-    # Find "THE END." to trim last book
-    the_end = text.find("THE END.", start, end)
-    if the_end != -1:
-        end = the_end
+    # Trim trailing material: index, appendix, "THE END."
+    for stop_marker in ["INDEXES.", "INDEX OF TERMS.", "APPENDIX", "THE END."]:
+        stop_pos = text.find(stop_marker, start, end)
+        if stop_pos != -1 and stop_pos < end:
+            end = stop_pos
 
     book_text = text[start:end].strip()
     books.append((book_num, book_text))
