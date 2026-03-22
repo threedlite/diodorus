@@ -18,10 +18,10 @@ from unidecode import unidecode
 from rapidfuzz import fuzz
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-BOOTH = PROJECT_ROOT / "output" / "booth_normalised.json"
-PERSEUS = PROJECT_ROOT / "output" / "perseus_extracted.json"
-ALIGNMENTS = PROJECT_ROOT / "output" / "section_alignments.json"
-OUTPUT = PROJECT_ROOT / "output" / "entity_validated_alignments.json"
+BOOTH = PROJECT_ROOT / "build" / "booth_normalised.json"
+PERSEUS = PROJECT_ROOT / "build" / "perseus_extracted.json"
+ALIGNMENTS = PROJECT_ROOT / "build" / "section_alignments.json"
+OUTPUT = PROJECT_ROOT / "build" / "entity_validated_alignments.json"
 
 for f, name in [
     (BOOTH, "booth_normalised.json"),
@@ -100,6 +100,13 @@ for bk in booth["books"]:
 # Validate each alignment by entity overlap
 print("Validating alignments with entity anchors...")
 for a in alignments:
+    # Skip unmatched English paragraphs (no Greek to compare)
+    if a.get("match_type") == "unmatched_english" or a.get("greek_cts_ref") is None:
+        a["entity_overlap_score"] = 0.0
+        a["entity_match_count"] = 0
+        a["combined_score"] = 0.0
+        continue
+
     gr_ref = a["greek_cts_ref"]
     en_key = f"{a['book']}/{a['booth_div2_index']}/{a['booth_p_index']}"
 

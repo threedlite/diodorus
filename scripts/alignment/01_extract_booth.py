@@ -24,7 +24,7 @@ from lxml import etree
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 INPUT = PROJECT_ROOT / "data-sources" / "booth" / "A36034.xml"
-OUTPUT = PROJECT_ROOT / "output" / "booth_extracted.json"
+OUTPUT = PROJECT_ROOT / "build" / "booth_extracted.json"
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
 if not INPUT.exists():

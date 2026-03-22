@@ -25,7 +25,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = PROJECT_ROOT / "data-sources" / "statius_mozley"
 THEBAID_RAW = DATA_DIR / "thebaid_raw.json"
 ACHILLEID_RAW = DATA_DIR / "achilleid_raw.json"
-OUTPUT = PROJECT_ROOT / "output" / "statius" / "mozley_normalised.json"
+OUTPUT = PROJECT_ROOT / "build" / "statius" / "mozley_normalised.json"
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
 

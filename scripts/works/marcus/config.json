@@ -1,0 +1,20 @@
+{
+  "name": "marcus",
+  "author": "Marcus Aurelius",
+  "work_title": "Meditations (Ad Se Ipsum)",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0562",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_id": 15877,
+    "translator": "George Long",
+    "date": 1862
+  },
+  "output_dir": "build/marcus",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0562.tlg001"
+}

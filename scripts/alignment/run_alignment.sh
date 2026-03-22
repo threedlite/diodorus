@@ -35,5 +35,17 @@ echo "=== Step 8: Generate Perseus TEI Translation ==="
 python scripts/alignment/08_generate_perseus_tei.py
 
 echo ""
-echo "Done. All outputs in ./output/"
-ls -la output/
+echo "=== Step 9: Quality Map ==="
+python scripts/alignment_quality_map.py --prefix tlg0060.tlg001.perseus-eng80 build/entity_validated_alignments.json
+
+echo ""
+echo "=== Step 10: Integrity Check ==="
+python scripts/verify_alignment_integrity.py diodorus
+
+echo ""
+echo "=== Step 11: Publish to final/ ==="
+python scripts/publish_to_final.py diodorus build/
+
+echo ""
+echo "Done. All outputs in ./build/"
+ls -la build/

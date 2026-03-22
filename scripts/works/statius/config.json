@@ -1,0 +1,20 @@
+{
+  "name": "statius",
+  "author": "Statius",
+  "work_title": "Thebaid / Achilleid",
+  "source_language": "latin",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "phi1020",
+    "work_ids": ["phi001", "phi003"]
+  },
+  "english_source": {
+    "type": "wikisource",
+    "translator": "J.H. Mozley",
+    "date": 1928
+  },
+  "output_dir": "build/statius",
+  "cts_urn_prefix": "urn:cts:latinLit:phi1020",
+  "multi_work": true
+}

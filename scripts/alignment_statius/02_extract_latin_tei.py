@@ -22,7 +22,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 PERSEUS_BASE = (
     PROJECT_ROOT / "data-sources" / "perseus" / "canonical-latinLit" / "data" / "phi1020"
 )
-OUTPUT = PROJECT_ROOT / "output" / "statius" / "latin_extracted.json"
+OUTPUT = PROJECT_ROOT / "build" / "statius" / "latin_extracted.json"
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
 WORKS = [

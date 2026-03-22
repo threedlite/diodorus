@@ -21,9 +21,9 @@ from pathlib import Path
 from collections import defaultdict
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-PASSAGES = PROJECT_ROOT / "output" / "statius" / "latin_passages.json"
-MOZLEY = PROJECT_ROOT / "output" / "statius" / "mozley_normalised.json"
-OUTPUT = PROJECT_ROOT / "output" / "statius" / "book_alignment.json"
+PASSAGES = PROJECT_ROOT / "build" / "statius" / "latin_passages.json"
+MOZLEY = PROJECT_ROOT / "build" / "statius" / "mozley_normalised.json"
+OUTPUT = PROJECT_ROOT / "build" / "statius" / "book_alignment.json"
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
 for f, name in [

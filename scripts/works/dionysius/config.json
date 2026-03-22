@@ -1,0 +1,20 @@
+{
+  "name": "dionysius",
+  "author": "Dionysius of Halicarnassus",
+  "work_title": "De Compositione Verborum",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0081",
+    "work_id": "tlg012"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_id": 50212,
+    "translator": "W. Rhys Roberts",
+    "date": 1910
+  },
+  "output_dir": "build/dionysius",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0081.tlg012"
+}

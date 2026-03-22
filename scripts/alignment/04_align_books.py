@@ -9,9 +9,9 @@ import re
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-BOOTH = PROJECT_ROOT / "output" / "booth_normalised.json"
-PERSEUS = PROJECT_ROOT / "output" / "perseus_extracted.json"
-OUTPUT = PROJECT_ROOT / "output" / "book_alignment.json"
+BOOTH = PROJECT_ROOT / "build" / "booth_normalised.json"
+PERSEUS = PROJECT_ROOT / "build" / "perseus_extracted.json"
+OUTPUT = PROJECT_ROOT / "build" / "book_alignment.json"
 
 for f, name in [(BOOTH, "booth_normalised.json"), (PERSEUS, "perseus_extracted.json")]:
     if not f.exists():

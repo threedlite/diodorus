@@ -28,8 +28,8 @@ import re
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-INPUT = PROJECT_ROOT / "output" / "statius" / "latin_extracted.json"
-OUTPUT = PROJECT_ROOT / "output" / "statius" / "latin_passages.json"
+INPUT = PROJECT_ROOT / "build" / "statius" / "latin_extracted.json"
+OUTPUT = PROJECT_ROOT / "build" / "statius" / "latin_passages.json"
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
 MIN_LINES = 8

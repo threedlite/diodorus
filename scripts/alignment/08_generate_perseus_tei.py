@@ -19,12 +19,12 @@ from pathlib import Path
 from lxml import etree
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-ALIGNMENTS_PATH = PROJECT_ROOT / "output" / "entity_validated_alignments.json"
-BOOTH_PATH = PROJECT_ROOT / "output" / "booth_normalised.json"
-GREEK_PATH = PROJECT_ROOT / "output" / "perseus_extracted.json"
-OUT_TEI = PROJECT_ROOT / "output" / "tlg0060.tlg001.perseus-eng80.xml"
-OUT_CTS = PROJECT_ROOT / "output" / "__cts__eng80_fragment.xml"
-OUT_CSV = PROJECT_ROOT / "output" / "chapter_sentence_counts.csv"
+ALIGNMENTS_PATH = PROJECT_ROOT / "build" / "entity_validated_alignments.json"
+BOOTH_PATH = PROJECT_ROOT / "build" / "booth_normalised.json"
+GREEK_PATH = PROJECT_ROOT / "build" / "perseus_extracted.json"
+OUT_TEI = PROJECT_ROOT / "build" / "tlg0060.tlg001.perseus-eng80.xml"
+OUT_CTS = PROJECT_ROOT / "build" / "__cts__eng80_diodorus.xml"
+OUT_CSV = PROJECT_ROOT / "build" / "chapter_sentence_counts.csv"
 
 TEI_NS = "http://www.tei-c.org/ns/1.0"
 XML_NS = "http://www.w3.org/XML/1998/namespace"

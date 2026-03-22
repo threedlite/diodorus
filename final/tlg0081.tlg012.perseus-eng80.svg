@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="172" viewBox="0 0 1220 172">
+<rect width="1220" height="172" fill="#f5f5f5"/>
+<style>
+  text { font-family: "SF Mono", "Menlo", "Monaco", monospace; }
+  .title { font-size: 16px; font-weight: bold; }
+  .subtitle { font-size: 11px; fill: #888; }
+  .label { font-size: 11px; fill: #333; }
+  .stats { font-size: 10px; fill: #666; }
+  .warn { font-size: 9px; fill: #c9493b; }
+  .total { font-size: 12px; font-weight: bold; fill: #333; }
+  .legend-text { font-size: 10px; fill: #555; }
+</style>
+<text x="20" y="38" class="title">Alignment Quality Map — Dionysius of Halicarnassus — De Compositione Verborum</text>
+<rect x="20" y="50" width="12" height="12" fill="#2d8a4e" rx="2"/>
+<text x="36" y="60" class="legend-text">High (≥0.6)</text>
+<rect x="160" y="50" width="12" height="12" fill="#e8b83d" rx="2"/>
+<text x="176" y="60" class="legend-text">Medium (0.3–0.6)</text>
+<rect x="300" y="50" width="12" height="12" fill="#c9493b" rx="2"/>
+<text x="316" y="60" class="legend-text">Low (&lt;0.3)</text>
+<text x="20" y="92" class="label">Book 1</text>
+<text x="988" y="92" class="stats">n=26  avg=0.789  H=88%  M=12%  L=0%</text>
+<rect x="180" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="184" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="188" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="192" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="196" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="200" y="80" width="4" height="15" fill="#e8b83d"/>
+<rect x="204" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="208" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="212" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="216" y="80" width="4" height="15" fill="#e8b83d"/>
+<rect x="220" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="224" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="228" y="80" width="4" height="15" fill="#e8b83d"/>
+<rect x="232" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="236" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="240" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="244" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="248" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="252" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="256" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="260" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="264" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="268" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="272" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="276" y="80" width="4" height="15" fill="#2d8a4e"/>
+<rect x="280" y="80" width="4" height="15" fill="#2d8a4e"/>
+<line x1="20" y1="107" x2="1200" y2="107" stroke="#ccc" stroke-width="1"/>
+<text x="20" y="127" class="total">TOTAL: 26 sections   avg=0.789   High=88%   Med=12%   Low=0%</text>
+<rect x="20" y="134" width="1043.8461538461538" height="10" fill="#2d8a4e" rx="2"/>
+<rect x="1063.8461538461538" y="134" width="136.15384615384616" height="10" fill="#e8b83d"/>
+<rect x="1200.0" y="134" width="0.0" height="10" fill="#c9493b" rx="2"/>
+</svg>

@@ -38,6 +38,20 @@ echo "=== Step 8: Generate Final Outputs ==="
 python scripts/alignment_statius/08_generate_outputs.py
 
 echo ""
+echo "=== Step 9: Quality Map ==="
+# One SVG per work
+python scripts/alignment_quality_map.py --prefix phi1020.phi001.perseus-eng80 build/statius/entity_validated_alignments.json
+python scripts/alignment_quality_map.py --prefix phi1020.phi003.perseus-eng80 build/statius/entity_validated_alignments.json
+
+echo ""
+echo "=== Step 10: Integrity Check ==="
+python scripts/verify_alignment_integrity.py statius
+
+echo ""
+echo "=== Step 11: Publish to final/ ==="
+python scripts/publish_to_final.py statius build/statius/
+
+echo ""
 echo "=== Pipeline Complete ==="
-echo "Outputs in ./output/statius/"
-ls -la output/statius/
+echo "Outputs in ./build/statius/"
+ls -la build/statius/

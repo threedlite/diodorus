@@ -21,7 +21,7 @@ cd "$PROJECT_ROOT"
 source .venv/bin/activate
 
 # Log directory
-LOG_DIR="output/embedding_logs"
+LOG_DIR="build/embedding_logs"
 mkdir -p "$LOG_DIR"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
@@ -144,9 +144,9 @@ echo ""
 echo "========================================"
 echo "Pipeline complete: $(date)"
 echo "Custom model: models/ancient-greek-embedding/"
-echo "Eval report:  output/embedding_eval_report.md"
+echo "Eval report:  build/embedding_eval_report.md"
 echo "Logs:         $LOG_DIR/"
 echo "========================================"
 echo ""
-echo "Next: review output/embedding_eval_report.md for quality gates."
+echo "Next: review build/embedding_eval_report.md for quality gates."
 echo "If passing, integrate into alignment pipeline (Step 9 in plan)."

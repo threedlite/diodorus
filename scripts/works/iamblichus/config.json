@@ -1,0 +1,21 @@
+{
+  "name": "iamblichus",
+  "author": "Iamblichus",
+  "work_title": "De Vita Pythagorica / De Mysteriis",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "multi_work": true,
+  "greek_source": {
+    "type": "first1kgreek",
+    "tlg_id": "tlg2023",
+    "work_ids": ["tlg001", "tlg006"]
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_ids": [63300, 72815],
+    "translator": "Thomas Taylor",
+    "date": 1818
+  },
+  "output_dir": "build/iamblichus",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg2023"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "aesop",
+  "author": "Aesop",
+  "work_title": "Fabulae",
+  "source_language": "greek",
+  "alignment_mode": "pairwise",
+  "pairwise_many_to_one": true,
+  "greek_source": {
+    "type": "first1kgreek",
+    "tlg_id": "tlg0096",
+    "work_id": "tlg002"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_id": 21,
+    "translator": "George Fyler Townsend",
+    "date": 1867
+  },
+  "output_dir": "build/aesop",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0096.tlg002"
+}

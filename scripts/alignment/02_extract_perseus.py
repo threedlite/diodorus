@@ -16,7 +16,7 @@ PERSEUS_DIR = (
     / "tlg0060"
     / "tlg001"
 )
-OUTPUT = PROJECT_ROOT / "output" / "perseus_extracted.json"
+OUTPUT = PROJECT_ROOT / "build" / "perseus_extracted.json"
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
 if not PERSEUS_DIR.exists():

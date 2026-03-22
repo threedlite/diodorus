@@ -1,6 +1,6 @@
 #!/bin/bash
 # Autonomous pipeline continuation: monitors s04, then runs s06 + s07
-# Logs everything to output/embedding_logs/
+# Logs everything to build/embedding_logs/
 
 set -e
 
@@ -8,7 +8,7 @@ PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$PROJECT_ROOT"
 source .venv/bin/activate
 
-LOG_DIR="$PROJECT_ROOT/output/embedding_logs"
+LOG_DIR="$PROJECT_ROOT/build/embedding_logs"
 mkdir -p "$LOG_DIR"
 LOGFILE="$LOG_DIR/pipeline_continuation.log"
 
@@ -94,10 +94,10 @@ log "=== Pipeline continuation complete ==="
 log "Results:"
 log "  s04 MLM model:     models/xlm-r-greek-mlm/"
 log "  s06 Embedding:     models/ancient-greek-embedding/"
-if [ -f "$PROJECT_ROOT/output/embedding_eval_report.md" ]; then
-    log "  s07 Eval report:   output/embedding_eval_report.md"
+if [ -f "$PROJECT_ROOT/build/embedding_eval_report.md" ]; then
+    log "  s07 Eval report:   build/embedding_eval_report.md"
     log ""
     log "--- Evaluation Report ---"
-    cat "$PROJECT_ROOT/output/embedding_eval_report.md" >> "$LOGFILE"
+    cat "$PROJECT_ROOT/build/embedding_eval_report.md" >> "$LOGFILE"
 fi
 log "=== DONE ==="

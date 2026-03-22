@@ -9,8 +9,8 @@ import re
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-INPUT = PROJECT_ROOT / "output" / "booth_extracted.json"
-OUTPUT = PROJECT_ROOT / "output" / "booth_normalised.json"
+INPUT = PROJECT_ROOT / "build" / "booth_extracted.json"
+OUTPUT = PROJECT_ROOT / "build" / "booth_normalised.json"
 
 if not INPUT.exists():
     print(f"Error: {INPUT} not found. Run 01_extract_booth.py first.")

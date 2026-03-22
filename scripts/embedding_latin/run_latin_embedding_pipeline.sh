@@ -19,7 +19,7 @@ cd "$PROJECT_ROOT"
 source .venv/bin/activate
 
 # Log directory
-LOG_DIR="output/latin_embedding_logs"
+LOG_DIR="build/latin_embedding_logs"
 mkdir -p "$LOG_DIR"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
@@ -136,8 +136,8 @@ echo ""
 echo "========================================"
 echo "Latin pipeline complete: $(date)"
 echo "Custom model: models/latin-embedding/"
-echo "Eval report:  output/latin_embedding_eval_report.md"
+echo "Eval report:  build/latin_embedding_eval_report.md"
 echo "Logs:         $LOG_DIR/"
 echo "========================================"
 echo ""
-echo "Next: review output/latin_embedding_eval_report.md for quality gates."
+echo "Next: review build/latin_embedding_eval_report.md for quality gates."

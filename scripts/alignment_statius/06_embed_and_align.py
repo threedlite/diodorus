@@ -25,19 +25,23 @@ Model: uses custom Latin embedding (models/latin-embedding/)
 """
 
 import json
-import math
 import re
+import sys
 
 import numpy as np
 from pathlib import Path
 from sentence_transformers import SentenceTransformer
 
+# Import shared alignment algorithms
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from align_core import segmental_dp_align
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-MOZLEY = PROJECT_ROOT / "output" / "statius" / "mozley_normalised.json"
-PASSAGES = PROJECT_ROOT / "output" / "statius" / "latin_passages.json"
-BOOK_ALIGN = PROJECT_ROOT / "output" / "statius" / "book_alignment.json"
-OUTPUT = PROJECT_ROOT / "output" / "statius" / "section_alignments.json"
-OUTPUT_TSV = PROJECT_ROOT / "output" / "statius" / "section_alignments.tsv"
+MOZLEY = PROJECT_ROOT / "build" / "statius" / "mozley_normalised.json"
+PASSAGES = PROJECT_ROOT / "build" / "statius" / "latin_passages.json"
+BOOK_ALIGN = PROJECT_ROOT / "build" / "statius" / "book_alignment.json"
+OUTPUT = PROJECT_ROOT / "build" / "statius" / "section_alignments.json"
+OUTPUT_TSV = PROJECT_ROOT / "build" / "statius" / "section_alignments.tsv"
 
 # --- Model selection: prefer custom Latin model ---
 CUSTOM_MODEL = PROJECT_ROOT / "models" / "latin-embedding"
@@ -67,143 +71,6 @@ with open(PASSAGES) as f:
     passages_data = json.load(f)
 with open(BOOK_ALIGN) as f:
     book_align = json.load(f)
-
-
-def segmental_dp_align(latin_embs, en_embs, latin_lens, en_lens, expected_ratio):
-    """
-    Segmental Dynamic Programming alignment.
-
-    Aligns variable-size groups of Latin passages (1-5) to English paragraphs
-    (1-2), optimizing a global score combining cosine similarity and length
-    penalty.
-
-    Args:
-        latin_embs: np.array (n_lat, dim) - Latin passage embeddings
-        en_embs: np.array (n_en, dim) - English paragraph embeddings
-        latin_lens: list[int] - character lengths of Latin passages
-        en_lens: list[int] - character lengths of English paragraphs
-        expected_ratio: float - expected Latin chars / English chars ratio
-
-    Returns:
-        list of (lat_start, lat_end, en_start, en_end, score) tuples
-        where lat_start:lat_end and en_start:en_end are half-open ranges
-    """
-    n_lat = len(latin_embs)
-    n_en = len(en_embs)
-    dim = latin_embs.shape[1]
-
-    MAX_LAT = 5  # max Latin passages per group
-    MAX_EN = 2   # max English paragraphs per group
-
-    # Banding: only allow j within +/- bandwidth of expected position
-    bandwidth = max(20, int(n_en * 0.15))
-
-    # Prefix sums for efficient mean embedding computation
-    prefix_lat = np.zeros((n_lat + 1, dim), dtype=np.float64)
-    for i in range(n_lat):
-        prefix_lat[i + 1] = prefix_lat[i] + latin_embs[i]
-
-    prefix_en = np.zeros((n_en + 1, dim), dtype=np.float64)
-    for i in range(n_en):
-        prefix_en[i + 1] = prefix_en[i] + en_embs[i]
-
-    # Prefix sums for character lengths
-    prefix_lat_len = np.zeros(n_lat + 1, dtype=np.float64)
-    for i in range(n_lat):
-        prefix_lat_len[i + 1] = prefix_lat_len[i] + latin_lens[i]
-
-    prefix_en_len = np.zeros(n_en + 1, dtype=np.float64)
-    for i in range(n_en):
-        prefix_en_len[i + 1] = prefix_en_len[i] + en_lens[i]
-
-    # DP table: dp[i][j] = best total score aligning latin[0:i] to en[0:j]
-    NEG_INF = -1e18
-    dp = np.full((n_lat + 1, n_en + 1), NEG_INF, dtype=np.float64)
-    dp[0][0] = 0.0
-
-    # Parent table for backtracking
-    parent = [[None] * (n_en + 1) for _ in range(n_lat + 1)]
-
-    for i in range(n_lat + 1):
-        j_expected = i * (n_en / n_lat) if n_lat > 0 else 0
-        j_lo = max(0, int(j_expected - bandwidth))
-        j_hi = min(n_en, int(j_expected + bandwidth))
-
-        for j in range(j_lo, j_hi + 1):
-            if dp[i][j] == NEG_INF:
-                continue
-
-            for g in range(1, MAX_LAT + 1):
-                if i + g > n_lat:
-                    break
-                for e in range(1, MAX_EN + 1):
-                    if j + e > n_en:
-                        break
-
-                    # Check that target is within band
-                    tgt_j_expected = (i + g) * (n_en / n_lat) if n_lat > 0 else 0
-                    if abs((j + e) - tgt_j_expected) > bandwidth:
-                        continue
-
-                    # Mean embeddings for group
-                    mean_lat = (prefix_lat[i + g] - prefix_lat[i]) / g
-                    mean_en = (prefix_en[j + e] - prefix_en[j]) / e
-
-                    # Cosine similarity
-                    norm_lat = np.linalg.norm(mean_lat)
-                    norm_en = np.linalg.norm(mean_en)
-                    if norm_lat < 1e-10 or norm_en < 1e-10:
-                        cos_sim = 0.0
-                    else:
-                        cos_sim = float(np.dot(mean_lat, mean_en) / (norm_lat * norm_en))
-
-                    # Length penalty
-                    lat_chars = prefix_lat_len[i + g] - prefix_lat_len[i]
-                    en_chars = prefix_en_len[j + e] - prefix_en_len[j]
-                    if en_chars > 0 and expected_ratio > 0:
-                        ratio = (lat_chars / en_chars) / expected_ratio
-                        length_pen = math.exp(-0.5 * (ratio - 1.0) ** 2)
-                    else:
-                        length_pen = 0.5
-
-                    score = 0.8 * cos_sim + 0.2 * length_pen
-                    new_score = dp[i][j] + score
-
-                    if new_score > dp[i + g][j + e]:
-                        dp[i + g][j + e] = new_score
-                        parent[i + g][j + e] = (i, j, g, e)
-
-    # Backtrack from dp[n_lat][n_en]
-    if dp[n_lat][n_en] == NEG_INF:
-        # Find best reachable endpoint
-        best_score = NEG_INF
-        best_i, best_j = n_lat, n_en
-        for i in range(max(0, n_lat - MAX_LAT), n_lat + 1):
-            for j in range(max(0, n_en - MAX_EN), n_en + 1):
-                if dp[i][j] > best_score:
-                    best_score = dp[i][j]
-                    best_i, best_j = i, j
-        ci, cj = best_i, best_j
-    else:
-        ci, cj = n_lat, n_en
-
-    groups = []
-    while ci > 0 and cj > 0 and parent[ci][cj] is not None:
-        prev_i, prev_j, g, e = parent[ci][cj]
-        # Compute the score for this group
-        mean_lat = (prefix_lat[ci] - prefix_lat[prev_i]) / g
-        mean_en = (prefix_en[cj] - prefix_en[prev_j]) / e
-        norm_lat = np.linalg.norm(mean_lat)
-        norm_en = np.linalg.norm(mean_en)
-        if norm_lat < 1e-10 or norm_en < 1e-10:
-            cos_sim = 0.0
-        else:
-            cos_sim = float(np.dot(mean_lat, mean_en) / (norm_lat * norm_en))
-        groups.append((prev_i, ci, prev_j, cj, cos_sim))
-        ci, cj = prev_i, prev_j
-
-    groups.reverse()
-    return groups
 
 
 all_alignments = []

@@ -1,0 +1,20 @@
+{
+  "name": "diodorus",
+  "author": "Diodorus Siculus",
+  "work_title": "Bibliotheca Historica",
+  "source_language": "greek",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "tlg0060",
+    "work_id": "tlg001"
+  },
+  "english_source": {
+    "type": "ota",
+    "record": "A36034",
+    "translator": "G. Booth",
+    "date": 1700
+  },
+  "output_dir": "build/diodorus",
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0060.tlg001"
+}

@@ -10,7 +10,8 @@ __pycache__/
 *.pyo
 
 # Output files
-output/
+build/
+build/
 
 # Model files
 models/

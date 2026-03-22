@@ -34,7 +34,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 CUSTOM_MODEL = PROJECT_ROOT / "models" / "ancient-greek-embedding"
 BASELINE_MODEL = "paraphrase-multilingual-MiniLM-L12-v2"
 EVAL_FILE = PROJECT_ROOT / "data-sources" / "parallel" / "eval_pairs.jsonl"
-REPORT = PROJECT_ROOT / "output" / "embedding_eval_report.md"
+REPORT = PROJECT_ROOT / "build" / "embedding_eval_report.md"
 
 if not EVAL_FILE.exists():
     print(f"Error: eval data not found at {EVAL_FILE}")

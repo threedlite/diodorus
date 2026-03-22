@@ -28,10 +28,10 @@ import spacy
 from rapidfuzz import fuzz
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-MOZLEY = PROJECT_ROOT / "output" / "statius" / "mozley_normalised.json"
-PASSAGES = PROJECT_ROOT / "output" / "statius" / "latin_passages.json"
-ALIGNMENTS = PROJECT_ROOT / "output" / "statius" / "section_alignments.json"
-OUTPUT = PROJECT_ROOT / "output" / "statius" / "entity_validated_alignments.json"
+MOZLEY = PROJECT_ROOT / "build" / "statius" / "mozley_normalised.json"
+PASSAGES = PROJECT_ROOT / "build" / "statius" / "latin_passages.json"
+ALIGNMENTS = PROJECT_ROOT / "build" / "statius" / "section_alignments.json"
+OUTPUT = PROJECT_ROOT / "build" / "statius" / "entity_validated_alignments.json"
 
 for f, name in [
     (MOZLEY, "mozley_normalised.json"),

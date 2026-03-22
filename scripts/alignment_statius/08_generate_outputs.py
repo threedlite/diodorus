@@ -26,11 +26,11 @@ from pathlib import Path
 from lxml import etree
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-ALIGNMENTS_PATH = PROJECT_ROOT / "output" / "statius" / "entity_validated_alignments.json"
-MOZLEY_PATH = PROJECT_ROOT / "output" / "statius" / "mozley_normalised.json"
-PASSAGES_PATH = PROJECT_ROOT / "output" / "statius" / "latin_passages.json"
+ALIGNMENTS_PATH = PROJECT_ROOT / "build" / "statius" / "entity_validated_alignments.json"
+MOZLEY_PATH = PROJECT_ROOT / "build" / "statius" / "mozley_normalised.json"
+PASSAGES_PATH = PROJECT_ROOT / "build" / "statius" / "latin_passages.json"
 
-OUT_DIR = PROJECT_ROOT / "output" / "statius"
+OUT_DIR = PROJECT_ROOT / "build" / "statius"
 OUT_STANDOFF = OUT_DIR / "alignment_statius_perseus.xml"
 OUT_TSV = OUT_DIR / "alignment_statius_perseus.tsv"
 OUT_REPORT = OUT_DIR / "alignment_report.md"
@@ -519,6 +519,24 @@ def main():
     print("Generating quality report...")
     generate_report(alignments)
     print(f"  Wrote: {OUT_REPORT}")
+
+    # CTS catalog fragment
+    out_cts = OUT_DIR / "__cts__eng80_statius.xml"
+    cts_lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+                 '<!-- CTS catalog entries for Statius English translations -->']
+    for work_name, urn in URN_BASE.items():
+        phi = PHI_WORK[work_name]
+        cts_lines.append(
+            f'<ti:translation xmlns:ti="http://chs.harvard.edu/xmlns/cts" '
+            f'urn="{urn}" workUrn="urn:cts:latinLit:{phi}" xml:lang="eng">'
+        )
+        cts_lines.append(f'  <ti:label xml:lang="eng">J.H. Mozley (1928)</ti:label>')
+        cts_lines.append(f'  <ti:description xml:lang="eng">J.H. Mozley translation of '
+                         f'Statius, {work_name}. Public domain (Loeb 1928).</ti:description>')
+        cts_lines.append('</ti:translation>')
+    with open(out_cts, "w", encoding="utf-8") as f:
+        f.write("\n".join(cts_lines) + "\n")
+    print(f"  Wrote: {out_cts}")
 
     # Summary
     print_summary(alignments, mozley, para_milestones, total_milestones)

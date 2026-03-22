@@ -13,10 +13,10 @@ from collections import defaultdict
 from datetime import date
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-ALIGNMENTS = PROJECT_ROOT / "output" / "entity_validated_alignments.json"
-OUT_XML = PROJECT_ROOT / "output" / "alignment_booth_perseus.xml"
-OUT_TSV = PROJECT_ROOT / "output" / "alignment_booth_perseus.tsv"
-OUT_REPORT = PROJECT_ROOT / "output" / "alignment_report.md"
+ALIGNMENTS = PROJECT_ROOT / "build" / "entity_validated_alignments.json"
+OUT_XML = PROJECT_ROOT / "build" / "alignment_booth_perseus.xml"
+OUT_TSV = PROJECT_ROOT / "build" / "alignment_booth_perseus.tsv"
+OUT_REPORT = PROJECT_ROOT / "build" / "alignment_report.md"
 
 if not ALIGNMENTS.exists():
     print(f"Error: {ALIGNMENTS} not found. Run 06_entity_anchors.py first.")
@@ -62,11 +62,17 @@ for book_num in sorted(by_book.keys(), key=lambda x: int(x) if x.isdigit() else 
     xml_lines.append(f'      <linkGrp type="alignment" subtype="book-{book_num}">')
     for a in book_aligns:
         src = f"booth:div1[@n='{book_num}']/div2[{a['booth_div2_index']}]/p[{a['booth_p_index']}]"
-        tgt = f"urn:cts:greekLit:tlg0060.tlg001.{a['greek_edition']}:{a['greek_cts_ref']}"
-        conf = a.get("combined_score", a["similarity"])
-        xml_lines.append(
-            f'        <link target="{src} {tgt}" ' f'ana="confidence:{conf}"/>'
-        )
+        if a.get("greek_cts_ref") is not None:
+            tgt = f"urn:cts:greekLit:tlg0060.tlg001.{a['greek_edition']}:{a['greek_cts_ref']}"
+            conf = a.get("combined_score", a["similarity"])
+            xml_lines.append(
+                f'        <link target="{src} {tgt}" ' f'ana="confidence:{conf}"/>'
+            )
+        else:
+            # Unmatched English paragraph — still present, no Greek target
+            xml_lines.append(
+                f'        <link target="{src}" ana="confidence:0 match:unmatched_english"/>'
+            )
     xml_lines.append("      </linkGrp>")
 
 xml_lines += [
@@ -81,7 +87,7 @@ with open(OUT_XML, "w", encoding="utf-8") as f:
 # ---- 2. TSV ----
 TSV_FIELDS = [
     "book", "greek_cts_ref", "greek_edition", "booth_div2", "booth_p",
-    "embedding_sim", "entity_score", "combined_score",
+    "embedding_sim", "entity_score", "combined_score", "match_type",
 ]
 with open(OUT_TSV, "w", encoding="utf-8", newline="") as f:
     writer = csv.DictWriter(f, fieldnames=TSV_FIELDS, delimiter="\t")
@@ -89,13 +95,14 @@ with open(OUT_TSV, "w", encoding="utf-8", newline="") as f:
     for a in alignments:
         writer.writerow({
             "book": a["book"],
-            "greek_cts_ref": a["greek_cts_ref"],
-            "greek_edition": a["greek_edition"],
+            "greek_cts_ref": a.get("greek_cts_ref", ""),
+            "greek_edition": a.get("greek_edition", ""),
             "booth_div2": a["booth_div2_index"],
             "booth_p": a["booth_p_index"],
             "embedding_sim": a["similarity"],
             "entity_score": a.get("entity_overlap_score", ""),
             "combined_score": a.get("combined_score", a["similarity"]),
+            "match_type": a.get("match_type", "dp_aligned"),
         })
 
 # ---- 3. Quality Report ----
