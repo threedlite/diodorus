@@ -27,7 +27,39 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 WORKS_DIR = PROJECT_ROOT / "scripts" / "works"
 
 
-def save_metrics(work_name, out_dir, build_time=None):
+def load_previous_metrics():
+    """Load the last published quality metrics from final/quality_metrics.json."""
+    prev_path = PROJECT_ROOT / "final" / "quality_metrics.json"
+    if prev_path.exists():
+        with open(prev_path) as f:
+            return json.load(f).get("works", {})
+    return {}
+
+
+def check_regression(work_name, new_entry, previous_metrics):
+    """Compare new metrics against previous and warn on regressions."""
+    prev = previous_metrics.get(work_name)
+    if not prev:
+        return  # no previous data to compare
+
+    warnings = []
+    if new_entry["high_pct"] < prev["high_pct"]:
+        warnings.append(
+            f"high dropped {prev['high_pct']}% → {new_entry['high_pct']}%")
+    if new_entry["low_pct"] > prev["low_pct"]:
+        warnings.append(
+            f"low rose {prev['low_pct']}% → {new_entry['low_pct']}%")
+    if new_entry["avg"] < prev["avg"]:
+        warnings.append(
+            f"avg dropped {prev['avg']:.3f} → {new_entry['avg']:.3f}")
+
+    if warnings:
+        print(f"\n  ⚠ QUALITY REGRESSION for {work_name}:")
+        for w in warnings:
+            print(f"    {w}")
+
+
+def save_metrics(work_name, out_dir, build_time=None, previous_metrics=None):
     """Append quality metrics for this work to build/quality_metrics.json."""
     from datetime import datetime
 
@@ -76,6 +108,10 @@ def save_metrics(work_name, out_dir, build_time=None):
         "timestamp": datetime.now().isoformat(),
     }
 
+    # Compare against previous metrics
+    if previous_metrics is not None:
+        check_regression(work_name, entry, previous_metrics)
+
     metrics_path = PROJECT_ROOT / "build" / "quality_metrics.json"
     if metrics_path.exists():
         with open(metrics_path) as f:
@@ -111,7 +147,7 @@ def run_step(description, cmd):
         sys.exit(1)
 
 
-def run_work(work_name):
+def run_work(work_name, previous_metrics=None):
     """Run the full pipeline for one work."""
     config_path = WORKS_DIR / work_name / "config.json"
     if not config_path.exists():
@@ -186,9 +222,10 @@ def run_work(work_name):
     run_step("Publish to final/",
              [sys.executable, "scripts/publish_to_final.py", work_name, out_dir])
 
-    # Step 9: Save quality metrics
+    # Step 9: Save quality metrics and check for regressions
     build_end = __import__('time').time()
-    save_metrics(work_name, out_dir, build_time=build_end - build_start)
+    save_metrics(work_name, out_dir, build_time=build_end - build_start,
+                 previous_metrics=previous_metrics)
 
     print(f"\n{'='*60}")
     print(f"  {work_name}: COMPLETE")
@@ -213,9 +250,10 @@ def main():
         return
 
     if arg == "--all":
+        prev = load_previous_metrics()
         works = list_works()
         for name, _, _, _ in works:
-            run_work(name)
+            run_work(name, previous_metrics=prev)
         # Copy quality metrics to final/ if all passed
         import shutil
         metrics_path = PROJECT_ROOT / "build" / "quality_metrics.json"
@@ -226,7 +264,8 @@ def main():
             print(f"\nPublished quality_metrics.json to final/")
         return
 
-    run_work(arg)
+    prev = load_previous_metrics()
+    run_work(arg, previous_metrics=prev)
 
 
 if __name__ == "__main__":
