@@ -22,3 +22,48 @@ already have English in Perseus or First1KGreek — that is not the point.
    matches are acceptable, but every section of both source and target must be
    present and in order
 4. The quality map must honestly report unmatched and low-confidence sections
+
+## Pipeline overview
+
+`scripts/pipeline/run.py --all` runs all 35 works through:
+extract → align → score → generate outputs → integrity check → publish to `final/`
+
+### Alignment algorithm (`scripts/pipeline/align.py`)
+
+1. **CTS ref matching** — match by section number (exact → parent → split-from → prefix)
+2. **Two-pass embedding DP** — segmental DP with entity + lexical matrix
+   - First pass: embedding cosine + entity overlap
+   - Build PMI-weighted Greek→English lexical table from first-pass alignment
+   - Second pass: embedding + combined entity/lexical matrix
+3. **Refinement** — split English text at sentence boundaries to match multiple Greek sections
+4. **CTS override** — when CTS covers 100%, use it instead of DP
+
+### Scoring formula (`scripts/pipeline/entity_anchors.py`)
+
+```
+lex_norm = min(1.0, lexical_score / 0.25)
+
+score = (1 - ent_weight) × (0.4 × embedding_cosine
+                           + 0.3 × lex_norm
+                           + 0.3 × length_ratio_penalty)
+      + ent_weight × entity_overlap
+
+if non-1:1 and not refined: score *= 1/sqrt(sharing_count)
+combined_score = min(1.0, score)
+```
+
+- **embedding_cosine**: cross-lingual embedding similarity (custom ancient-greek model)
+- **lex_norm**: PMI-weighted bilingual word overlap (from global lexicon, 40K entries)
+- **length_ratio_penalty**: Gaussian on char-ratio deviation from expected
+- **entity_overlap**: proper name transliteration matching (evidence-adaptive weight)
+- **sharing penalty**: 1/sqrt(N) for non-1:1 mappings not split by refinement
+
+Thresholds: green ≥ 0.50, yellow ≥ 0.25, red < 0.25
+
+### Key files
+
+- `scripts/pipeline/lexical_overlap.py` — PMI-based bilingual lexical overlap
+- `scripts/build_lexicon.py` — builds `build/global_lexical_table.pkl` (40K Greek words)
+- `scripts/word_count_report.py` — generates `final/word_count_comparison.md`
+- `scripts/alignment_quality_map.py` — clickable SVG quality maps
+- `plans/` — design docs, analysis, rollout notes

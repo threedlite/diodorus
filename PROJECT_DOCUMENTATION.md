@@ -160,6 +160,15 @@ python scripts/pipeline/run.py --all        # all works
 python scripts/pipeline/run.py --list       # list available
 ```
 
+### Build times
+
+A full `--all` build (35 works as of 2026-03-22) takes approximately **18 minutes**
+on an Apple M-series Mac. Individual work times range from 2-4 seconds (small works
+like Bion, Julian) to 3-4 minutes (Diodorus, Procopius Wars). The entity overlap
+matrix computation adds a few seconds per book for name-rich works. Embedding
+computation is cached — subsequent runs skip re-embedding unless the model or
+source text changes.
+
 ### Pipeline steps (per work)
 
 | Step | Script | Description |

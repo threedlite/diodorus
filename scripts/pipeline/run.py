@@ -262,6 +262,10 @@ def main():
             final_dir.mkdir(parents=True, exist_ok=True)
             shutil.copy2(metrics_path, final_dir / "quality_metrics.json")
             print(f"\nPublished quality_metrics.json to final/")
+        # Regenerate word count comparison report
+        word_count_script = PROJECT_ROOT / "scripts" / "word_count_report.py"
+        if word_count_script.exists():
+            subprocess.run([sys.executable, str(word_count_script)], cwd=str(PROJECT_ROOT))
         return
 
     prev = load_previous_metrics()

@@ -13,14 +13,41 @@ import math
 import numpy as np
 
 
+def _speaker_lcs_similarity(seq_a, seq_b):
+    """LCS-based similarity between two speaker sequences.
+
+    Returns a float in [0, 1] measuring how well the ordered speaker turns
+    match. Uses the Longest Common Subsequence normalized by total length.
+    """
+    if not seq_a or not seq_b:
+        return 0.0
+    m, n = len(seq_a), len(seq_b)
+    dp_lcs = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if seq_a[i - 1] == seq_b[j - 1]:
+                dp_lcs[i][j] = dp_lcs[i - 1][j - 1] + 1
+            else:
+                dp_lcs[i][j] = max(dp_lcs[i - 1][j], dp_lcs[i][j - 1])
+    lcs = dp_lcs[m][n]
+    return (2 * lcs) / (m + n)
+
+
 def segmental_dp_align(source_embs, target_embs, source_lens, target_lens,
-                       expected_ratio, max_source=5, max_target=2):
+                       expected_ratio, max_source=5, max_target=2,
+                       source_speakers=None, target_speakers=None,
+                       entity_matrix=None):
     """
     Segmental Dynamic Programming alignment for sequential texts.
 
     Assumes source and target are in roughly the same order (e.g., both follow
     book/chapter sequence). Groups 1-max_source source sections onto
     1-max_target target paragraphs.
+
+    Scoring adapts automatically to group size: cosine similarity is weighted
+    by 1/sqrt(g*e) because averaging more embeddings dilutes the signal.
+    When speaker sequences are provided, speaker-sequence LCS similarity is
+    blended in as an additional signal channel.
 
     Args:
         source_embs: np.array (n_src, dim) - source (e.g. Greek) embeddings
@@ -30,6 +57,14 @@ def segmental_dp_align(source_embs, target_embs, source_lens, target_lens,
         expected_ratio: float - expected source chars / target chars ratio
         max_source: int - max source sections per group (default 5)
         max_target: int - max target sections per group (default 2)
+        source_speakers: list[list[str]] or None - ordered speaker names per
+            source section (e.g. from TEI <speaker> tags). None for prose.
+        target_speakers: list[str] or None - single speaker name per target
+            section (e.g. from CAPS labels in English drama). None for prose.
+        entity_matrix: np.array (n_src, n_tgt) or None - precomputed entity
+            name overlap scores. entity_matrix[i][j] is the fraction of Greek
+            names in source section i that fuzzy-match names in target section j.
+            None if not available.
 
     Returns:
         list of (src_start, src_end, tgt_start, tgt_end, score) tuples
@@ -101,7 +136,65 @@ def segmental_dp_align(source_embs, target_embs, source_lens, target_lens,
                     else:
                         length_pen = 0.5
 
-                    score = 0.8 * cos_sim + 0.2 * length_pen
+                    # Adaptive weighting: cosine signal degrades as 1/sqrt(group_size)
+                    # because averaging many embeddings dilutes specificity.
+                    # Floor at 0.5: even diluted cosine from averaging many sections
+                    # carries signal and shouldn't be dominated by length ratio.
+                    cos_weight = max(0.5, 1.0 / math.sqrt(g * e))
+                    len_weight = 1.0 - cos_weight
+
+                    # Speaker sequence scoring (when available)
+                    spk_score = None
+                    if source_speakers is not None and target_speakers is not None:
+                        # Build combined source speaker sequence for this group
+                        src_seq = []
+                        prev = None
+                        for si in range(i, i + g):
+                            for sp in source_speakers[si]:
+                                if sp != prev:
+                                    src_seq.append(sp)
+                                    prev = sp
+                        # Build target speaker sequence
+                        tgt_seq = []
+                        prev = None
+                        for tj in range(j, j + e):
+                            sp = target_speakers[tj]
+                            if sp and sp != prev:
+                                tgt_seq.append(sp)
+                                prev = sp
+                        if src_seq and tgt_seq:
+                            spk_score = _speaker_lcs_similarity(src_seq, tgt_seq)
+
+                    # Entity overlap scoring (when available)
+                    ent_score = None
+                    if entity_matrix is not None:
+                        # Average entity overlap: for each source section in the
+                        # group, take its best overlap with any target section.
+                        # Average over source sections. This penalizes groups
+                        # where some source sections have zero overlap (wrong
+                        # grouping) even if others match well.
+                        ent_sum = 0.0
+                        ent_count = 0
+                        for si in range(i, i + g):
+                            best_for_si = 0.0
+                            for tj in range(j, j + e):
+                                if entity_matrix[si][tj] > best_for_si:
+                                    best_for_si = entity_matrix[si][tj]
+                            ent_sum += best_for_si
+                            ent_count += 1
+                        avg_ent = ent_sum / ent_count if ent_count > 0 else 0.0
+                        if avg_ent > 0:
+                            ent_score = avg_ent
+
+                    # Combine all scoring channels additively.
+                    # Each channel is on a [0, 1] scale and contributes
+                    # independently — no relative weighting needed.
+                    score = cos_weight * cos_sim + len_weight * length_pen
+                    if spk_score is not None:
+                        score += spk_score
+                    if ent_score is not None:
+                        score += ent_score
+
                     new_score = dp[i][j] + score
 
                     if new_score > dp[i + g][j + e]:

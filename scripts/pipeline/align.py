@@ -24,16 +24,25 @@ from sentence_transformers import SentenceTransformer
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from align_core import segmental_dp_align, pairwise_match
+from entity_anchors import extract_greek_names, extract_english_names
+from rapidfuzz import fuzz
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 # Alignment thresholds (can be overridden in config)
 MIN_PAIRWISE_SIMILARITY = 0.3
-OUTLIER_MULTIPLIER = 4          # split sections > median * this
-OUTLIER_FLOOR = 3000            # minimum chars before splitting
 MAX_REFINE_GROUP = 8            # max Greek sections per refinement group
 
+# Chars-per-token estimates for computing model-capacity split thresholds.
+# These are empirical averages for each language in xlm-roberta tokenization.
+CHARS_PER_TOKEN = {
+    "greek": 3.5,   # Greek script averages ~3.5 chars per subword token
+    "latin": 4.5,   # Latin/Romance text ~4.5
+    "english": 5.0, # English ~5.0
+}
+
 _model_dir_path = None  # set by load_model
+_model_max_seq_length = None  # set by load_model
 
 
 def embed_with_cache(model, texts, cache_dir, label):
@@ -152,15 +161,18 @@ def split_large_sections(sections, max_chars=2000):
         chunks.append(remaining.strip())
 
         for ci, chunk in enumerate(chunks):
+            is_split = len(chunks) > 1
             new_section = {
                 "book": book,
-                "section": f"{s.get('section', '')}.{ci}" if len(chunks) > 1 else s.get("section", ""),
-                "cts_ref": f"{base_ref}.{ci}" if len(chunks) > 1 else base_ref,
+                "section": f"{s.get('section', '')}.{ci}" if is_split else s.get("section", ""),
+                "cts_ref": f"{base_ref}.{ci}" if is_split else base_ref,
                 "edition": edition,
                 "text": chunk,
                 "text_for_embedding": embed_chunks[ci] if ci < len(embed_chunks) else chunk,
                 "char_count": len(chunk),
             }
+            if is_split:
+                new_section["split_from"] = base_ref
             if work:
                 new_section["work"] = work
             # Only first chunk gets the notes
@@ -184,7 +196,7 @@ def load_config(work_name):
 
 
 def load_model(source_language="greek"):
-    global _model_dir_path
+    global _model_dir_path, _model_max_seq_length
     custom_greek = PROJECT_ROOT / "models" / "ancient-greek-embedding"
     custom_latin = PROJECT_ROOT / "models" / "latin-embedding"
     baseline = "paraphrase-multilingual-MiniLM-L12-v2"
@@ -192,26 +204,53 @@ def load_model(source_language="greek"):
     if source_language == "latin" and custom_latin.exists():
         print(f"  Using custom Latin model")
         _model_dir_path = custom_latin
-        return SentenceTransformer(str(custom_latin))
+        model = SentenceTransformer(str(custom_latin))
+        _model_max_seq_length = model.max_seq_length
+        return model
     elif source_language == "greek" and custom_greek.exists():
         print(f"  Using custom Ancient Greek model")
         _model_dir_path = custom_greek
-        return SentenceTransformer(str(custom_greek))
+        model = SentenceTransformer(str(custom_greek))
+        _model_max_seq_length = model.max_seq_length
+        return model
     elif custom_greek.exists():
         print(f"  Using custom Ancient Greek model (fallback)")
         _model_dir_path = custom_greek
-        return SentenceTransformer(str(custom_greek))
+        model = SentenceTransformer(str(custom_greek))
+        _model_max_seq_length = model.max_seq_length
+        return model
     else:
         print(f"  Using baseline: {baseline}")
         _model_dir_path = None
-        return SentenceTransformer(baseline)
+        model = SentenceTransformer(baseline)
+        _model_max_seq_length = model.max_seq_length
+        return model
 
 
-def _refine_group(model, en_text, n_gr, gr_embs):
+def _entity_overlap(gr_text, en_text):
+    """Fraction of Greek proper names that fuzzy-match in English text.
+
+    Returns a float in [0, 1], or None if no Greek names were found
+    (no evidence to score against).
+    """
+    gr_names = extract_greek_names(gr_text)
+    if not gr_names:
+        return None
+    en_names = extract_english_names(en_text)
+    if not en_names:
+        return 0.0
+    matches = sum(1 for _, gn_lat in gr_names
+                  if any(fuzz.partial_ratio(gn_lat, en) > 75 for en in en_names))
+    return matches / len(gr_names)
+
+
+def _refine_group(model, en_text, n_gr, gr_embs, gr_texts=None):
     """Split English text at sentence boundaries to match Greek sections.
 
     Tries progressively finer splitting until enough sentences are found.
-    Uses DP on sentence embeddings to find optimal partition.
+    Uses DP on sentence embeddings to find optimal partition. When Greek
+    texts are provided, entity name overlap is used as an additional
+    signal to keep sentences with matching names in the correct group.
 
     Returns list of (sub_text, similarity) tuples, or None.
     """
@@ -224,7 +263,8 @@ def _refine_group(model, en_text, n_gr, gr_embs):
     for pattern in [
         r'(?<=[.!?])\s+(?=[A-Z])',
         r'(?<=[.!?;])\s+(?=[A-Z])',
-        r'(?<=[.!?;])\s+(?=[A-Z])|\band\s+',
+        r'(?<=[;])\s+(?=and\b)',
+        r'(?<=[;])\s+',
     ]:
         parts = re.split(pattern, en_text)
         parts = [p.strip() for p in parts if p and p.strip()]
@@ -252,7 +292,7 @@ def _refine_group(model, en_text, n_gr, gr_embs):
     if len(sentences) < n_gr:
         m = len(sentences)
         sent_embs = model.encode(sentences, show_progress_bar=False, batch_size=32)
-        # sim_matrix[si][gi] = cosine similarity of sentence si to Greek gi
+        # sim_matrix[si][gi] = cosine similarity + entity bonus
         sim_matrix = np.zeros((m, n_gr))
         for si in range(m):
             ns = np.linalg.norm(sent_embs[si])
@@ -260,6 +300,11 @@ def _refine_group(model, en_text, n_gr, gr_embs):
                 ng = np.linalg.norm(gr_embs[gi])
                 if ns > 1e-10 and ng > 1e-10:
                     sim_matrix[si, gi] = float(np.dot(sent_embs[si], gr_embs[gi]) / (ns * ng))
+                # Entity bonus: names matching → boost
+                if gr_texts:
+                    ent = _entity_overlap(gr_texts[gi], sentences[si])
+                    if ent is not None and ent > 0:
+                        sim_matrix[si, gi] += ent
         # DP: assign m sentences to m of n_gr Greek slots, preserving order.
         # dp[si][gi] = best total similarity assigning sentences 0..si to
         # Greek slots where sentence si is assigned to Greek gi.
@@ -287,16 +332,60 @@ def _refine_group(model, en_text, n_gr, gr_embs):
         assignment[m - 1] = best_gi
         for si in range(m - 2, -1, -1):
             assignment[si] = parent[si + 1][assignment[si + 1]]
-        # Build result
+        # Build result — each sentence covers a range of Greek sections.
+        # Split its text proportionally among all Greek sections in its range.
+        # No Greek section should be left with None.
+        assigned = sorted((assignment[si], si) for si in range(m))
+        # Each sentence covers from its position to the next assigned position.
+        # The first sentence also covers any leading unassigned sections.
         result = [None] * n_gr
-        for si in range(m):
-            gi = assignment[si]
-            result[gi] = (sentences[si], sim_matrix[si, gi])
+        first_assigned_gi = assigned[0][0]
+        for idx, (gi, si) in enumerate(assigned):
+            # First sentence extends backward to cover leading sections
+            start_gi = 0 if idx == 0 else gi
+            # This sentence covers from start_gi to next_gi (exclusive)
+            next_gi = assigned[idx + 1][0] if idx + 1 < len(assigned) else n_gr
+            text = sentences[si]
+            span = next_gi - start_gi
+            if span == 1:
+                result[start_gi] = (text, sim_matrix[si, gi])
+            else:
+                # Split text proportionally by Greek section char counts
+                gr_chars = [len(gr_texts[g]) if gr_texts else 100
+                            for g in range(start_gi, next_gi)]
+                total_chars = sum(gr_chars)
+                chunks = []
+                pos = 0
+                for k in range(span):
+                    frac = gr_chars[k] / total_chars if total_chars > 0 else 1.0 / span
+                    cut = int(frac * len(text))
+                    if k < span - 1:
+                        end = pos + cut
+                        # Find nearest word boundary
+                        while end < len(text) and text[end] != ' ':
+                            end += 1
+                        chunks.append(text[pos:end].strip())
+                        pos = end
+                    else:
+                        chunks.append(text[pos:].strip())
+                # Merge tiny chunks (<20 chars) with previous
+                merged = []
+                for c in chunks:
+                    if merged and len(c) < 20:
+                        merged[-1] = merged[-1] + " " + c
+                    else:
+                        merged.append(c)
+                # Pad to span length if merging reduced count
+                while len(merged) < span:
+                    merged.append("")
+                for k, g in enumerate(range(start_gi, next_gi)):
+                    chunk = merged[k] if k < len(merged) else ""
+                    result[g] = (chunk, sim_matrix[si, gi]) if chunk else ("", 0.0)
         return result
 
     # Encode sentences and run DP
     sent_embs = model.encode(sentences, show_progress_bar=False, batch_size=32)
-    splits = _optimal_split(sentences, sent_embs, n_gr, gr_embs)
+    splits = _optimal_split(sentences, sent_embs, n_gr, gr_embs, gr_texts)
     if splits is None:
         return None
 
@@ -321,11 +410,15 @@ def _refine_group(model, en_text, n_gr, gr_embs):
 
 
 
-def _optimal_split(sentences, sent_embs, n_gr, gr_embs):
+def _optimal_split(sentences, sent_embs, n_gr, gr_embs, gr_texts=None):
     """Find optimal split of sentences into n_gr groups using DP.
 
     Uses pre-computed sentence embeddings with prefix sums for O(1) range
-    similarity. DP over split positions: O(n_sents² × n_gr).
+    similarity. When Greek texts are provided, entity name overlap is added
+    as a scoring bonus — sentences containing names that match the Greek
+    section are attracted to the correct group.
+
+    DP over split positions: O(n_sents² × n_gr).
     """
     n_sents = len(sentences)
     dim = sent_embs.shape[1]
@@ -338,6 +431,11 @@ def _optimal_split(sentences, sent_embs, n_gr, gr_embs):
     # Precompute norms for Greek embeddings
     gr_norms = [np.linalg.norm(gr_embs[k]) for k in range(n_gr)]
 
+    # Precompute Greek names per section for entity matching
+    gr_names_per_section = None
+    if gr_texts:
+        gr_names_per_section = [extract_greek_names(t) for t in gr_texts]
+
     def range_sim(start, end, gr_idx):
         n = end - start
         if n == 0:
@@ -345,8 +443,20 @@ def _optimal_split(sentences, sent_embs, n_gr, gr_embs):
         mean_emb = (prefix[end] - prefix[start]) / n
         norm_m = np.linalg.norm(mean_emb)
         if norm_m < 1e-10 or gr_norms[gr_idx] < 1e-10:
-            return 0.0
-        return float(np.dot(mean_emb, gr_embs[gr_idx]) / (norm_m * gr_norms[gr_idx]))
+            cos_sim = 0.0
+        else:
+            cos_sim = float(np.dot(mean_emb, gr_embs[gr_idx]) / (norm_m * gr_norms[gr_idx]))
+
+        # Entity overlap bonus: if Greek section has proper names and the
+        # English sentence range contains matching names, boost the score.
+        if gr_names_per_section and gr_names_per_section[gr_idx]:
+            en_text = " ".join(sentences[start:end])
+            ent = _entity_overlap(gr_texts[gr_idx], en_text)
+            if ent is not None and ent > 0:
+                # Entity match is a strong signal — if names match, this is
+                # almost certainly the right grouping. Add overlap as bonus.
+                return cos_sim + ent
+        return cos_sim
 
     # DP: dp[k][j] = best total similarity using first k Greek sections
     # covering sentences 0..j-1
@@ -376,8 +486,66 @@ def _optimal_split(sentences, sent_embs, n_gr, gr_embs):
     return [sentences[bounds[i]:bounds[i + 1]] for i in range(n_gr)]
 
 
+def try_cts_match(greek_secs, english_secs):
+    """Try to match Greek sections to English sections by CTS reference numbers.
+
+    Tries: exact match, parent match (book.chapter.section → book.chapter),
+    split variants (parent.0, parent.1), and prefix match (book.X).
+
+    Returns dict mapping greek_sec_idx → english_sec_idx.
+    """
+    en_by_ref = {}
+    # Also index by split_from for sections that were split by the pipeline
+    en_by_split_from = {}
+    for i, s in enumerate(english_secs):
+        en_by_ref[s.get("cts_ref", "")] = i
+        split_from = s.get("split_from")
+        if split_from and split_from not in en_by_split_from:
+            en_by_split_from[split_from] = i  # first split piece
+
+    matches = {}
+    for gi, gs in enumerate(greek_secs):
+        ref = gs.get("cts_ref", "")
+        parts = ref.split(".")
+
+        # Exact match
+        if ref in en_by_ref:
+            matches[gi] = en_by_ref[ref]
+            continue
+
+        # Parent match (book.chapter.section → book.chapter)
+        if len(parts) >= 3:
+            parent = ".".join(parts[:-1])
+            if parent in en_by_ref:
+                matches[gi] = en_by_ref[parent]
+                continue
+            # Parent was split by pipeline — look up by split_from
+            if parent in en_by_split_from:
+                matches[gi] = en_by_split_from[parent]
+                continue
+
+        # Split-variant match: the full Greek ref was split
+        if ref in en_by_split_from:
+            matches[gi] = en_by_split_from[ref]
+            continue
+
+        # Prefix match (first two components)
+        if len(parts) >= 2:
+            prefix = ".".join(parts[:2])
+            if prefix in en_by_ref:
+                matches[gi] = en_by_ref[prefix]
+                continue
+
+    return matches
+
+
 def run_dp_alignment(config, greek_data, english_data, model):
-    """Run segmental DP alignment, book by book or work by work."""
+    """Run segmental DP alignment, book by book or work by work.
+
+    Tries CTS reference matching first, then falls back to embedding DP
+    for unmatched sections. Builds a lexical overlap table from the initial
+    alignment and uses it as an additional signal in a second DP pass.
+    """
     all_alignments = []
 
     # Group sections by alignment unit (work for multi_work, book otherwise)
@@ -444,8 +612,16 @@ def run_dp_alignment(config, greek_data, english_data, model):
 
     cache_dir = PROJECT_ROOT / config["output_dir"] / ".embed_cache"
 
+    from lexical_overlap import build_lexical_table, build_lexical_matrix
+
     for book, greek_secs, english_secs in groups:
         print(f"\n=== {book}: {len(greek_secs)} source, {len(english_secs)} target ===")
+
+        # --- CTS reference matching ---
+        cts_matches = try_cts_match(greek_secs, english_secs)
+        if cts_matches:
+            cts_pct = len(cts_matches) / len(greek_secs) * 100
+            print(f"  CTS matched: {len(cts_matches)}/{len(greek_secs)} ({cts_pct:.0f}%)")
 
         book_label = str(book).replace(" ", "_").replace("/", "_")
         greek_embs = embed_with_cache(
@@ -458,21 +634,112 @@ def run_dp_alignment(config, greek_data, english_data, model):
         greek_lens = [s["char_count"] for s in greek_secs]
         english_lens = [s["char_count"] for s in english_secs]
 
-
         total_gr = sum(greek_lens)
         total_en = sum(english_lens)
         expected_ratio = total_gr / total_en if total_en > 0 else 1.0
 
-        # Auto-scale max_source
+        # Auto-scale max_source and max_target from section count ratios
         gr_per_en = len(greek_secs) / max(len(english_secs), 1)
+        en_per_gr = len(english_secs) / max(len(greek_secs), 1)
         max_source = max(5, int(gr_per_en * 2))
-        print(f"  Ratio: {gr_per_en:.1f} source/target, max_source={max_source}")
+        max_target = max(2, int(en_per_gr * 2))
+        print(f"  Ratio: {gr_per_en:.1f} source/target, max_source={max_source}, max_target={max_target}")
 
+        # Extract speaker sequences if sections have them (drama works)
+        source_speakers = None
+        target_speakers = None
+        if any(s.get("speakers") for s in greek_secs):
+            source_speakers = [s.get("speakers", []) for s in greek_secs]
+        if any(s.get("speaker") for s in english_secs):
+            target_speakers = [s.get("speaker") for s in english_secs]
+
+        # Compute entity overlap matrix
+        n_g, n_e = len(greek_secs), len(english_secs)
+        gr_names = [extract_greek_names(s.get("text_for_embedding", s["text"]))
+                     for s in greek_secs]
+        en_names = [extract_english_names(s.get("text_for_embedding", s["text"]))
+                     for s in english_secs]
+        entity_matrix = np.zeros((n_g, n_e), dtype=np.float32)
+        for si in range(n_g):
+            if not gr_names[si]:
+                continue
+            for tj in range(n_e):
+                if not en_names[tj]:
+                    continue
+                matches = sum(1 for _, gn_lat in gr_names[si]
+                              if any(fuzz.partial_ratio(gn_lat, en) > 75
+                                     for en in en_names[tj]))
+                if matches > 0:
+                    entity_matrix[si][tj] = matches / len(gr_names[si])
+
+        # --- First DP pass ---
         groups_result = segmental_dp_align(
             greek_embs, english_embs, greek_lens, english_lens,
-            expected_ratio, max_source=max_source
+            expected_ratio, max_source=max_source, max_target=max_target,
+            source_speakers=source_speakers, target_speakers=target_speakers,
+            entity_matrix=entity_matrix,
         )
-        print(f"  DP produced {len(groups_result)} alignment groups")
+        print(f"  DP pass 1: {len(groups_result)} groups")
+
+        # --- Build lexical table from first-pass alignment ---
+        # Use CTS matches (high confidence) + DP results
+        aligned_pairs = []
+        # From CTS matches
+        for gi, ei in cts_matches.items():
+            aligned_pairs.append((
+                greek_secs[gi].get("text_for_embedding", greek_secs[gi]["text"]),
+                english_secs[ei].get("text_for_embedding", english_secs[ei]["text"]),
+            ))
+        # From DP groups
+        for gs, ge, es, ee, score in groups_result:
+            gr_text = " ".join(greek_secs[i].get("text_for_embedding", greek_secs[i]["text"])
+                               for i in range(gs, ge))
+            en_text = " ".join(english_secs[j].get("text_for_embedding", english_secs[j]["text"])
+                               for j in range(es, ee))
+            aligned_pairs.append((gr_text, en_text))
+
+        if aligned_pairs:
+            src2en, src_idf, _ = build_lexical_table(aligned_pairs)
+            if src2en:
+                print(f"  Lexical table: {len(src2en)} words")
+                # Build lexical matrix
+                gr_texts = [s.get("text_for_embedding", s["text"]) for s in greek_secs]
+                en_texts = [s.get("text_for_embedding", s["text"]) for s in english_secs]
+                lexical_matrix = build_lexical_matrix(gr_texts, en_texts, src2en, src_idf,
+                                                     bandwidth=max(30, n_e // 3))
+
+                # Combine entity + lexical (take max — they complement each other)
+                combined_matrix = np.maximum(entity_matrix, lexical_matrix)
+
+                # --- Second DP pass with combined matrix ---
+                groups_result = segmental_dp_align(
+                    greek_embs, english_embs, greek_lens, english_lens,
+                    expected_ratio, max_source=max_source, max_target=max_target,
+                    source_speakers=source_speakers, target_speakers=target_speakers,
+                    entity_matrix=combined_matrix,
+                )
+                print(f"  DP pass 2: {len(groups_result)} groups")
+
+        # If CTS matched 100%, override DP with CTS results
+        if len(cts_matches) == len(greek_secs):
+            print(f"  Using CTS matches (100% coverage)")
+            # Convert CTS matches to DP group format
+            # Group consecutive Greek sections that map to the same English section
+            groups_result = []
+            prev_ei = None
+            group_gs = 0
+            for gi in range(len(greek_secs)):
+                ei = cts_matches[gi]
+                if prev_ei is not None and ei != prev_ei:
+                    groups_result.append((group_gs, gi, prev_ei, prev_ei + 1,
+                                          1.0))
+                    group_gs = gi
+                prev_ei = ei
+            if prev_ei is not None:
+                groups_result.append((group_gs, len(greek_secs), prev_ei,
+                                      prev_ei + 1, 1.0))
+
+        print(f"  Final: {len(groups_result)} alignment groups")
 
         # Build records — ensure every English section appears
         en_used = set()
@@ -497,7 +764,11 @@ def run_dp_alignment(config, greek_data, english_data, model):
                 en_text = es.get("text_for_embedding", es["text"])
                 gr_emb_group = greek_embs[gr_start:gr_end]
 
-                refined = _refine_group(model, en_text, n_gr, gr_emb_group)
+                gr_texts_group = [greek_secs[gi].get("text_for_embedding",
+                                    greek_secs[gi]["text"])
+                                  for gi in range(gr_start, gr_end)]
+                refined = _refine_group(model, en_text, n_gr, gr_emb_group,
+                                        gr_texts=gr_texts_group)
 
                 if refined and any(r is not None for r in refined):
                     refined_count += 1
@@ -741,22 +1012,32 @@ def main(work_name):
             merged = data["sections"]
         data["sections"] = merged
 
-    # Split sections that are extreme outliers on their own side.
-    # Uses text_for_embedding length (excludes footnotes).
-    # Only splits sections >4x their side's median AND >3000 chars.
-    # The DP already handles moderate size differences via grouping.
-    for label, data in [("source", greek_data), ("English", english_data)]:
+    # Split oversized sections that would produce blurred embeddings.
+    # Two thresholds combined (take the more conservative):
+    # - Outlier detection: median * 4 (only split sections much larger than peers)
+    # - Model capacity: 2x the model's effective char capacity (sections losing
+    #   >50% content to truncation)
+    # The outlier threshold prevents fragmenting works where all sections are
+    # uniformly large (e.g. long treatise chapters). The model capacity threshold
+    # prevents splitting sections that already fit the model even if they look
+    # like outliers relative to very short peers.
+    source_lang = config.get("source_language", "greek")
+    for label, data, lang in [("source", greek_data, source_lang),
+                              ("English", english_data, "english")]:
+        cpt = CHARS_PER_TOKEN.get(lang, 4.5)
+        max_tokens = _model_max_seq_length or 512
+        model_capacity = int(max_tokens * cpt * 0.9)
         content_lens = sorted(len(s.get("text_for_embedding", s["text"]))
                               for s in data["sections"])
         if not content_lens:
             continue
         median = content_lens[len(content_lens) // 2]
-        threshold = max(median * OUTLIER_MULTIPLIER, OUTLIER_FLOOR)
+        threshold = max(median * 4, model_capacity * 2)
         oversized = sum(1 for c in content_lens if c > threshold)
         if oversized > 0:
             data["sections"] = split_large_sections(data["sections"], max_chars=threshold)
             print(f"  Split {label} outliers > {threshold} chars "
-                  f"(median {median}, {oversized} oversized)")
+                  f"(median {median}, model cap {model_capacity}, {oversized} oversized)")
 
     # Strip footnotes for embedding — keeps original text for hashing and output
     from pipeline.strip_notes import strip_notes_from_sections

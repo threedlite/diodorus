@@ -25,9 +25,10 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-# Confidence thresholds
-HIGH = 0.6
-MED = 0.3
+# Confidence thresholds (calibrated for multi-signal combined_score:
+# embedding cosine + lexical TF-IDF + entity overlap + length ratio)
+HIGH = 0.50
+MED = 0.25
 
 # ANSI colors for terminal
 GREEN = "\033[42m"   # high
@@ -358,8 +359,12 @@ def render_heatmap(records, fmt, title="", use_color=True):
 
 # --------------- SVG HEATMAP ---------------
 
-def generate_svg(records, fmt, out_path, title=""):
-    """Generate an SVG heatmap of alignment quality."""
+def generate_svg(records, fmt, out_path, title="", html_filename=None):
+    """Generate an SVG heatmap of alignment quality.
+
+    If html_filename is provided, each cell links to the corresponding
+    section in the HTML parallel text file.
+    """
     by_book = defaultdict(list)
     for r in records:
         by_book[get_book_key(r, fmt)].append(r)
@@ -470,9 +475,17 @@ def generate_svg(records, fmt, out_path, title=""):
             x = bx + col * CELL_W
             y = by + row * CELL_H
             color = score_to_color(s)
-            parts.append(f'<rect x="{x}" y="{y}" '
-                         f'width="{CELL_W}" height="{CELL_H - 1}" '
-                         f'fill="{color}"/>')
+            ref = get_section_label(recs[i], fmt)
+            anchor = f's{ref.replace(".", "-")}' if ref else ""
+            rect = (f'<rect x="{x}" y="{y}" '
+                    f'width="{CELL_W}" height="{CELL_H - 1}" '
+                    f'fill="{color}"/>')
+            if html_filename and anchor:
+                tooltip = _svg_escape(f'{ref} ({s:.2f})')
+                parts.append(f'<a href="{html_filename}#{anchor}">'
+                             f'<title>{tooltip}</title>{rect}</a>')
+            else:
+                parts.append(rect)
 
         # Low-run warnings
         warn_y = cy + n_rows * CELL_H + 2
@@ -615,7 +628,8 @@ def process_file(path, prefix=None):
 
     # Save SVG — name matches the alignment XML (same stem, .svg extension)
     svg_path = path.parent / f"{prefix}.svg"
-    generate_svg(records, fmt, svg_path, title=title)
+    html_filename = f"{prefix}.html"
+    generate_svg(records, fmt, svg_path, title=title, html_filename=html_filename)
     print(f"  Saved: {svg_path}")
 
 

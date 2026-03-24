@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="218" viewBox="0 0 1220 218">
-<rect width="1220" height="218" fill="#f5f5f5"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="246" viewBox="0 0 1220 246">
+<rect width="1220" height="246" fill="#f5f5f5"/>
 <style>
   text { font-family: "SF Mono", "Menlo", "Monaco", monospace; }
   .title { font-size: 16px; font-weight: bold; }
@@ -10,554 +10,565 @@
   .total { font-size: 12px; font-weight: bold; fill: #333; }
   .legend-text { font-size: 10px; fill: #555; }
 </style>
-<text x="20" y="38" class="title">Alignment Quality Map — Alignment</text>
+<text x="20" y="38" class="title">Alignment Quality Map — Aristophanes — Lysistrata</text>
 <rect x="20" y="50" width="12" height="12" fill="#2d8a4e" rx="2"/>
-<text x="36" y="60" class="legend-text">High (≥0.6)</text>
+<text x="36" y="60" class="legend-text">High (≥0.5)</text>
 <rect x="160" y="50" width="12" height="12" fill="#e8b83d" rx="2"/>
-<text x="176" y="60" class="legend-text">Medium (0.3–0.6)</text>
+<text x="176" y="60" class="legend-text">Medium (0.25–0.5)</text>
 <rect x="300" y="50" width="12" height="12" fill="#c9493b" rx="2"/>
-<text x="316" y="60" class="legend-text">Low (&lt;0.3)</text>
+<text x="316" y="60" class="legend-text">Low (&lt;0.25)</text>
 <text x="20" y="92" class="label">Book 1</text>
-<text x="988" y="92" class="stats">n=535  avg=0.000  H=0%  M=0%  L=100%</text>
-<rect x="180" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="184" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="188" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="192" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="196" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="200" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="204" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="208" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="212" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="216" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="220" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="224" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="228" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="232" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="236" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="240" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="244" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="248" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="252" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="256" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="260" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="264" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="268" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="272" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="276" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="280" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="284" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="288" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="292" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="296" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="300" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="304" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="308" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="312" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="316" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="320" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="324" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="328" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="332" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="336" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="340" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="344" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="348" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="352" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="356" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="360" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="364" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="368" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="372" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="376" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="380" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="384" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="388" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="392" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="396" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="400" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="404" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="408" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="412" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="416" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="420" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="424" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="428" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="432" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="436" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="440" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="444" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="448" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="452" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="456" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="460" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="464" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="468" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="472" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="476" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="480" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="484" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="488" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="492" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="496" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="500" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="504" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="508" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="512" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="516" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="520" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="524" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="528" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="532" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="536" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="540" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="544" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="548" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="552" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="556" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="560" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="564" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="568" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="572" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="576" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="580" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="584" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="588" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="592" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="596" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="600" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="604" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="608" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="612" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="616" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="620" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="624" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="628" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="632" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="636" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="640" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="644" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="648" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="652" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="656" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="660" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="664" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="668" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="672" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="676" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="680" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="684" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="688" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="692" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="696" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="700" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="704" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="708" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="712" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="716" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="720" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="724" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="728" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="732" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="736" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="740" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="744" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="748" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="752" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="756" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="760" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="764" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="768" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="772" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="776" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="780" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="784" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="788" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="792" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="796" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="800" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="804" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="808" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="812" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="816" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="820" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="824" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="828" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="832" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="836" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="840" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="844" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="848" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="852" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="856" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="860" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="864" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="868" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="872" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="876" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="880" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="884" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="888" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="892" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="896" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="900" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="904" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="908" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="912" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="916" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="920" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="924" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="928" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="932" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="936" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="940" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="944" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="948" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="952" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="956" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="960" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="964" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="968" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="972" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="976" y="80" width="4" height="15" fill="#c9493b"/>
-<rect x="180" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="184" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="188" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="192" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="196" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="200" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="204" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="208" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="212" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="216" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="220" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="224" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="228" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="232" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="236" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="240" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="244" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="248" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="252" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="256" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="260" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="264" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="268" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="272" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="276" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="280" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="284" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="288" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="292" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="296" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="300" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="304" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="308" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="312" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="316" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="320" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="324" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="328" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="332" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="336" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="340" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="344" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="348" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="352" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="356" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="360" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="364" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="368" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="372" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="376" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="380" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="384" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="388" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="392" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="396" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="400" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="404" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="408" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="412" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="416" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="420" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="424" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="428" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="432" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="436" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="440" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="444" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="448" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="452" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="456" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="460" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="464" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="468" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="472" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="476" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="480" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="484" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="488" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="492" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="496" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="500" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="504" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="508" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="512" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="516" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="520" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="524" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="528" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="532" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="536" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="540" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="544" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="548" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="552" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="556" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="560" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="564" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="568" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="572" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="576" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="580" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="584" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="588" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="592" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="596" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="600" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="604" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="608" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="612" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="616" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="620" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="624" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="628" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="632" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="636" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="640" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="644" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="648" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="652" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="656" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="660" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="664" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="668" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="672" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="676" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="680" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="684" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="688" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="692" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="696" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="700" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="704" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="708" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="712" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="716" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="720" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="724" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="728" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="732" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="736" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="740" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="744" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="748" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="752" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="756" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="760" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="764" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="768" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="772" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="776" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="780" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="784" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="788" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="792" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="796" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="800" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="804" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="808" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="812" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="816" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="820" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="824" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="828" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="832" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="836" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="840" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="844" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="848" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="852" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="856" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="860" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="864" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="868" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="872" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="876" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="880" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="884" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="888" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="892" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="896" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="900" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="904" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="908" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="912" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="916" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="920" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="924" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="928" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="932" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="936" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="940" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="944" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="948" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="952" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="956" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="960" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="964" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="968" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="972" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="976" y="96" width="4" height="15" fill="#c9493b"/>
-<rect x="180" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="184" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="188" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="192" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="196" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="200" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="204" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="208" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="212" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="216" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="220" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="224" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="228" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="232" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="236" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="240" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="244" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="248" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="252" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="256" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="260" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="264" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="268" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="272" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="276" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="280" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="284" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="288" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="292" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="296" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="300" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="304" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="308" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="312" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="316" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="320" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="324" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="328" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="332" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="336" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="340" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="344" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="348" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="352" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="356" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="360" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="364" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="368" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="372" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="376" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="380" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="384" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="388" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="392" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="396" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="400" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="404" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="408" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="412" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="416" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="420" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="424" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="428" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="432" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="436" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="440" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="444" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="448" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="452" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="456" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="460" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="464" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="468" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="472" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="476" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="480" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="484" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="488" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="492" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="496" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="500" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="504" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="508" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="512" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="516" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="520" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="524" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="528" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="532" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="536" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="540" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="544" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="548" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="552" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="556" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="560" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="564" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="568" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="572" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="576" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="580" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="584" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="588" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="592" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="596" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="600" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="604" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="608" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="612" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="616" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="620" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="624" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="628" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="632" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="636" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="640" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="644" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="648" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="652" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="656" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="660" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="664" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="668" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="672" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="676" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="680" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="684" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="688" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="692" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="696" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="700" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="704" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="708" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="712" y="112" width="4" height="15" fill="#c9493b"/>
-<rect x="716" y="112" width="4" height="15" fill="#c9493b"/>
-<text x="180" y="139" class="warn">⚠ en:1.1 → en:1.535  (535 sections, avg=0.000)</text>
-<line x1="20" y1="153" x2="1200" y2="153" stroke="#ccc" stroke-width="1"/>
-<text x="20" y="173" class="total">TOTAL: 535 sections   avg=0.000   High=0%   Med=0%   Low=100%</text>
-<rect x="20" y="180" width="0.0" height="10" fill="#2d8a4e" rx="2"/>
-<rect x="20.0" y="180" width="0.0" height="10" fill="#e8b83d"/>
-<rect x="20.0" y="180" width="1180.0" height="10" fill="#c9493b" rx="2"/>
+<text x="988" y="92" class="stats">n=544  avg=0.501  H=56%  M=26%  L=17%</text>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1"><title>1.1 (0.12)</title><rect x="180" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1"><title>1.1 (0.12)</title><rect x="184" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1"><title>1.1 (0.12)</title><rect x="188" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1"><title>1.1 (0.47)</title><rect x="192" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1"><title>1.1 (0.53)</title><rect x="196" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-9"><title>1.9 (0.51)</title><rect x="200" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-9"><title>1.9 (0.70)</title><rect x="204" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-9"><title>1.9 (0.22)</title><rect x="208" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-9"><title>1.9 (0.54)</title><rect x="212" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-17"><title>1.17 (0.73)</title><rect x="216" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-17"><title>1.17 (0.49)</title><rect x="220" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-17"><title>1.17 (0.77)</title><rect x="224" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-17"><title>1.17 (0.47)</title><rect x="228" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-17"><title>1.17 (0.22)</title><rect x="232" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-17"><title>1.17 (0.51)</title><rect x="236" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-25"><title>1.25 (0.76)</title><rect x="240" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-25"><title>1.25 (0.18)</title><rect x="244" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-25"><title>1.25 (0.56)</title><rect x="248" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-25"><title>1.25 (0.22)</title><rect x="252" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-25"><title>1.25 (0.68)</title><rect x="256" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-25"><title>1.25 (0.23)</title><rect x="260" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-35"><title>1.35 (0.24)</title><rect x="264" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-35"><title>1.35 (0.19)</title><rect x="268" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-35"><title>1.35 (0.81)</title><rect x="272" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-35"><title>1.35 (0.51)</title><rect x="276" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-46"><title>1.46 (0.73)</title><rect x="280" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-46"><title>1.46 (0.18)</title><rect x="284" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-46"><title>1.46 (0.72)</title><rect x="288" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-46"><title>1.46 (0.40)</title><rect x="292" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-46"><title>1.46 (0.46)</title><rect x="296" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-46"><title>1.46 (0.20)</title><rect x="300" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-46"><title>1.46 (0.46)</title><rect x="304" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-54"><title>1.54 (0.14)</title><rect x="308" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-54"><title>1.54 (0.43)</title><rect x="312" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-54"><title>1.54 (0.18)</title><rect x="316" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-54"><title>1.54 (0.73)</title><rect x="320" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-54"><title>1.54 (0.33)</title><rect x="324" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-54"><title>1.54 (0.62)</title><rect x="328" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-64"><title>1.64 (0.57)</title><rect x="332" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-64"><title>1.64 (0.54)</title><rect x="336" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-64"><title>1.64 (0.57)</title><rect x="340" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-64"><title>1.64 (0.58)</title><rect x="344" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-72"><title>1.72 (0.58)</title><rect x="348" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-72"><title>1.72 (0.65)</title><rect x="352" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-72"><title>1.72 (0.66)</title><rect x="356" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-72"><title>1.72 (0.81)</title><rect x="360" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-80"><title>1.80 (0.74)</title><rect x="364" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-80"><title>1.80 (0.52)</title><rect x="368" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-80"><title>1.80 (0.58)</title><rect x="372" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-80"><title>1.80 (0.63)</title><rect x="376" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-80"><title>1.80 (0.71)</title><rect x="380" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-80"><title>1.80 (0.66)</title><rect x="384" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-80"><title>1.80 (0.42)</title><rect x="388" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-88"><title>1.88 (0.68)</title><rect x="392" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-88"><title>1.88 (0.73)</title><rect x="396" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-88"><title>1.88 (0.76)</title><rect x="400" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-88"><title>1.88 (0.70)</title><rect x="404" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-88"><title>1.88 (0.55)</title><rect x="408" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-88"><title>1.88 (0.53)</title><rect x="412" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-88"><title>1.88 (0.48)</title><rect x="416" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-96"><title>1.96 (0.54)</title><rect x="420" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-96"><title>1.96 (0.26)</title><rect x="424" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-96"><title>1.96 (0.60)</title><rect x="428" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-96"><title>1.96 (0.74)</title><rect x="432" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-104"><title>1.104 (0.28)</title><rect x="436" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-104"><title>1.104 (0.76)</title><rect x="440" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-104"><title>1.104 (0.75)</title><rect x="444" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-113"><title>1.113 (0.63)</title><rect x="448" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-113"><title>1.113 (0.42)</title><rect x="452" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-113"><title>1.113 (0.48)</title><rect x="456" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-113"><title>1.113 (0.55)</title><rect x="460" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-113"><title>1.113 (0.48)</title><rect x="464" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-113"><title>1.113 (0.23)</title><rect x="468" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-113"><title>1.113 (0.38)</title><rect x="472" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-124"><title>1.124 (0.83)</title><rect x="476" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-124"><title>1.124 (0.56)</title><rect x="480" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-124"><title>1.124 (0.59)</title><rect x="484" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-124"><title>1.124 (0.55)</title><rect x="488" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-133"><title>1.133 (0.72)</title><rect x="492" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-133"><title>1.133 (0.38)</title><rect x="496" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-133"><title>1.133 (0.29)</title><rect x="500" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-133"><title>1.133 (0.65)</title><rect x="504" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-143"><title>1.143 (0.71)</title><rect x="508" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-143"><title>1.143 (0.18)</title><rect x="512" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-143"><title>1.143 (0.73)</title><rect x="516" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-143"><title>1.143 (0.73)</title><rect x="520" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-155"><title>1.155 (0.48)</title><rect x="524" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-155"><title>1.155 (0.32)</title><rect x="528" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-155"><title>1.155 (0.45)</title><rect x="532" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-155"><title>1.155 (0.77)</title><rect x="536" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-155"><title>1.155 (0.48)</title><rect x="540" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-155"><title>1.155 (0.18)</title><rect x="544" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-163"><title>1.163 (0.67)</title><rect x="548" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-172"><title>1.172 (0.33)</title><rect x="552" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-172"><title>1.172 (0.49)</title><rect x="556" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-172"><title>1.172 (0.22)</title><rect x="560" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-172"><title>1.172 (0.50)</title><rect x="564" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-172"><title>1.172 (0.54)</title><rect x="568" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-180"><title>1.180 (0.31)</title><rect x="572" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-180"><title>1.180 (0.72)</title><rect x="576" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-180"><title>1.180 (0.45)</title><rect x="580" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-180"><title>1.180 (0.71)</title><rect x="584" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-180"><title>1.180 (0.59)</title><rect x="588" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-180"><title>1.180 (0.63)</title><rect x="592" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-180"><title>1.180 (0.67)</title><rect x="596" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-188"><title>1.188 (0.52)</title><rect x="600" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-188"><title>1.188 (0.48)</title><rect x="604" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-188"><title>1.188 (0.52)</title><rect x="608" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-188"><title>1.188 (0.23)</title><rect x="612" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-188"><title>1.188 (0.82)</title><rect x="616" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-198"><title>1.198 (0.25)</title><rect x="620" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-198"><title>1.198 (0.34)</title><rect x="624" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-198"><title>1.198 (0.53)</title><rect x="628" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-198"><title>1.198 (0.54)</title><rect x="632" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-198"><title>1.198 (0.35)</title><rect x="636" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-206"><title>1.206 (0.45)</title><rect x="640" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-206"><title>1.206 (0.65)</title><rect x="644" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-206"><title>1.206 (0.26)</title><rect x="648" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-206"><title>1.206 (0.79)</title><rect x="652" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-206"><title>1.206 (0.26)</title><rect x="656" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-206"><title>1.206 (0.54)</title><rect x="660" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-215"><title>1.215 (0.80)</title><rect x="664" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-215"><title>1.215 (0.61)</title><rect x="668" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-215"><title>1.215 (0.62)</title><rect x="672" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-215"><title>1.215 (0.62)</title><rect x="676" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-215"><title>1.215 (0.63)</title><rect x="680" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-215"><title>1.215 (0.67)</title><rect x="684" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-215"><title>1.215 (0.68)</title><rect x="688" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-223"><title>1.223 (0.60)</title><rect x="692" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-223"><title>1.223 (0.60)</title><rect x="696" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-223"><title>1.223 (0.57)</title><rect x="700" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-223"><title>1.223 (0.59)</title><rect x="704" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-223"><title>1.223 (0.67)</title><rect x="708" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-223"><title>1.223 (0.68)</title><rect x="712" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-223"><title>1.223 (0.56)</title><rect x="716" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-231"><title>1.231 (0.61)</title><rect x="720" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-231"><title>1.231 (0.63)</title><rect x="724" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-231"><title>1.231 (0.67)</title><rect x="728" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-231"><title>1.231 (0.60)</title><rect x="732" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-231"><title>1.231 (0.60)</title><rect x="736" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-231"><title>1.231 (0.67)</title><rect x="740" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-231"><title>1.231 (0.68)</title><rect x="744" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-239"><title>1.239 (0.19)</title><rect x="748" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-239"><title>1.239 (0.14)</title><rect x="752" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-239"><title>1.239 (0.33)</title><rect x="756" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-239"><title>1.239 (0.48)</title><rect x="760" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-239"><title>1.239 (0.15)</title><rect x="764" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-239"><title>1.239 (0.51)</title><rect x="768" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-247"><title>1.247 (0.56)</title><rect x="772" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-247"><title>1.247 (0.66)</title><rect x="776" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-247"><title>1.247 (0.55)</title><rect x="780" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-254"><title>1.254 (0.72)</title><rect x="784" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-266"><title>1.266 (0.52)</title><rect x="788" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-281"><title>1.281 (0.69)</title><rect x="792" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-281"><title>1.281 (0.68)</title><rect x="796" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-289"><title>1.289 (0.70)</title><rect x="800" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-289"><title>1.289 (0.57)</title><rect x="804" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-289"><title>1.289 (0.70)</title><rect x="808" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-299"><title>1.299 (0.58)</title><rect x="812" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-299"><title>1.299 (0.56)</title><rect x="816" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-299"><title>1.299 (0.42)</title><rect x="820" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-307"><title>1.307 (0.49)</title><rect x="824" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-315"><title>1.315 (0.20)</title><rect x="828" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-326"><title>1.326 (0.72)</title><rect x="832" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-326"><title>1.326 (0.62)</title><rect x="836" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-326"><title>1.326 (0.70)</title><rect x="840" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-326"><title>1.326 (0.73)</title><rect x="844" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-335"><title>1.335 (0.60)</title><rect x="848" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-335"><title>1.335 (0.17)</title><rect x="852" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-335"><title>1.335 (0.35)</title><rect x="856" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-335"><title>1.335 (0.36)</title><rect x="860" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-335"><title>1.335 (0.52)</title><rect x="864" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-346"><title>1.346 (0.54)</title><rect x="868" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-354"><title>1.354 (0.12)</title><rect x="872" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-362"><title>1.362 (0.12)</title><rect x="876" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-362"><title>1.362 (0.16)</title><rect x="880" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-362"><title>1.362 (0.16)</title><rect x="884" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-362"><title>1.362 (0.17)</title><rect x="888" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-362"><title>1.362 (0.18)</title><rect x="892" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-362"><title>1.362 (0.20)</title><rect x="896" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-362"><title>1.362 (0.33)</title><rect x="900" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-370"><title>1.370 (0.15)</title><rect x="904" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-378"><title>1.378 (0.51)</title><rect x="908" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-387"><title>1.387 (0.38)</title><rect x="912" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-387"><title>1.387 (0.09)</title><rect x="916" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-387"><title>1.387 (0.15)</title><rect x="920" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-387"><title>1.387 (0.33)</title><rect x="924" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-395"><title>1.395 (0.55)</title><rect x="928" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-403"><title>1.403 (0.43)</title><rect x="932" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-411"><title>1.411 (0.61)</title><rect x="936" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-420"><title>1.420 (0.58)</title><rect x="940" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-428"><title>1.428 (0.59)</title><rect x="944" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-428"><title>1.428 (0.68)</title><rect x="948" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-428"><title>1.428 (0.55)</title><rect x="952" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-437"><title>1.437 (0.74)</title><rect x="956" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-437"><title>1.437 (0.65)</title><rect x="960" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-437"><title>1.437 (0.77)</title><rect x="964" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-437"><title>1.437 (0.80)</title><rect x="968" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-445"><title>1.445 (0.60)</title><rect x="972" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-445"><title>1.445 (0.63)</title><rect x="976" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-445"><title>1.445 (0.60)</title><rect x="180" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-453"><title>1.453 (0.62)</title><rect x="184" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-453"><title>1.453 (0.66)</title><rect x="188" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-461"><title>1.461 (0.48)</title><rect x="192" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-461"><title>1.461 (0.86)</title><rect x="196" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-461"><title>1.461 (0.53)</title><rect x="200" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-461"><title>1.461 (0.52)</title><rect x="204" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-467"><title>1.467 (0.84)</title><rect x="208" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-467"><title>1.467 (0.78)</title><rect x="212" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-476"><title>1.476 (0.42)</title><rect x="216" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-476"><title>1.476 (0.56)</title><rect x="220" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-476"><title>1.476 (0.38)</title><rect x="224" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-476"><title>1.476 (0.61)</title><rect x="228" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-476"><title>1.476 (0.05)</title><rect x="232" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-476"><title>1.476 (0.05)</title><rect x="236" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-476"><title>1.476 (0.35)</title><rect x="240" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-486"><title>1.486 (0.57)</title><rect x="244" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-486"><title>1.486 (0.09)</title><rect x="248" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-486"><title>1.486 (0.09)</title><rect x="252" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-486"><title>1.486 (0.12)</title><rect x="256" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-486"><title>1.486 (0.12)</title><rect x="260" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-486"><title>1.486 (0.35)</title><rect x="264" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-486"><title>1.486 (0.09)</title><rect x="268" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-494"><title>1.494 (0.38)</title><rect x="272" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-494"><title>1.494 (0.12)</title><rect x="276" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-494"><title>1.494 (0.62)</title><rect x="280" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-494"><title>1.494 (0.15)</title><rect x="284" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-494"><title>1.494 (0.67)</title><rect x="288" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-494"><title>1.494 (0.13)</title><rect x="292" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-494"><title>1.494 (0.46)</title><rect x="296" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-502"><title>1.502 (0.12)</title><rect x="300" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-502"><title>1.502 (0.13)</title><rect x="304" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-502"><title>1.502 (0.12)</title><rect x="308" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-502"><title>1.502 (0.14)</title><rect x="312" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-502"><title>1.502 (0.46)</title><rect x="316" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-502"><title>1.502 (0.21)</title><rect x="320" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-502"><title>1.502 (0.31)</title><rect x="324" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-510"><title>1.510 (0.20)</title><rect x="328" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-510"><title>1.510 (0.23)</title><rect x="332" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-510"><title>1.510 (0.64)</title><rect x="336" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-510"><title>1.510 (0.17)</title><rect x="340" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-518"><title>1.518 (0.26)</title><rect x="344" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-518"><title>1.518 (0.64)</title><rect x="348" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-518"><title>1.518 (0.30)</title><rect x="352" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-518"><title>1.518 (0.72)</title><rect x="356" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-527"><title>1.527 (0.41)</title><rect x="360" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-527"><title>1.527 (0.52)</title><rect x="364" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-527"><title>1.527 (0.80)</title><rect x="368" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-527"><title>1.527 (0.81)</title><rect x="372" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-536"><title>1.536 (0.62)</title><rect x="376" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-549"><title>1.549 (0.58)</title><rect x="380" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-549"><title>1.549 (0.13)</title><rect x="384" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-549"><title>1.549 (0.42)</title><rect x="388" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-549"><title>1.549 (0.13)</title><rect x="392" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-557"><title>1.557 (0.53)</title><rect x="396" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-557"><title>1.557 (0.29)</title><rect x="400" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-557"><title>1.557 (0.44)</title><rect x="404" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-557"><title>1.557 (0.60)</title><rect x="408" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-565"><title>1.565 (0.38)</title><rect x="412" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-565"><title>1.565 (0.10)</title><rect x="416" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-565"><title>1.565 (0.40)</title><rect x="420" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-565"><title>1.565 (0.42)</title><rect x="424" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-565"><title>1.565 (0.36)</title><rect x="428" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-565"><title>1.565 (0.10)</title><rect x="432" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-573"><title>1.573 (0.61)</title><rect x="436" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-582"><title>1.582 (0.42)</title><rect x="440" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-582"><title>1.582 (0.48)</title><rect x="444" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-582"><title>1.582 (0.13)</title><rect x="448" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-582"><title>1.582 (0.50)</title><rect x="452" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-591"><title>1.591 (0.23)</title><rect x="456" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-591"><title>1.591 (0.56)</title><rect x="460" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-591"><title>1.591 (0.22)</title><rect x="464" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-591"><title>1.591 (0.64)</title><rect x="468" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-600"><title>1.600 (0.45)</title><rect x="472" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-600"><title>1.600 (0.45)</title><rect x="476" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-600"><title>1.600 (0.71)</title><rect x="480" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-608"><title>1.608 (0.58)</title><rect x="484" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-608"><title>1.608 (0.58)</title><rect x="488" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-614"><title>1.614 (0.72)</title><rect x="492" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-626"><title>1.626 (0.76)</title><rect x="496" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-636"><title>1.636 (0.48)</title><rect x="500" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-646"><title>1.646 (0.46)</title><rect x="504" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-656"><title>1.656 (0.54)</title><rect x="508" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-672"><title>1.672 (0.68)</title><rect x="512" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-680"><title>1.680 (0.74)</title><rect x="516" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-691"><title>1.691 (0.70)</title><rect x="520" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-706"><title>1.706 (0.53)</title><rect x="524" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-706"><title>1.706 (0.71)</title><rect x="528" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-706"><title>1.706 (0.32)</title><rect x="532" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-706"><title>1.706 (0.16)</title><rect x="536" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-706"><title>1.706 (0.44)</title><rect x="540" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-706"><title>1.706 (0.38)</title><rect x="544" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-714"><title>1.714 (0.21)</title><rect x="548" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-714"><title>1.714 (0.15)</title><rect x="552" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-714"><title>1.714 (0.17)</title><rect x="556" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-714"><title>1.714 (0.43)</title><rect x="560" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-726"><title>1.726 (0.81)</title><rect x="564" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-726"><title>1.726 (0.61)</title><rect x="568" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-726"><title>1.726 (0.80)</title><rect x="572" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-726"><title>1.726 (0.64)</title><rect x="576" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-726"><title>1.726 (0.68)</title><rect x="580" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-726"><title>1.726 (0.73)</title><rect x="584" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-734"><title>1.734 (0.82)</title><rect x="588" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-734"><title>1.734 (0.54)</title><rect x="592" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-734"><title>1.734 (0.79)</title><rect x="596" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-734"><title>1.734 (0.58)</title><rect x="600" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-734"><title>1.734 (0.84)</title><rect x="604" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-742"><title>1.742 (0.48)</title><rect x="608" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-742"><title>1.742 (0.22)</title><rect x="612" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-742"><title>1.742 (0.49)</title><rect x="616" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-742"><title>1.742 (0.54)</title><rect x="620" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-742"><title>1.742 (0.69)</title><rect x="624" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-742"><title>1.742 (0.19)</title><rect x="628" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-742"><title>1.742 (0.76)</title><rect x="632" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-751"><title>1.751 (0.48)</title><rect x="636" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-751"><title>1.751 (0.19)</title><rect x="640" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-751"><title>1.751 (0.78)</title><rect x="644" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-751"><title>1.751 (0.52)</title><rect x="648" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-751"><title>1.751 (0.76)</title><rect x="652" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-760"><title>1.760 (0.64)</title><rect x="656" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-760"><title>1.760 (0.73)</title><rect x="660" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-769"><title>1.769 (0.15)</title><rect x="664" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-769"><title>1.769 (0.74)</title><rect x="668" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-769"><title>1.769 (0.16)</title><rect x="672" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-769"><title>1.769 (0.45)</title><rect x="676" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-777"><title>1.777 (0.47)</title><rect x="680" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-781"><title>1.781 (0.66)</title><rect x="684" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-793"><title>1.793 (0.44)</title><rect x="688" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-793"><title>1.793 (0.49)</title><rect x="692" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-793"><title>1.793 (0.43)</title><rect x="696" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-793"><title>1.793 (0.46)</title><rect x="700" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-793"><title>1.793 (0.58)</title><rect x="704" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-805"><title>1.805 (0.78)</title><rect x="708" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-805"><title>1.805 (0.36)</title><rect x="712" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-816"><title>1.816 (0.55)</title><rect x="716" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-816"><title>1.816 (0.27)</title><rect x="720" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-816"><title>1.816 (0.53)</title><rect x="724" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-816"><title>1.816 (0.81)</title><rect x="728" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-816"><title>1.816 (0.34)</title><rect x="732" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-829"><title>1.829 (0.66)</title><rect x="736" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-829"><title>1.829 (0.50)</title><rect x="740" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-829"><title>1.829 (0.52)</title><rect x="744" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-829"><title>1.829 (0.24)</title><rect x="748" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-829"><title>1.829 (0.71)</title><rect x="752" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-837"><title>1.837 (0.27)</title><rect x="756" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-837"><title>1.837 (0.35)</title><rect x="760" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-837"><title>1.837 (0.64)</title><rect x="764" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-837"><title>1.837 (0.22)</title><rect x="768" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-845"><title>1.845 (0.81)</title><rect x="772" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-845"><title>1.845 (0.63)</title><rect x="776" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-845"><title>1.845 (0.62)</title><rect x="780" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-845"><title>1.845 (0.60)</title><rect x="784" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-845"><title>1.845 (0.36)</title><rect x="788" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-845"><title>1.845 (0.35)</title><rect x="792" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-845"><title>1.845 (0.63)</title><rect x="796" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-853"><title>1.853 (0.27)</title><rect x="800" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-853"><title>1.853 (0.64)</title><rect x="804" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-853"><title>1.853 (0.20)</title><rect x="808" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-853"><title>1.853 (0.59)</title><rect x="812" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-853"><title>1.853 (0.20)</title><rect x="816" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-861"><title>1.861 (0.42)</title><rect x="820" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-861"><title>1.861 (0.66)</title><rect x="824" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-861"><title>1.861 (0.37)</title><rect x="828" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-861"><title>1.861 (0.81)</title><rect x="832" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-870"><title>1.870 (0.68)</title><rect x="836" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-870"><title>1.870 (0.66)</title><rect x="840" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-870"><title>1.870 (0.52)</title><rect x="844" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-870"><title>1.870 (0.57)</title><rect x="848" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-870"><title>1.870 (0.54)</title><rect x="852" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-870"><title>1.870 (0.63)</title><rect x="856" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-870"><title>1.870 (0.57)</title><rect x="860" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-878"><title>1.878 (0.80)</title><rect x="864" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-878"><title>1.878 (0.47)</title><rect x="868" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-878"><title>1.878 (0.80)</title><rect x="872" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-878"><title>1.878 (0.46)</title><rect x="876" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-878"><title>1.878 (0.58)</title><rect x="880" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-878"><title>1.878 (0.63)</title><rect x="884" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-887"><title>1.887 (0.78)</title><rect x="888" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-887"><title>1.887 (0.60)</title><rect x="892" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-887"><title>1.887 (0.80)</title><rect x="896" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-887"><title>1.887 (0.31)</title><rect x="900" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-887"><title>1.887 (0.76)</title><rect x="904" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-896"><title>1.896 (0.49)</title><rect x="908" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-896"><title>1.896 (0.75)</title><rect x="912" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-896"><title>1.896 (0.48)</title><rect x="916" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-896"><title>1.896 (0.76)</title><rect x="920" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-896"><title>1.896 (0.70)</title><rect x="924" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-896"><title>1.896 (0.64)</title><rect x="928" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-896"><title>1.896 (0.77)</title><rect x="932" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-904"><title>1.904 (0.40)</title><rect x="936" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-904"><title>1.904 (0.60)</title><rect x="940" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-904"><title>1.904 (0.59)</title><rect x="944" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-904"><title>1.904 (0.53)</title><rect x="948" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-904"><title>1.904 (0.65)</title><rect x="952" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-904"><title>1.904 (0.47)</title><rect x="956" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-904"><title>1.904 (0.57)</title><rect x="960" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-912"><title>1.912 (0.66)</title><rect x="964" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-912"><title>1.912 (0.63)</title><rect x="968" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-912"><title>1.912 (0.69)</title><rect x="972" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-912"><title>1.912 (0.62)</title><rect x="976" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-912"><title>1.912 (0.55)</title><rect x="180" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-912"><title>1.912 (0.52)</title><rect x="184" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-912"><title>1.912 (0.74)</title><rect x="188" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-920"><title>1.920 (0.70)</title><rect x="192" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-920"><title>1.920 (0.69)</title><rect x="196" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-920"><title>1.920 (0.59)</title><rect x="200" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-920"><title>1.920 (0.65)</title><rect x="204" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-920"><title>1.920 (0.50)</title><rect x="208" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-920"><title>1.920 (0.46)</title><rect x="212" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-920"><title>1.920 (0.51)</title><rect x="216" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-928"><title>1.928 (0.68)</title><rect x="220" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-928"><title>1.928 (0.48)</title><rect x="224" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-928"><title>1.928 (0.41)</title><rect x="228" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-928"><title>1.928 (0.60)</title><rect x="232" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-928"><title>1.928 (0.48)</title><rect x="236" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-928"><title>1.928 (0.48)</title><rect x="240" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-928"><title>1.928 (0.51)</title><rect x="244" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-936"><title>1.936 (0.79)</title><rect x="248" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-936"><title>1.936 (0.50)</title><rect x="252" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-936"><title>1.936 (0.53)</title><rect x="256" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-936"><title>1.936 (0.67)</title><rect x="260" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-936"><title>1.936 (0.79)</title><rect x="264" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-936"><title>1.936 (0.58)</title><rect x="268" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-936"><title>1.936 (0.67)</title><rect x="272" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-944"><title>1.944 (0.43)</title><rect x="276" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-944"><title>1.944 (0.45)</title><rect x="280" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-944"><title>1.944 (0.42)</title><rect x="284" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-944"><title>1.944 (0.61)</title><rect x="288" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-944"><title>1.944 (0.59)</title><rect x="292" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-944"><title>1.944 (0.69)</title><rect x="296" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-944"><title>1.944 (0.71)</title><rect x="300" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-952"><title>1.952 (0.66)</title><rect x="304" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-952"><title>1.952 (0.59)</title><rect x="308" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-952"><title>1.952 (0.45)</title><rect x="312" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-952"><title>1.952 (0.66)</title><rect x="316" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-952"><title>1.952 (0.61)</title><rect x="320" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-952"><title>1.952 (0.74)</title><rect x="324" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-952"><title>1.952 (0.75)</title><rect x="328" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-961"><title>1.961 (0.80)</title><rect x="332" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-961"><title>1.961 (0.83)</title><rect x="336" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-970"><title>1.970 (0.54)</title><rect x="340" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-970"><title>1.970 (0.52)</title><rect x="344" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-970"><title>1.970 (0.58)</title><rect x="348" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-970"><title>1.970 (0.74)</title><rect x="352" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-980"><title>1.980 (0.50)</title><rect x="356" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-980"><title>1.980 (0.55)</title><rect x="360" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-980"><title>1.980 (0.53)</title><rect x="364" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-980"><title>1.980 (0.68)</title><rect x="368" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-980"><title>1.980 (0.24)</title><rect x="372" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-980"><title>1.980 (0.83)</title><rect x="376" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-989"><title>1.989 (0.23)</title><rect x="380" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-989"><title>1.989 (0.58)</title><rect x="384" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-989"><title>1.989 (0.33)</title><rect x="388" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-989"><title>1.989 (0.50)</title><rect x="392" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-989"><title>1.989 (0.20)</title><rect x="396" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-989"><title>1.989 (0.80)</title><rect x="400" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-989"><title>1.989 (0.45)</title><rect x="404" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-997"><title>1.997 (0.39)</title><rect x="408" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-997"><title>1.997 (0.62)</title><rect x="412" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-997"><title>1.997 (0.20)</title><rect x="416" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-997"><title>1.997 (0.69)</title><rect x="420" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1007"><title>1.1007 (0.82)</title><rect x="424" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1014"><title>1.1014 (0.48)</title><rect x="428" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1014"><title>1.1014 (0.81)</title><rect x="432" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1014"><title>1.1014 (0.83)</title><rect x="436" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1014"><title>1.1014 (0.58)</title><rect x="440" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1022"><title>1.1022 (0.70)</title><rect x="444" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1022"><title>1.1022 (0.58)</title><rect x="448" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1022"><title>1.1022 (0.72)</title><rect x="452" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1030"><title>1.1030 (0.83)</title><rect x="456" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1030"><title>1.1030 (0.82)</title><rect x="460" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1030"><title>1.1030 (0.78)</title><rect x="464" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1030"><title>1.1030 (0.57)</title><rect x="468" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1043"><title>1.1043 (0.12)</title><rect x="472" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1043"><title>1.1043 (0.13)</title><rect x="476" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1043"><title>1.1043 (0.40)</title><rect x="480" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1054"><title>1.1054 (0.64)</title><rect x="484" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1063"><title>1.1063 (0.74)</title><rect x="488" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1072"><title>1.1072 (0.65)</title><rect x="492" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1072"><title>1.1072 (0.60)</title><rect x="496" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1072"><title>1.1072 (0.51)</title><rect x="500" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1080"><title>1.1080 (0.48)</title><rect x="504" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1080"><title>1.1080 (0.77)</title><rect x="508" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1080"><title>1.1080 (0.76)</title><rect x="512" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1080"><title>1.1080 (0.77)</title><rect x="516" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1088"><title>1.1088 (0.58)</title><rect x="520" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1096"><title>1.1096 (0.54)</title><rect x="524" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1096"><title>1.1096 (0.22)</title><rect x="528" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1096"><title>1.1096 (0.45)</title><rect x="532" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1096"><title>1.1096 (0.33)</title><rect x="536" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1105"><title>1.1105 (0.34)</title><rect x="540" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1105"><title>1.1105 (0.32)</title><rect x="544" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1105"><title>1.1105 (0.09)</title><rect x="548" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1105"><title>1.1105 (0.42)</title><rect x="552" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1105"><title>1.1105 (0.14)</title><rect x="556" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1114"><title>1.1114 (0.79)</title><rect x="560" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1122"><title>1.1122 (0.38)</title><rect x="564" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1133"><title>1.1133 (0.41)</title><rect x="568" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1122"><title>1.1122 (0.12)</title><rect x="572" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1133"><title>1.1133 (0.12)</title><rect x="576" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1143"><title>1.1143 (0.63)</title><rect x="580" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1157"><title>1.1157 (0.27)</title><rect x="584" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1157"><title>1.1157 (0.34)</title><rect x="588" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1157"><title>1.1157 (0.62)</title><rect x="592" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1157"><title>1.1157 (0.26)</title><rect x="596" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1165"><title>1.1165 (0.14)</title><rect x="600" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1173"><title>1.1173 (0.48)</title><rect x="604" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1173"><title>1.1173 (0.37)</title><rect x="608" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1181"><title>1.1181 (0.09)</title><rect x="612" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1181"><title>1.1181 (0.35)</title><rect x="616" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1181"><title>1.1181 (0.17)</title><rect x="620" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1181"><title>1.1181 (0.14)</title><rect x="624" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1181"><title>1.1181 (0.13)</title><rect x="628" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1189"><title>1.1189 (0.45)</title><rect x="632" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1189"><title>1.1189 (0.19)</title><rect x="636" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1189"><title>1.1189 (0.19)</title><rect x="640" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1189"><title>1.1189 (0.26)</title><rect x="644" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1200"><title>1.1200 (0.31)</title><rect x="648" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1200"><title>1.1200 (0.37)</title><rect x="652" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1200"><title>1.1200 (0.40)</title><rect x="656" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1200"><title>1.1200 (0.25)</title><rect x="660" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1208"><title>1.1208 (0.50)</title><rect x="664" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1208"><title>1.1208 (0.37)</title><rect x="668" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1208"><title>1.1208 (0.17)</title><rect x="672" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1216"><title>1.1216 (0.45)</title><rect x="676" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1216"><title>1.1216 (0.71)</title><rect x="680" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1216"><title>1.1216 (0.22)</title><rect x="684" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1216"><title>1.1216 (0.80)</title><rect x="688" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1225"><title>1.1225 (0.17)</title><rect x="692" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1225"><title>1.1225 (0.34)</title><rect x="696" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1225"><title>1.1225 (0.22)</title><rect x="700" y="112" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1225"><title>1.1225 (0.45)</title><rect x="704" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1225"><title>1.1225 (0.47)</title><rect x="708" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1233"><title>1.1233 (0.56)</title><rect x="712" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1241"><title>1.1241 (0.51)</title><rect x="716" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1241"><title>1.1241 (0.45)</title><rect x="720" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1241"><title>1.1241 (0.56)</title><rect x="724" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1241"><title>1.1241 (0.45)</title><rect x="728" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1256"><title>1.1256 (0.54)</title><rect x="732" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1266"><title>1.1266 (0.63)</title><rect x="736" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1279"><title>1.1279 (0.60)</title><rect x="740" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1287"><title>1.1287 (0.65)</title><rect x="744" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1295"><title>1.1295 (0.57)</title><rect x="748" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg007.perseus-eng80.html#s1-1311"><title>1.1311 (0.58)</title><rect x="752" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<text x="180" y="139" class="warn">⚠ 1.354 → 1.362  (7 sections, avg=0.158)</text>
+<text x="180" y="153" class="warn">⚠ 1.486 → 1.486  (4 sections, avg=0.104)</text>
+<text x="180" y="167" class="warn">⚠ 1.502 → 1.502  (4 sections, avg=0.127)</text>
+<line x1="20" y1="181" x2="1200" y2="181" stroke="#ccc" stroke-width="1"/>
+<text x="20" y="201" class="total">TOTAL: 544 sections   avg=0.501   High=56%   Med=26%   Low=17%</text>
+<rect x="20" y="208" width="665.9191176470588" height="10" fill="#2d8a4e" rx="2"/>
+<rect x="685.9191176470588" y="208" width="308.014705882353" height="10" fill="#e8b83d"/>
+<rect x="993.9338235294117" y="208" width="206.06617647058823" height="10" fill="#c9493b" rx="2"/>
 </svg>

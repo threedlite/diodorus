@@ -23,8 +23,9 @@ from collections import defaultdict
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
-HIGH = 0.6
-MED = 0.3
+# Confidence thresholds (calibrated for multi-signal combined_score)
+HIGH = 0.50
+MED = 0.25
 
 
 def load_config(work_name):
@@ -232,7 +233,7 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
         lines.append(f'<div class="meta">')
         lines.append(f"{lang_label}: {cts_stem}<br>")
         lines.append(f"English: {esc(translator)} ({en_date})<br>")
-        lines.append(f"Alignment: embedding similarity + entity anchoring")
+        lines.append(f"Alignment: CTS ref matching + embedding DP + lexical TF-IDF + entity anchoring")
         lines.append("</div>")
 
         # Determine which books belong to this work_id
@@ -322,9 +323,10 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
                     en_cell = '<td class="empty">↑</td>'  # points up to the English above
                 else:
                     en_cell = '<td class="empty">—</td>'
+                section_id = (gr_ref or en_ref or "").replace(".", "-")
                 ref_cell = f'<td class="ref">{esc(gr_ref or en_ref or "")}</td>'
 
-                lines.append(f'<tr class="{css_class}">{ref_cell}{gr_cell}{en_cell}</tr>')
+                lines.append(f'<tr class="{css_class}" id="s{section_id}">{ref_cell}{gr_cell}{en_cell}</tr>')
 
             lines.append("</table>")
 

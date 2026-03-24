@@ -10,13 +10,13 @@
       "xml_files": [
         "tlg0096.tlg002.perseus-eng80.xml"
       ],
-      "sections": 600,
-      "high_pct": 17.3,
-      "med_pct": 69.0,
-      "low_pct": 13.7,
-      "avg": 0.455,
-      "build_time_seconds": 3.9,
-      "timestamp": "2026-03-22T15:30:55.707634"
+      "sections": 598,
+      "high_pct": 15.1,
+      "med_pct": 54.2,
+      "low_pct": 30.8,
+      "avg": 0.384,
+      "build_time_seconds": 4.2,
+      "timestamp": "2026-03-23T21:11:43.374849"
     },
     "diodorus": {
       "author": "Diodorus Siculus",
@@ -28,13 +28,13 @@
       "xml_files": [
         "tlg0060.tlg001.perseus-eng80.xml"
       ],
-      "sections": 8187,
-      "high_pct": 33.6,
-      "med_pct": 49.3,
-      "low_pct": 17.1,
-      "avg": 0.499,
-      "build_time_seconds": 196.1,
-      "timestamp": "2026-03-22T15:34:11.812873"
+      "sections": 8205,
+      "high_pct": 45.9,
+      "med_pct": 43.2,
+      "low_pct": 10.9,
+      "avg": 0.555,
+      "build_time_seconds": 324.3,
+      "timestamp": "2026-03-23T21:20:33.992823"
     },
     "dionysius": {
       "author": "Dionysius of Halicarnassus",
@@ -47,12 +47,12 @@
         "tlg0081.tlg012.perseus-eng80.xml"
       ],
       "sections": 29,
-      "high_pct": 82.8,
-      "med_pct": 17.2,
-      "low_pct": 0.0,
-      "avg": 0.753,
-      "build_time_seconds": 4.1,
-      "timestamp": "2026-03-22T15:34:15.922342"
+      "high_pct": 89.7,
+      "med_pct": 0.0,
+      "low_pct": 10.3,
+      "avg": 0.777,
+      "build_time_seconds": 11.0,
+      "timestamp": "2026-03-23T21:20:45.021922"
     },
     "hippolytus": {
       "author": "Hippolytus",
@@ -64,13 +64,13 @@
       "xml_files": [
         "tlg2115.tlg060.perseus-eng80.xml"
       ],
-      "sections": 1440,
-      "high_pct": 30.3,
-      "med_pct": 54.2,
-      "low_pct": 15.6,
-      "avg": 0.488,
-      "build_time_seconds": 36.6,
-      "timestamp": "2026-03-22T15:34:52.536452"
+      "sections": 1655,
+      "high_pct": 16.6,
+      "med_pct": 43.1,
+      "low_pct": 40.3,
+      "avg": 0.35,
+      "build_time_seconds": 33.2,
+      "timestamp": "2026-03-23T21:22:51.279848"
     },
     "iamblichus": {
       "author": "Iamblichus",
@@ -83,13 +83,13 @@
         "tlg2023.tlg001.perseus-eng80.xml",
         "tlg2023.tlg006.perseus-eng80.xml"
       ],
-      "sections": 468,
-      "high_pct": 17.3,
-      "med_pct": 53.0,
-      "low_pct": 29.7,
-      "avg": 0.41,
-      "build_time_seconds": 45.4,
-      "timestamp": "2026-03-22T15:35:37.921313"
+      "sections": 461,
+      "high_pct": 46.2,
+      "med_pct": 43.6,
+      "low_pct": 10.2,
+      "avg": 0.558,
+      "build_time_seconds": 187.0,
+      "timestamp": "2026-03-23T21:25:58.301804"
     },
     "marcus": {
       "author": "Marcus Aurelius",
@@ -102,12 +102,12 @@
         "tlg0562.tlg001.perseus-eng80.xml"
       ],
       "sections": 578,
-      "high_pct": 70.1,
-      "med_pct": 29.1,
-      "low_pct": 0.9,
-      "avg": 0.651,
-      "build_time_seconds": 9.2,
-      "timestamp": "2026-03-22T15:35:47.164705"
+      "high_pct": 84.3,
+      "med_pct": 15.4,
+      "low_pct": 0.3,
+      "avg": 0.726,
+      "build_time_seconds": 11.7,
+      "timestamp": "2026-03-23T21:26:38.261149"
     },
     "plotinus": {
       "author": "Plotinus",
@@ -119,13 +119,13 @@
       "xml_files": [
         "tlg2000.tlg001.perseus-eng80.xml"
       ],
-      "sections": 678,
-      "high_pct": 32.4,
-      "med_pct": 51.2,
-      "low_pct": 16.4,
-      "avg": 0.496,
-      "build_time_seconds": 26.5,
-      "timestamp": "2026-03-22T15:36:13.626601"
+      "sections": 700,
+      "high_pct": 63.1,
+      "med_pct": 32.7,
+      "low_pct": 4.1,
+      "avg": 0.647,
+      "build_time_seconds": 53.6,
+      "timestamp": "2026-03-23T21:27:43.349361"
     },
     "procopius_secret": {
       "author": "Procopius",
@@ -137,13 +137,13 @@
       "xml_files": [
         "tlg4029.tlg002.perseus-eng80.xml"
       ],
-      "sections": 1025,
-      "high_pct": 32.4,
-      "med_pct": 49.6,
-      "low_pct": 18.0,
-      "avg": 0.49,
-      "build_time_seconds": 25.7,
-      "timestamp": "2026-03-22T15:36:39.374276"
+      "sections": 1022,
+      "high_pct": 44.2,
+      "med_pct": 45.3,
+      "low_pct": 10.5,
+      "avg": 0.552,
+      "build_time_seconds": 18.2,
+      "timestamp": "2026-03-23T21:28:01.590656"
     },
     "procopius_wars": {
       "author": "Procopius",
@@ -155,13 +155,13 @@
       "xml_files": [
         "tlg4029.tlg001.perseus-eng80.xml"
       ],
-      "sections": 7385,
-      "high_pct": 11.5,
-      "med_pct": 25.2,
-      "low_pct": 63.3,
-      "avg": 0.268,
-      "build_time_seconds": 91.0,
-      "timestamp": "2026-03-22T15:38:10.414264"
+      "sections": 7598,
+      "high_pct": 15.3,
+      "med_pct": 22.1,
+      "low_pct": 62.6,
+      "avg": 0.285,
+      "build_time_seconds": 176.1,
+      "timestamp": "2026-03-23T21:30:57.764770"
     },
     "statius": {
       "author": "Statius",
@@ -174,13 +174,469 @@
         "phi1020.phi001.perseus-eng80.xml",
         "phi1020.phi003.perseus-eng80.xml"
       ],
-      "sections": 924,
-      "high_pct": 10.9,
-      "med_pct": 81.2,
-      "low_pct": 7.9,
-      "avg": 0.459,
-      "build_time_seconds": 52.9,
-      "timestamp": "2026-03-22T15:39:03.363238"
+      "sections": 927,
+      "high_pct": 1.5,
+      "med_pct": 83.8,
+      "low_pct": 14.7,
+      "avg": 0.41,
+      "build_time_seconds": 48.3,
+      "timestamp": "2026-03-23T21:31:46.068020"
+    },
+    "theophrastus": {
+      "author": "Theophrastus",
+      "work_title": "Characters",
+      "source_type": "perseus",
+      "english_source": "gutenberg",
+      "translator": "Charles E. Bennett & William A. Hammond",
+      "english_date": 1902,
+      "xml_files": [
+        "tlg0093.tlg009.perseus-eng80.xml"
+      ],
+      "sections": 332,
+      "high_pct": 47.9,
+      "med_pct": 50.3,
+      "low_pct": 1.8,
+      "avg": 0.601,
+      "build_time_seconds": 7.8,
+      "timestamp": "2026-03-23T21:32:22.036192"
+    },
+    "aristotle_const_athens": {
+      "author": "Aristotle",
+      "work_title": "Constitution of the Athenians",
+      "source_type": "perseus",
+      "english_source": "gutenberg",
+      "translator": "Sir Frederic G. Kenyon",
+      "english_date": 1920,
+      "xml_files": [
+        "tlg0086.tlg003.perseus-eng80.xml"
+      ],
+      "sections": 299,
+      "high_pct": 81.3,
+      "med_pct": 18.7,
+      "low_pct": 0.0,
+      "avg": 0.713,
+      "build_time_seconds": 12.3,
+      "timestamp": "2026-03-23T21:13:57.700282"
+    },
+    "longus": {
+      "author": "Longus",
+      "work_title": "Daphnis and Chloe",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "Rowland Smith",
+      "english_date": 1901,
+      "xml_files": [
+        "tlg0561.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 591,
+      "high_pct": 28.3,
+      "med_pct": 41.1,
+      "low_pct": 30.6,
+      "avg": 0.429,
+      "build_time_seconds": 15.4,
+      "timestamp": "2026-03-23T21:26:26.551425"
+    },
+    "theocritus_idylls": {
+      "author": "Theocritus",
+      "work_title": "Idylls",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "J. Banks",
+      "english_date": 1878,
+      "xml_files": [
+        "tlg0005.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 301,
+      "high_pct": 81.7,
+      "med_pct": 16.9,
+      "low_pct": 1.3,
+      "avg": 0.713,
+      "build_time_seconds": 24.2,
+      "timestamp": "2026-03-23T21:32:14.261042"
+    },
+    "theocritus_epigrams": {
+      "author": "Theocritus",
+      "work_title": "Epigrams",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "J. Banks",
+      "english_date": 1878,
+      "xml_files": [
+        "tlg0005.tlg002.perseus-eng80.xml"
+      ],
+      "sections": 25,
+      "high_pct": 92.0,
+      "med_pct": 0.0,
+      "low_pct": 8.0,
+      "avg": 0.783,
+      "build_time_seconds": 4.0,
+      "timestamp": "2026-03-23T21:31:50.078618"
+    },
+    "arrian_anabasis": {
+      "author": "Arrian",
+      "work_title": "Anabasis of Alexander",
+      "source_type": "perseus",
+      "english_source": "gutenberg",
+      "translator": "E. J. Chinnock",
+      "english_date": 1884,
+      "xml_files": [
+        "tlg0074.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 1406,
+      "high_pct": 85.8,
+      "med_pct": 13.9,
+      "low_pct": 0.2,
+      "avg": 0.712,
+      "build_time_seconds": 60.3,
+      "timestamp": "2026-03-23T21:14:57.993797"
+    },
+    "achilles_tatius": {
+      "author": "Achilles Tatius",
+      "work_title": "Leucippe and Clitophon",
+      "source_type": "perseus",
+      "english_source": "gutenberg",
+      "translator": "Rowland Smith",
+      "english_date": 1901,
+      "xml_files": [
+        "tlg0532.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 1433,
+      "high_pct": 15.2,
+      "med_pct": 41.1,
+      "low_pct": 43.7,
+      "avg": 0.32,
+      "build_time_seconds": 28.3,
+      "timestamp": "2026-03-23T21:11:39.201049"
+    },
+    "heliodorus": {
+      "author": "Heliodorus",
+      "work_title": "Aethiopica",
+      "source_type": "first1kgreek",
+      "english_source": "eng_trans_dev",
+      "translator": "Rowland Smith",
+      "english_date": 1901,
+      "xml_files": [
+        "tlg0658.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 680,
+      "high_pct": 19.7,
+      "med_pct": 20.6,
+      "low_pct": 59.7,
+      "avg": 0.251,
+      "build_time_seconds": 9.2,
+      "timestamp": "2026-03-23T21:22:18.031295"
+    },
+    "aristophanes_peace": {
+      "author": "Aristophanes",
+      "work_title": "Peace (Pax)",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "Benjamin Bickley Rogers",
+      "english_date": 1919,
+      "xml_files": [
+        "tlg0019.tlg005.perseus-eng80.xml"
+      ],
+      "sections": 165,
+      "high_pct": 0.0,
+      "med_pct": 39.4,
+      "low_pct": 60.6,
+      "avg": 0.237,
+      "build_time_seconds": 6.8,
+      "timestamp": "2026-03-23T21:13:11.012431"
+    },
+    "aristophanes_frogs": {
+      "author": "Aristophanes",
+      "work_title": "Frogs (Ranae)",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "Benjamin Bickley Rogers",
+      "english_date": 1919,
+      "xml_files": [
+        "tlg0019.tlg009.perseus-eng80.xml"
+      ],
+      "sections": 192,
+      "high_pct": 3.1,
+      "med_pct": 49.0,
+      "low_pct": 47.9,
+      "avg": 0.275,
+      "build_time_seconds": 8.2,
+      "timestamp": "2026-03-23T21:12:38.855593"
+    },
+    "aristophanes_ecclesiazusae": {
+      "author": "Aristophanes",
+      "work_title": "Ecclesiazusae",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "Benjamin Bickley Rogers",
+      "english_date": 1919,
+      "xml_files": [
+        "tlg0019.tlg010.perseus-eng80.xml"
+      ],
+      "sections": 152,
+      "high_pct": 2.0,
+      "med_pct": 52.6,
+      "low_pct": 45.4,
+      "avg": 0.285,
+      "build_time_seconds": 6.9,
+      "timestamp": "2026-03-23T21:12:30.688099"
+    },
+    "moschus": {
+      "author": "Moschus",
+      "work_title": "Idylls",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "J. Banks",
+      "english_date": 1878,
+      "xml_files": [
+        "tlg0035.tlg001.perseus-eng80.xml",
+        "tlg0035.tlg002.perseus-eng80.xml",
+        "tlg0035.tlg003.perseus-eng80.xml",
+        "tlg0035.tlg004.perseus-eng80.xml",
+        "tlg0035.tlg005.perseus-eng80.xml"
+      ],
+      "sections": 57,
+      "high_pct": 24.6,
+      "med_pct": 47.4,
+      "low_pct": 28.1,
+      "avg": 0.409,
+      "build_time_seconds": 11.5,
+      "timestamp": "2026-03-23T21:26:49.745048"
+    },
+    "bion": {
+      "author": "Bion of Phlossa",
+      "work_title": "Idylls",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "J. Banks",
+      "english_date": 1878,
+      "xml_files": [
+        "tlg0036.tlg001.perseus-eng80.xml",
+        "tlg0036.tlg002.perseus-eng80.xml",
+        "tlg0036.tlg003.perseus-eng80.xml"
+      ],
+      "sections": 27,
+      "high_pct": 18.5,
+      "med_pct": 74.1,
+      "low_pct": 7.4,
+      "avg": 0.498,
+      "build_time_seconds": 4.9,
+      "timestamp": "2026-03-23T21:15:09.689781"
+    },
+    "apollonius": {
+      "author": "Apollonius Rhodius",
+      "work_title": "Argonautica",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "Edward P. Coleridge",
+      "english_date": 1889,
+      "xml_files": [
+        "tlg0001.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 669,
+      "high_pct": 53.7,
+      "med_pct": 26.6,
+      "low_pct": 19.7,
+      "avg": 0.533,
+      "build_time_seconds": 22.0,
+      "timestamp": "2026-03-23T21:12:13.307958"
+    },
+    "alciphron": {
+      "author": "Alciphron",
+      "work_title": "Epistulae",
+      "source_type": "first1kgreek",
+      "english_source": "eng_trans_dev",
+      "translator": "Unknown",
+      "english_date": 1896,
+      "xml_files": [
+        "tlg0640.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 231,
+      "high_pct": 8.7,
+      "med_pct": 26.0,
+      "low_pct": 65.4,
+      "avg": 0.216,
+      "build_time_seconds": 8.0,
+      "timestamp": "2026-03-23T21:11:51.348752"
+    },
+    "julian_helios": {
+      "author": "Julian",
+      "work_title": "Hymn to King Helios",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "C. W. King",
+      "english_date": 1888,
+      "xml_files": [
+        "tlg2003.tlg011.perseus-eng80.xml"
+      ],
+      "sections": 44,
+      "high_pct": 77.3,
+      "med_pct": 18.2,
+      "low_pct": 4.5,
+      "avg": 0.681,
+      "build_time_seconds": 6.0,
+      "timestamp": "2026-03-23T21:26:04.263103"
+    },
+    "julian_mother": {
+      "author": "Julian",
+      "work_title": "Hymn to the Mother of the Gods",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "C. W. King",
+      "english_date": 1888,
+      "xml_files": [
+        "tlg2003.tlg008.perseus-eng80.xml"
+      ],
+      "sections": 20,
+      "high_pct": 85.0,
+      "med_pct": 15.0,
+      "low_pct": 0.0,
+      "avg": 0.716,
+      "build_time_seconds": 6.9,
+      "timestamp": "2026-03-23T21:26:11.176648"
+    },
+    "arrian_cynegeticus": {
+      "author": "Arrian",
+      "work_title": "Cynegeticus",
+      "source_type": "perseus",
+      "english_source": "gutenberg",
+      "translator": "William Dansey",
+      "english_date": 1831,
+      "xml_files": [
+        "tlg0074.tlg003.perseus-eng80.xml"
+      ],
+      "sections": 147,
+      "high_pct": 71.4,
+      "med_pct": 25.2,
+      "low_pct": 3.4,
+      "avg": 0.67,
+      "build_time_seconds": 6.8,
+      "timestamp": "2026-03-23T21:15:04.835922"
+    },
+    "dionysius_ant": {
+      "author": "Dionysius of Halicarnassus",
+      "work_title": "Roman Antiquities",
+      "source_type": "perseus",
+      "english_source": "lacuscurtius",
+      "translator": "Earnest Cary",
+      "english_date": 1937,
+      "xml_files": [
+        "tlg0081.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 4272,
+      "high_pct": 98.0,
+      "med_pct": 1.8,
+      "low_pct": 0.2,
+      "avg": 0.81,
+      "build_time_seconds": 83.7,
+      "timestamp": "2026-03-23T21:22:08.778955"
+    },
+    "aristophanes_acharnians": {
+      "author": "Aristophanes",
+      "work_title": "Acharnians",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "William James Hickie",
+      "english_date": 1853,
+      "xml_files": [
+        "tlg0019.tlg001.perseus-eng80.xml"
+      ],
+      "sections": 467,
+      "high_pct": 26.8,
+      "med_pct": 48.4,
+      "low_pct": 24.8,
+      "avg": 0.457,
+      "build_time_seconds": 10.5,
+      "timestamp": "2026-03-23T21:12:23.790636"
+    },
+    "aristophanes_knights": {
+      "author": "Aristophanes",
+      "work_title": "Knights",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "William James Hickie",
+      "english_date": 1853,
+      "xml_files": [
+        "tlg0019.tlg002.perseus-eng80.xml"
+      ],
+      "sections": 537,
+      "high_pct": 28.9,
+      "med_pct": 50.5,
+      "low_pct": 20.7,
+      "avg": 0.486,
+      "build_time_seconds": 12.3,
+      "timestamp": "2026-03-23T21:12:51.171030"
+    },
+    "aristophanes_lysistrata": {
+      "author": "Aristophanes",
+      "work_title": "Lysistrata",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "William James Hickie",
+      "english_date": 1853,
+      "xml_files": [
+        "tlg0019.tlg007.perseus-eng80.xml"
+      ],
+      "sections": 544,
+      "high_pct": 36.2,
+      "med_pct": 43.8,
+      "low_pct": 20.0,
+      "avg": 0.501,
+      "build_time_seconds": 13.0,
+      "timestamp": "2026-03-23T21:13:04.203699"
+    },
+    "aristophanes_plutus": {
+      "author": "Aristophanes",
+      "work_title": "Plutus",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "William James Hickie",
+      "english_date": 1853,
+      "xml_files": [
+        "tlg0019.tlg011.perseus-eng80.xml"
+      ],
+      "sections": 589,
+      "high_pct": 38.7,
+      "med_pct": 47.5,
+      "low_pct": 13.8,
+      "avg": 0.527,
+      "build_time_seconds": 14.2,
+      "timestamp": "2026-03-23T21:13:25.239002"
+    },
+    "aristophanes_thesmophoriazusae": {
+      "author": "Aristophanes",
+      "work_title": "Thesmophoriazusae",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "William James Hickie",
+      "english_date": 1853,
+      "xml_files": [
+        "tlg0019.tlg008.perseus-eng80.xml"
+      ],
+      "sections": 498,
+      "high_pct": 25.9,
+      "med_pct": 44.4,
+      "low_pct": 29.7,
+      "avg": 0.443,
+      "build_time_seconds": 11.7,
+      "timestamp": "2026-03-23T21:13:36.928249"
+    },
+    "aristophanes_wasps": {
+      "author": "Aristophanes",
+      "work_title": "Wasps (Vespae)",
+      "source_type": "perseus",
+      "english_source": "eng_trans_dev",
+      "translator": "Benjamin Bickley Rogers",
+      "english_date": 1919,
+      "xml_files": [
+        "tlg0019.tlg004.perseus-eng80.xml"
+      ],
+      "sections": 387,
+      "high_pct": 35.9,
+      "med_pct": 46.8,
+      "low_pct": 17.3,
+      "avg": 0.513,
+      "build_time_seconds": 8.5,
+      "timestamp": "2026-03-23T21:13:45.423035"
     }
   }
 }
