@@ -32,15 +32,17 @@ def load_config(work_name):
 def _build_p_with_notes(p_elem, text, notes, ns):
     """Build a <p> element with footnote bodies wrapped in <note> tags.
 
-    Uses the extracted notes from strip_notes to find where each note's
-    marker appears in the text and insert the note body as a <note> child.
-    """
-    # Build a mapping of marker -> note text
-    note_map = {}
-    for n in notes:
-        note_map[n["marker"]] = n["text"]
+    The full text has footnote bodies inline after markers. We reconstruct
+    the original text faithfully: markers become <note> elements containing
+    the footnote body. Markers that appear as references (not followed by
+    body) become empty <note> elements.
 
-    # Find all [A], [B], [1], [2] markers in the text and split around them
+    Strategy: scan the text, track which marker+body pairs we've consumed,
+    and only put the body in the <note> when it actually follows the marker.
+    """
+    note_map = {n["marker"]: n["text"] for n in notes}
+
+    # Split text on markers
     pattern = re.compile(r'(\[[A-Za-z]\]|\[\d+\])')
     parts = pattern.split(text)
 
@@ -52,19 +54,22 @@ def _build_p_with_notes(p_elem, text, notes, ns):
         after = parts[i + 1] if i + 1 < len(parts) else ""
 
         note_text = note_map.get(marker, "")
+
+        # Check if the footnote body actually follows this marker instance.
+        # If so, put it in <note> and strip it from the tail.
+        actual_body = ""
         if note_text:
-            note_elem = etree.SubElement(p_elem, f"{{{ns}}}note")
-            note_elem.set("type", "translator")
-            note_elem.set("n", marker.strip("[]"))
-            note_elem.text = note_text
-            note_elem.tail = after
-        else:
-            # No note body found — keep marker as text
-            if prev == p_elem:
-                p_elem.text = (p_elem.text or "") + marker + after
-            else:
-                prev.tail = (prev.tail or "") + marker + after
-            continue
+            after_stripped = after.lstrip()
+            if after_stripped.startswith(note_text):
+                actual_body = note_text
+                after = after_stripped[len(note_text):]
+
+        note_elem = etree.SubElement(p_elem, f"{{{ns}}}note")
+        note_elem.set("type", "translator")
+        note_elem.set("n", marker.strip("[]"))
+        if actual_body:
+            note_elem.text = actual_body
+        note_elem.tail = after
 
         prev = note_elem
 
@@ -252,8 +257,10 @@ def main(work_name):
                 p.set("n", str(sec_n))
 
                 # Build mixed content with <note> elements for footnotes.
-                # Uses text_for_embedding (translation only) for <p> content,
-                # with footnotes wrapped in <note> tags.
+                # The text field has footnote bodies inline after markers;
+                # text_for_embedding has markers stripped. We need text with
+                # markers but WITHOUT footnote bodies for the <p> content,
+                # then insert note bodies as <note> children.
                 section_notes = s.get("notes", [])
                 if section_notes:
                     _build_p_with_notes(p, s["text"], section_notes, TEI_NS)

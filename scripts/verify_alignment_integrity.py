@@ -345,10 +345,14 @@ def verify(work_name):
                     for child in p:
                         tag = etree.QName(child.tag).localname if isinstance(child.tag, str) else ""
                         if tag == "note":
-                            # Reconstruct [marker] from <note n="marker">
+                            # Reconstruct [marker] + note body from <note n="marker">
                             marker = child.get("n", "")
                             if marker:
                                 parts.append(f"[{marker}]")
+                            # Include note body text (footnote content)
+                            note_body = child.text or ""
+                            if note_body:
+                                parts.append(f" {note_body}")
                         else:
                             # Include other element text
                             parts.append("".join(child.itertext()))

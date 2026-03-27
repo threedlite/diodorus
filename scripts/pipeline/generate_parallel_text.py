@@ -358,7 +358,22 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
                         milestone_paras[ms_ref] = []
                         active_milestones.append(ms_ref)
                 elif tag == 'p' and active_milestones:
-                    p_text = ' '.join(elem.itertext()).strip()
+                    # Extract text, converting <note> back to [marker] form
+                    # to avoid inlining footnote bodies into the main text.
+                    parts = []
+                    if elem.text:
+                        parts.append(elem.text)
+                    for child in elem:
+                        child_tag = child.tag.split('}')[-1] if '}' in str(child.tag) else str(child.tag)
+                        if child_tag == 'note':
+                            marker = child.get('n', '')
+                            if marker:
+                                parts.append(f'[{marker}]')
+                        else:
+                            parts.append(''.join(child.itertext()))
+                        if child.tail:
+                            parts.append(child.tail)
+                    p_text = ' '.join(''.join(parts).split()).strip()
                     if p_text:
                         for ms in active_milestones:
                             milestone_paras[ms].append(p_text)
@@ -443,6 +458,9 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
                     en_text = xml_en_by_gr_ref[gr_ref]
                     show_english = True
                     seen_en.add(gr_ref)
+                    # Look up footnotes from the English sections data
+                    if en_ref and en_ref in en_by_ref:
+                        en_notes = en_by_ref[en_ref].get("notes")
                     # Mark all Greek refs sharing this same text as seen
                     for other_ref in xml_en_by_gr_ref:
                         if xml_en_by_gr_ref[other_ref] == en_text:
