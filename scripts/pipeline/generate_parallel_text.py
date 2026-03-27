@@ -231,7 +231,17 @@ tr.unmatched td { background-color: #f5f5f5; }
 
 
 def generate_html(work_name, config, alignments, greek_data, english_data):
-    """Generate parallel text HTML for one work (or sub-work)."""
+    """Generate parallel text HTML derived from TEI XML output.
+
+    The HTML shows exactly what's in the TEI XML — same text, same order,
+    same pairing. This guarantees the HTML is an accurate debug view of
+    the deliverable.
+
+    Falls back to alignment JSON if TEI XML is not available.
+    """
+    from lxml import etree
+    TEI_NS = "{http://www.tei-c.org/ns/1.0}"
+
     out_dir = PROJECT_ROOT / config["output_dir"]
 
     gr_source = config.get("greek_source", {})
@@ -322,6 +332,62 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
         else:
             relevant_books = set(by_book.keys())
 
+        # Parse TEI XML to get the authoritative English text.
+        # Milestones mark where each Greek section range starts.
+        # English <p> elements between milestones belong to that range.
+        # Build a mapping: greek_cts_ref → English text for all Greek
+        # sections in the range (from this milestone to the next).
+        xml_path = out_dir / f"{cts_stem}.xml"
+        xml_en_by_gr_ref = {}  # greek_cts_ref → English text
+        xml_milestone_order = []  # ordered list of milestone refs
+        if xml_path.exists():
+            xml_tree = etree.parse(str(xml_path))
+            xml_root = xml_tree.getroot()
+            # Collect milestone → paragraphs.
+            # Multiple milestones can appear before the same <p> (when
+            # multiple Greek sections are refined from one English section).
+            # All such milestones share the same paragraph text.
+            milestone_paras = {}  # milestone_ref → list of paragraph texts
+            active_milestones = []  # milestones waiting for their first <p>
+            for elem in xml_root.iter():
+                tag = elem.tag.split('}')[-1] if '}' in str(elem.tag) else str(elem.tag)
+                if tag == 'milestone' and elem.get('unit') == 'section':
+                    ms_ref = elem.get('n', '')
+                    if ms_ref:
+                        xml_milestone_order.append(ms_ref)
+                        milestone_paras[ms_ref] = []
+                        active_milestones.append(ms_ref)
+                elif tag == 'p' and active_milestones:
+                    p_text = ' '.join(elem.itertext()).strip()
+                    if p_text:
+                        for ms in active_milestones:
+                            milestone_paras[ms].append(p_text)
+                        # After a <p>, only the last milestone stays active
+                        # for subsequent <p> elements in this range
+                        active_milestones = [active_milestones[-1]]
+
+            # Map each Greek section to its milestone's English text.
+            # Use source order index for comparison (not string sort).
+            all_gr_refs = [s["cts_ref"] for s in greek_data["sections"]]
+            gr_ref_to_idx = {ref: i for i, ref in enumerate(all_gr_refs)}
+
+            # Convert milestones to source indices for comparison
+            ms_with_idx = [(gr_ref_to_idx.get(ms, -1), ms)
+                           for ms in xml_milestone_order
+                           if ms in gr_ref_to_idx]
+            ms_with_idx.sort()
+
+            # For each Greek section, find nearest preceding milestone
+            for gi, gr_ref in enumerate(all_gr_refs):
+                best_ms = None
+                for ms_gi, ms_ref in ms_with_idx:
+                    if ms_gi <= gi:
+                        best_ms = ms_ref
+                    else:
+                        break
+                if best_ms and best_ms in milestone_paras and milestone_paras[best_ms]:
+                    xml_en_by_gr_ref[gr_ref] = " ".join(milestone_paras[best_ms])
+
         for book_key in sorted(by_book.keys(),
                                key=lambda x: int(x) if x.isdigit() else x):
             if book_key not in relevant_books:
@@ -365,27 +431,40 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
                 if gr_ref and gr_ref in gr_by_ref:
                     gr_text = gr_by_ref[gr_ref]["text"]
 
-                # For refined sections, each Greek section has its own English
-                # fragment in english_preview — show it directly.
-                # For unrefined, show English only on first occurrence.
+                # Get English text from the TEI XML (authoritative source).
+                # This ensures the HTML shows exactly what's in the deliverable.
                 en_text = ""
                 en_notes = None
                 show_english = False
                 en_heading = None
-                if match_type == "dp_refined":
-                    en_text = a.get("english_refined_text", a.get("english_preview", ""))
+
+                if gr_ref and gr_ref in xml_en_by_gr_ref and gr_ref not in seen_en:
+                    # Show English text from XML for this Greek section
+                    en_text = xml_en_by_gr_ref[gr_ref]
                     show_english = True
-                    seen_en.add(en_ref)
-                elif en_ref and en_ref in en_by_ref and en_ref not in seen_en:
-                    en_section = en_by_ref[en_ref]
-                    en_text = en_section.get("text_for_embedding", en_section["text"])
-                    en_notes = en_section.get("notes")
-                    en_heading = en_section.get("heading_text")
-                    # Strip heading from text if it's a prefix (avoid duplication)
-                    if en_heading and en_text.startswith(en_heading):
-                        en_text = en_text[len(en_heading):].lstrip()
-                    seen_en.add(en_ref)
-                    show_english = True
+                    seen_en.add(gr_ref)
+                    # Mark all Greek refs sharing this same text as seen
+                    for other_ref in xml_en_by_gr_ref:
+                        if xml_en_by_gr_ref[other_ref] == en_text:
+                            seen_en.add(other_ref)
+                elif gr_ref and gr_ref in seen_en:
+                    # Already shown — display arrow
+                    show_english = False
+                elif not xml_en_by_gr_ref:
+                    # No XML available — fall back to alignment JSON
+                    if match_type == "dp_refined":
+                        en_text = a.get("english_refined_text", a.get("english_preview", ""))
+                        show_english = True
+                        seen_en.add(en_ref)
+                    elif en_ref and en_ref in en_by_ref and en_ref not in seen_en:
+                        en_section = en_by_ref[en_ref]
+                        en_text = en_section.get("text_for_embedding", en_section["text"])
+                        en_notes = en_section.get("notes")
+                        en_heading = en_section.get("heading_text")
+                        if en_heading and en_text.startswith(en_heading):
+                            en_text = en_text[len(en_heading):].lstrip()
+                        seen_en.add(en_ref)
+                        show_english = True
 
                 # Extract entity and lexicon words for highlighting + glossary
                 gr_entity_words = set()

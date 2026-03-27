@@ -58,6 +58,45 @@ def verify(work_name):
 
     ok = True
 
+    # --- 0. No duplicate CTS refs in source data ---
+    # For multi_work configs, check per-work (since alignment groups by work
+    # and sections from different works never interact).
+    from collections import Counter
+    config_path = PROJECT_ROOT / "scripts" / "works" / work_name / "config.json"
+    is_multi = False
+    if config_path.exists():
+        with open(config_path) as _cf:
+            is_multi = json.load(_cf).get("multi_work", False)
+
+    if is_multi:
+        gr_dupes = {}
+        for s in greek_data["sections"]:
+            work = s.get("work", "")
+            ref = s["cts_ref"]
+            key = (work, ref)
+            gr_dupes[key] = gr_dupes.get(key, 0) + 1
+        gr_dupes = {f"{w}:{r}": c for (w, r), c in gr_dupes.items() if c > 1}
+    else:
+        gr_ref_counts = Counter(s["cts_ref"] for s in greek_data["sections"])
+        gr_dupes = {r: c for r, c in gr_ref_counts.items() if c > 1}
+    if gr_dupes:
+        print(f"  ✗ Duplicate Greek CTS refs: {len(gr_dupes)}")
+        for r in sorted(gr_dupes)[:5]:
+            print(f"    {r} appears {gr_dupes[r]}x")
+        ok = False
+
+    en_ref_counts_src = Counter(str(s["cts_ref"]) for s in english_data["sections"])
+    en_dupes = {r: c for r, c in en_ref_counts_src.items() if c > 1}
+    if en_dupes:
+        # English duplicates are a quality issue (multi-paragraph sections
+        # sharing a ref) but not a data loss issue — TEI hash is authoritative.
+        print(f"  ⚠ Duplicate English CTS refs: {len(en_dupes)}")
+
+    if not gr_dupes and not en_dupes:
+        print(f"  ✓ No duplicate CTS refs in source data")
+    elif not gr_dupes:
+        print(f"  ✓ No duplicate Greek CTS refs")
+
     # --- 1. All source section refs present in alignment ---
     source_refs = set(s["cts_ref"] for s in greek_data["sections"])
     output_refs = set(a["greek_cts_ref"] for a in alignments if a.get("greek_cts_ref"))
@@ -167,8 +206,20 @@ def verify(work_name):
         with open(config_path) as _cf:
             alignment_mode = json.load(_cf).get("alignment_mode", "dp")
 
-    source_order = {s["cts_ref"]: i for i, s in enumerate(greek_data["sections"])}
-    en_order = {str(s["cts_ref"]): i for i, s in enumerate(english_data["sections"])}
+    # For multi-work configs, CTS refs can collide across works (e.g.
+    # Thebaid and Achilleid both have "1.1"). Build per-work order maps.
+    if is_multi:
+        source_order_by_work = {}
+        for i, s in enumerate(greek_data["sections"]):
+            work = s.get("work", s.get("book", ""))
+            source_order_by_work.setdefault(work, {})[s["cts_ref"]] = i
+        en_order_by_work = {}
+        for i, s in enumerate(english_data["sections"]):
+            work = s.get("work", s.get("book", ""))
+            en_order_by_work.setdefault(work, {})[str(s["cts_ref"])] = i
+    else:
+        source_order_by_work = {"": {s["cts_ref"]: i for i, s in enumerate(greek_data["sections"])}}
+        en_order_by_work = {"": {str(s["cts_ref"]): i for i, s in enumerate(english_data["sections"])}}
 
     gr_order_ok = True
     en_order_ok = True
@@ -179,29 +230,28 @@ def verify(work_name):
 
     # Check order per alignment group. For multi-work configs, each work
     # is aligned independently so only check within each work/book.
-    is_multi_work = config_path.exists() and json.load(open(config_path)).get("multi_work", False) if config_path.exists() else False
+    is_multi_work = is_multi
     prev_gr_idx = {}
     prev_en_idx = {}
 
     for a in alignments:
-        # Group by book, or by CTS ref first component for multi-work
+        # Group by book field. For multi-work configs, book contains
+        # the work name (e.g. "Thebaid", "Achilleid") which keeps
+        # each work's ordering check independent.
         gr_ref = a.get("greek_cts_ref")
-        if is_multi_work and gr_ref:
-            group = gr_ref.split(".")[0]  # first component = work number
-        else:
-            group = a.get("book", "")
+        group = a.get("book", "")
+        source_order = source_order_by_work.get(group, source_order_by_work.get("", {}))
+        en_order = en_order_by_work.get(group, en_order_by_work.get("", {}))
 
         if gr_ref and gr_ref in source_order:
             idx = source_order[gr_ref]
             prev = prev_gr_idx.get(group, -1)
             if idx < prev:
                 if gr_order_ok:
-                    label = "⚠" if is_multi_work else "✗"
-                    print(f"  {label} Greek out of order: {gr_ref} "
+                    print(f"  ✗ Greek out of order: {gr_ref} "
                           f"(index {idx}) after {prev} in group '{group}'")
                 gr_order_ok = False
-                if not is_multi_work:
-                    ok = False
+                ok = False
             prev_gr_idx[group] = idx
 
         en_ref = a.get("english_cts_ref")
@@ -211,9 +261,14 @@ def verify(work_name):
             if idx < prev:
                 if en_order_ok:
                     label = "⚠" if is_multi_work else "✗"
-                    print(f"  {label} English out of order: {en_ref} "
-                          f"(index {idx}) after {prev} in group '{group}'")
+                    print(f"  {label} English out of order in alignment: "
+                          f"{en_ref} (index {idx}) after {prev} "
+                          f"in group '{group}'")
                 en_order_ok = False
+                # Multi-work configs align each work independently —
+                # English order across works is legitimately non-monotonic.
+                # Greek order is ALWAYS enforced; English is best-effort
+                # for multi-work since TEI hash verifies text integrity.
                 if not is_multi_work:
                     ok = False
             prev_en_idx[group] = idx

@@ -291,11 +291,15 @@ def main(work_name):
         # Primary: best of entity, lexical, speaker
         primary = max(ent_signal, lex_signal, spk_signal)
 
-        # If primary signals are weak (<0.3), use embedding as tiebreaker
-        if primary < 0.3:
+        # If primary signals are available, use them; embedding is tiebreaker.
+        # If ALL primary signals are zero (e.g. Latin works with no lexicon),
+        # use embedding at full weight — it's the only evidence we have.
+        if primary >= 0.3:
+            content = primary
+        elif primary > 0:
             content = max(primary, emb_signal * 0.5)  # embedding at half weight
         else:
-            content = primary
+            content = emb_signal  # no other signals; embedding is primary
 
         # Length ratio vetoes — wrong size = wrong pair
         score = content * length_pen

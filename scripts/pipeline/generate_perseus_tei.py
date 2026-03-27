@@ -213,13 +213,15 @@ def main(work_name):
                     continue  # skip sections belonging to a different work
             en_by_book[s["book"]].append(s)
 
-        # Build alignment lookup: english cts_ref -> greek cts_ref
-        en_to_gr = {}
+        # Build alignment lookup: english cts_ref -> list of greek cts_refs
+        # Multiple Greek sections can map to the same English section
+        # (via refinement), so collect all of them.
+        en_to_gr_list = {}
         for a in alignments:
             en_ref = a.get("english_cts_ref", a.get("english_section", ""))
             gr_ref = a.get("greek_cts_ref")
             if en_ref and gr_ref:
-                en_to_gr[str(en_ref)] = gr_ref
+                en_to_gr_list.setdefault(str(en_ref), []).append(gr_ref)
 
         for book_key in sorted(en_by_book.keys(),
                                 key=lambda x: int(x) if x.isdigit() else x):
@@ -233,9 +235,9 @@ def main(work_name):
             for s in book_secs:
                 sec_n = s.get("section", s.get("cts_ref", ""))
 
-                # Add milestone for Greek reference if aligned
-                gr_ref = en_to_gr.get(str(s.get("cts_ref", "")))
-                if gr_ref:
+                # Add milestones for all Greek references aligned to this section
+                gr_refs = en_to_gr_list.get(str(s.get("cts_ref", "")), [])
+                for gr_ref in gr_refs:
                     ms = etree.SubElement(book_div, f"{{{TEI_NS}}}milestone")
                     ms.set("unit", "section")
                     ms.set("n", str(gr_ref))

@@ -50,8 +50,14 @@ for p in passages_data["passages"]:
     first_line = str(p["first_line"])
     last_line = str(p["last_line"])
 
+    # Keep work_id for multi-work grouping but use original book.line
+    # CTS ref format — CTS matching needs these to match English refs.
+    # Duplicates across works (Thebaid/Achilleid both have book 1) are
+    # safe because multi_work alignment groups by work field.
+    work_id = p.get("work_id", p["edition"].split(".")[1] if "." in p["edition"] else "")
     sections.append({
         "work": work,
+        "work_id": work_id,
         "book": book,
         "section": first_line,
         "cts_ref": f"{book}.{first_line}",

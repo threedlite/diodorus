@@ -58,36 +58,75 @@ for wid in WORK_IDS:
     tree = etree.parse(str(xml_path))
     root = tree.getroot()
 
-    lines = []
-    for l_elem in root.iter(f"{{{TEI_NS}}}l"):
-        line_n = l_elem.get("n", "")
-        if not line_n or not line_n.isdigit():
-            continue
-        text = " ".join(l_elem.itertext()).strip()
-        text = " ".join(text.split())
-        if text:
-            lines.append({"line": line_n, "text": text})
-
-    if not lines:
-        continue
-
-    passages = segment_lines(lines)
     book_num = str(WORK_IDS.index(wid) + 1)
 
-    for passage in passages:
-        first_line = passage[0]["line"]
-        text = " ".join(l["text"] for l in passage)
-        sections.append({
-            "book": book_num,
-            "section": first_line,
-            "cts_ref": f"{book_num}.{first_line}",
-            "edition": edition,
-            "work_id": wid,
-            "text": text,
-            "char_count": len(text),
-        })
+    # Extract per-poem to avoid line number collisions when a work
+    # contains multiple poems (e.g. tlg005 has poems 4-7, each with
+    # their own line numbering starting from 1).
+    poem_divs = [d for d in root.iter(f"{{{TEI_NS}}}div")
+                 if d.get("subtype") == "poem" and d.get("n")]
 
-    print(f"  {wid}: {len(lines)} lines → {len(passages)} passages (book {book_num})")
+    if poem_divs:
+        # Multi-poem work: extract each poem separately
+        total_lines = 0
+        total_passages = 0
+        for poem_div in poem_divs:
+            poem_n = poem_div.get("n")
+            lines = []
+            for l_elem in poem_div.iter(f"{{{TEI_NS}}}l"):
+                line_n = l_elem.get("n", "")
+                if not line_n or not line_n.isdigit():
+                    continue
+                text = " ".join(l_elem.itertext()).strip()
+                text = " ".join(text.split())
+                if text:
+                    lines.append({"line": line_n, "text": text})
+            if not lines:
+                continue
+            total_lines += len(lines)
+            passages = segment_lines(lines)
+            total_passages += len(passages)
+            for passage in passages:
+                first_line = passage[0]["line"]
+                text = " ".join(l["text"] for l in passage)
+                sections.append({
+                    "book": book_num,
+                    "section": f"{poem_n}.{first_line}",
+                    "cts_ref": f"{book_num}.{poem_n}.{first_line}",
+                    "edition": edition,
+                    "work_id": wid,
+                    "text": text,
+                    "char_count": len(text),
+                })
+        print(f"  {wid}: {total_lines} lines → {total_passages} passages "
+              f"(book {book_num}, {len(poem_divs)} poems)")
+    else:
+        # Single-poem work: extract all lines flat
+        lines = []
+        for l_elem in root.iter(f"{{{TEI_NS}}}l"):
+            line_n = l_elem.get("n", "")
+            if not line_n or not line_n.isdigit():
+                continue
+            text = " ".join(l_elem.itertext()).strip()
+            text = " ".join(text.split())
+            if text:
+                lines.append({"line": line_n, "text": text})
+        if not lines:
+            continue
+        passages = segment_lines(lines)
+        for passage in passages:
+            first_line = passage[0]["line"]
+            text = " ".join(l["text"] for l in passage)
+            sections.append({
+                "book": book_num,
+                "section": first_line,
+                "cts_ref": f"{book_num}.{first_line}",
+                "edition": edition,
+                "work_id": wid,
+                "text": text,
+                "char_count": len(text),
+            })
+        print(f"  {wid}: {len(lines)} lines → {len(passages)} passages (book {book_num})")
 
 with open(OUTPUT, "w", encoding="utf-8") as f:
     json.dump({"sections": sections}, f, ensure_ascii=False, indent=2)
