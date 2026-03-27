@@ -332,20 +332,18 @@ def _refine_group(model, en_text, n_gr, gr_embs, gr_texts=None):
         assignment[m - 1] = best_gi
         for si in range(m - 2, -1, -1):
             assignment[si] = parent[si + 1][assignment[si + 1]]
-        # Build result — each sentence covers a range of Greek sections.
-        # Split its text proportionally among all Greek sections in its range.
-        # No Greek section should be left with None.
+        # Build result — each assigned sentence anchors a range of Greek sections.
+        # The text for each range includes ALL sentences between this anchor
+        # and the next (not just the assigned sentence), so no text is lost.
         assigned = sorted((assignment[si], si) for si in range(m))
-        # Each sentence covers from its position to the next assigned position.
-        # The first sentence also covers any leading unassigned sections.
         result = [None] * n_gr
-        first_assigned_gi = assigned[0][0]
         for idx, (gi, si) in enumerate(assigned):
-            # First sentence extends backward to cover leading sections
             start_gi = 0 if idx == 0 else gi
-            # This sentence covers from start_gi to next_gi (exclusive)
             next_gi = assigned[idx + 1][0] if idx + 1 < len(assigned) else n_gr
-            text = sentences[si]
+            # Include all sentences from this anchor to the next anchor
+            next_si = assigned[idx + 1][1] if idx + 1 < len(assigned) else m
+            first_si = 0 if idx == 0 else si
+            text = " ".join(sentences[first_si:next_si])
             span = next_gi - start_gi
             if span == 1:
                 result[start_gi] = (text, sim_matrix[si, gi])
@@ -536,6 +534,19 @@ def try_cts_match(greek_secs, english_secs):
                 matches[gi] = en_by_ref[prefix]
                 continue
 
+    # Remove crossings: if Greek order and English order disagree,
+    # fix the crossing by adjusting the English index to be monotonic.
+    # A crossing is: gi1 < gi2 but matches[gi1] > matches[gi2].
+    sorted_gi = sorted(matches.keys())
+    max_en = -1
+    for gi in sorted_gi:
+        ei = matches[gi]
+        if ei < max_en:
+            # Crossing — adjust to match the previous English position
+            matches[gi] = max_en
+        else:
+            max_en = ei
+
     return matches
 
 
@@ -623,6 +634,24 @@ def run_dp_alignment(config, greek_data, english_data, model):
             cts_pct = len(cts_matches) / len(greek_secs) * 100
             print(f"  CTS matched: {len(cts_matches)}/{len(greek_secs)} ({cts_pct:.0f}%)")
 
+        # --- Detect unmatched prefix using entity anchors ---
+        # If the first strong entity anchor is far into the Greek text,
+        # the beginning is likely untranslated (preface, argument).
+        prefix_gr = 0
+        if (len(cts_matches) < len(greek_secs) * 0.5 and
+                len(greek_secs) > 20):
+            import pickle as _pkl
+            _lex_path = PROJECT_ROOT / "build" / "global_lexical_table.pkl"
+            if _lex_path.exists():
+                with open(_lex_path, "rb") as _lf:
+                    _lex = _pkl.load(_lf)
+                from sentence_align import find_anchors
+                _anchors = find_anchors(greek_secs, english_secs,
+                                        _lex["src2en"], _lex["src_idf"])
+                if _anchors and _anchors[0][0] > 5:
+                    prefix_gr = _anchors[0][0]
+                    print(f"  Unmatched prefix: {prefix_gr} Greek sections")
+
         book_label = str(book).replace(" ", "_").replace("/", "_")
         greek_embs = embed_with_cache(
             model, [s.get("text_for_embedding", s["text"]) for s in greek_secs],
@@ -645,13 +674,57 @@ def run_dp_alignment(config, greek_data, english_data, model):
         max_target = max(2, int(en_per_gr * 2))
         print(f"  Ratio: {gr_per_en:.1f} source/target, max_source={max_source}, max_target={max_target}")
 
-        # Extract speaker sequences if sections have them (drama works)
+        # Extract speaker sequences if sections have them (drama works).
+        # Normalize both sides to canonical IDs so Greek Σωσίας matches
+        # English SOSIAS/Sos/SOS.
         source_speakers = None
         target_speakers = None
-        if any(s.get("speakers") for s in greek_secs):
-            source_speakers = [s.get("speakers", []) for s in greek_secs]
-        if any(s.get("speaker") for s in english_secs):
-            target_speakers = [s.get("speaker") for s in english_secs]
+        if (any(s.get("speakers") for s in greek_secs) and
+                any(s.get("speaker") for s in english_secs)):
+            from entity_anchors import greek_to_latin
+
+            # Collect unique Greek speakers → transliterated form
+            gr_speaker_map = {}  # transliterated → canonical ID
+            for s in greek_secs:
+                for spk in s.get("speakers", []):
+                    lat = greek_to_latin(spk)
+                    if lat not in gr_speaker_map:
+                        gr_speaker_map[lat] = lat
+
+            # Map English speakers to canonical IDs by prefix or fuzzy matching
+            en_speaker_map = {}  # english_lower → canonical ID
+            for s in english_secs:
+                en_spk = s.get("speaker", "").lower().strip()
+                if not en_spk or en_spk in en_speaker_map:
+                    continue
+                # Find best Greek match: prefix or fuzzy
+                best = None
+                best_score = 0
+                for gr_lat in gr_speaker_map:
+                    # Prefix match (handles abbreviations: sos→sosias)
+                    if gr_lat.startswith(en_spk) or en_spk.startswith(gr_lat):
+                        best = gr_lat
+                        break
+                    # Fuzzy match (handles transliteration: bdelycleon→bdelykleon)
+                    score = fuzz.ratio(en_spk, gr_lat)
+                    if score > best_score and score >= 60:
+                        best_score = score
+                        best = gr_lat
+                en_speaker_map[en_spk] = best if best else en_spk
+
+            source_speakers = [
+                [gr_speaker_map.get(greek_to_latin(spk), greek_to_latin(spk))
+                 for spk in s.get("speakers", [])]
+                for s in greek_secs
+            ]
+            target_speakers = [
+                en_speaker_map.get(s.get("speaker", "").lower().strip(), "")
+                for s in english_secs
+            ]
+
+            # Report mapping
+            mapped = {v for v in en_speaker_map.values() if v in gr_speaker_map}
+            print(f"  Speaker mapping: {len(mapped)} English→Greek matches")
 
         # Compute entity overlap matrix
         n_g, n_e = len(greek_secs), len(english_secs)
@@ -741,6 +814,20 @@ def run_dp_alignment(config, greek_data, english_data, model):
 
         print(f"  Final: {len(groups_result)} alignment groups")
 
+        # Override prefix sections as unmatched (detected earlier)
+        if prefix_gr > 0:
+            new_groups = []
+            # First group: all prefix Greek → first English (unmatched)
+            new_groups.append((0, prefix_gr, 0, 1, 0.0))
+            # Keep only DP groups that start after the prefix
+            for gs, ge, es, ee, sc in groups_result:
+                if gs >= prefix_gr:
+                    new_groups.append((gs, ge, es, ee, sc))
+                elif ge > prefix_gr:
+                    # Overlapping — trim to start at prefix_gr
+                    new_groups.append((prefix_gr, ge, es, ee, sc))
+            groups_result = new_groups
+
         # Build records — ensure every English section appears
         en_used = set()
         for gr_start, gr_end, en_start, en_end, score in groups_result:
@@ -758,7 +845,7 @@ def run_dp_alignment(config, greek_data, english_data, model):
             # Refinement: when multiple Greek sections map to 1 English section,
             # split the English at sentence boundaries and match each piece to a
             # Greek section using embedding similarity.
-            if n_gr > 1 and n_en == 1:
+            if n_gr > 1 and n_en == 1 and score > 0:
                 ej = en_start
                 es = english_secs[ej]
                 en_text = es.get("text_for_embedding", es["text"])
@@ -837,10 +924,19 @@ def run_dp_alignment(config, greek_data, english_data, model):
         if refined_count > 0:
             print(f"  Refined {refined_count} groups (split English to match Greek)")
 
+        emitted_gr = set()
         for ej in range(len(english_secs)):
+            emitted_any = False
             if ej in en_to_greek:
-                all_alignments.extend(en_to_greek[ej])
-            else:
+                for rec in en_to_greek[ej]:
+                    gr_ref = rec.get("greek_cts_ref")
+                    if gr_ref:
+                        if gr_ref in emitted_gr:
+                            continue  # skip duplicate Greek section
+                        emitted_gr.add(gr_ref)
+                    all_alignments.append(rec)
+                    emitted_any = True
+            if not emitted_any:
                 es = english_secs[ej]
                 all_alignments.append({
                     "book": str(book),
@@ -859,6 +955,11 @@ def run_dp_alignment(config, greek_data, english_data, model):
 
         if en_skipped > 0:
             print(f"  Added {en_skipped} unmatched English sections")
+
+    # Verify order: the loop above already emits in English order (which
+    # preserves Greek order for matched sections since the DP is monotonic).
+    # Don't re-sort — it would break the interleaving of unmatched English
+    # sections with their neighbors.
 
     return all_alignments
 

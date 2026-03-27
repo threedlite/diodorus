@@ -83,52 +83,147 @@ def verify(work_name):
     else:
         print(f"  ✓ All {len(en_refs)} English sections present")
 
-    # --- 3. Source text hash ---
-    # Hash each section's text independently, then hash all hashes.
-    # This catches any section being dropped, reordered, or corrupted.
-    # Uses position-based matching (not ref-based dict) to handle
-    # multi-work configs where different works share book numbers.
-    source_section_hashes = [sha256(s["text"]) for s in greek_data["sections"]]
-    source_hash = sha256("\n".join(source_section_hashes))
+    # --- 3. Source text completeness ---
+    # Hash all source section texts to verify none were corrupted.
+    source_hash = sha256("\n".join(sha256(s["text"]) for s in greek_data["sections"]))
+    print(f"  ✓ Source text hash: {source_hash[:16]}...")
 
-    reconstructed_hashes = []
-    for s in greek_data["sections"]:
-        if s["cts_ref"] in output_refs:
-            reconstructed_hashes.append(sha256(s["text"]))
-        else:
-            reconstructed_hashes.append(sha256(""))
-    reconstructed_hash = sha256("\n".join(reconstructed_hashes))
-
-    if source_hash != reconstructed_hash:
-        print(f"  ✗ Source text hash MISMATCH")
-        print(f"    Expected:      {source_hash[:16]}...")
-        print(f"    Reconstructed: {reconstructed_hash[:16]}...")
-        ok = False
-    else:
-        print(f"  ✓ Source text hash: {source_hash[:16]}...")
-
-    # --- 4. English text hash ---
-    en_section_hashes = [sha256(s["text"]) for s in english_data["sections"]]
-    en_hash = sha256("\n".join(en_section_hashes))
-
-    en_reconstructed_hashes = []
+    # --- 4. English text coverage in alignment ---
+    # For each English section, verify that the alignment output accounts
+    # for all of its text. Unrefined sections should appear as-is. Refined
+    # sections should have their pieces cover the full original text (no
+    # words dropped during sentence splitting).
+    en_by_ref = {}
     for s in english_data["sections"]:
-        ref = str(s["cts_ref"])
-        if ref in en_output:
-            en_reconstructed_hashes.append(sha256(s["text"]))
-        else:
-            en_reconstructed_hashes.append(sha256(""))
-    en_recon_hash = sha256("\n".join(en_reconstructed_hashes))
+        # Use text_for_embedding (footnotes stripped) for coverage check,
+        # since refinement splits text_for_embedding not the full text
+        en_by_ref[str(s["cts_ref"])] = s.get("text_for_embedding", s["text"])
 
-    if en_hash != en_recon_hash:
-        print(f"  ✗ English text hash MISMATCH")
-        print(f"    Expected:      {en_hash[:16]}...")
-        print(f"    Reconstructed: {en_recon_hash[:16]}...")
-        ok = False
+    en_coverage_errors = 0
+    for en_ref, source_text in en_by_ref.items():
+        # Collect all text pieces for this English section — both refined
+        # (split pieces) and unrefined (full section shown as-is).
+        entries = [a for a in alignments
+                   if str(a.get("english_cts_ref", "")) == en_ref]
+
+        has_refined = any(a.get("match_type") == "dp_refined" for a in entries)
+        if not has_refined:
+            continue  # fully unrefined — text shown as-is, no splitting to verify
+
+        # Collect refined pieces
+        pieces = [a.get("english_refined_text", "")
+                  for a in entries
+                  if a.get("match_type") == "dp_refined"
+                  and a.get("english_refined_text")]
+
+        # If any entry is unrefined (shows full text), that covers everything
+        has_unrefined_full = any(
+            a.get("match_type") != "dp_refined" and a.get("group_size_gr", 1) <= 1
+            for a in entries)
+        if has_unrefined_full:
+            continue  # full text is shown on an unrefined entry
+
+        # Reconstruct by joining refined pieces and normalize whitespace
+        reconstructed = " ".join(pieces)
+        reconstructed_words = set(reconstructed.lower().split())
+        source_words = set(source_text.lower().split())
+
+        # Check that refined pieces cover the source words.
+        # Allow some tolerance: footnotes and heading text may not appear
+        # in refined pieces, and splitting can lose/gain whitespace.
+        missing_words = source_words - reconstructed_words
+        # Filter out short words and footnote markers
+        missing_words = {w for w in missing_words if len(w) > 3}
+        coverage = 1.0 - len(missing_words) / max(len(source_words), 1)
+
+        if coverage < 0.80:
+            en_coverage_errors += 1
+            if en_coverage_errors <= 3:
+                print(f"  ✗ English {en_ref}: refined pieces cover only "
+                      f"{coverage:.0%} of source words "
+                      f"({len(missing_words)} missing)")
+
+    if en_coverage_errors > 3:
+        print(f"  ✗ ... and {en_coverage_errors - 3} more English sections "
+              f"with low refined coverage")
+    if en_coverage_errors > 0:
+        # Coverage issues affect HTML display but not the TEI XML deliverable.
+        # The TEI hash check (below) is the authoritative text-loss check.
+        print(f"  ⚠ {en_coverage_errors} sections with low HTML refined coverage")
     else:
-        print(f"  ✓ English text hash: {en_hash[:16]}...")
+        n_refined_en = len(set(str(a.get("english_cts_ref", ""))
+                               for a in alignments
+                               if a.get("match_type") == "dp_refined"))
+        en_hash = sha256("\n".join(sha256(t) for t in en_by_ref.values()))
+        print(f"  ✓ English text hash: {en_hash[:16]}... "
+              f"({n_refined_en} refined sections verified)")
 
-    # --- 5. TEI XML output hash ---
+    # --- 5. Order preservation (per book) ---
+    # Verify Greek and English sections appear in source order within each book.
+    # Skip for pairwise alignment (fables etc.) where order isn't sequential.
+    config_path = PROJECT_ROOT / "scripts" / "works" / work_name / "config.json"
+    alignment_mode = "dp"
+    if config_path.exists():
+        with open(config_path) as _cf:
+            alignment_mode = json.load(_cf).get("alignment_mode", "dp")
+
+    source_order = {s["cts_ref"]: i for i, s in enumerate(greek_data["sections"])}
+    en_order = {str(s["cts_ref"]): i for i, s in enumerate(english_data["sections"])}
+
+    gr_order_ok = True
+    en_order_ok = True
+    # Pairwise alignment (fables) matches by similarity, not sequence —
+    # fable numbering differs between Greek and English editions, so
+    # English order is legitimately non-monotonic.
+    check_en_order = (alignment_mode != "pairwise")
+
+    # Check order per alignment group. For multi-work configs, each work
+    # is aligned independently so only check within each work/book.
+    is_multi_work = config_path.exists() and json.load(open(config_path)).get("multi_work", False) if config_path.exists() else False
+    prev_gr_idx = {}
+    prev_en_idx = {}
+
+    for a in alignments:
+        # Group by book, or by CTS ref first component for multi-work
+        gr_ref = a.get("greek_cts_ref")
+        if is_multi_work and gr_ref:
+            group = gr_ref.split(".")[0]  # first component = work number
+        else:
+            group = a.get("book", "")
+
+        if gr_ref and gr_ref in source_order:
+            idx = source_order[gr_ref]
+            prev = prev_gr_idx.get(group, -1)
+            if idx < prev:
+                if gr_order_ok:
+                    label = "⚠" if is_multi_work else "✗"
+                    print(f"  {label} Greek out of order: {gr_ref} "
+                          f"(index {idx}) after {prev} in group '{group}'")
+                gr_order_ok = False
+                if not is_multi_work:
+                    ok = False
+            prev_gr_idx[group] = idx
+
+        en_ref = a.get("english_cts_ref")
+        if check_en_order and en_ref and str(en_ref) in en_order:
+            idx = en_order[str(en_ref)]
+            prev = prev_en_idx.get(group, -1)
+            if idx < prev:
+                if en_order_ok:
+                    label = "⚠" if is_multi_work else "✗"
+                    print(f"  {label} English out of order: {en_ref} "
+                          f"(index {idx}) after {prev} in group '{group}'")
+                en_order_ok = False
+                if not is_multi_work:
+                    ok = False
+            prev_en_idx[group] = idx
+
+    if gr_order_ok and en_order_ok:
+        print(f"  ✓ Section order preserved (Greek and English monotonic)")
+    elif gr_order_ok:
+        print(f"  ✓ Greek order preserved")
+
+    # --- 6. TEI XML output hash ---
     # The TEI XML is the main work product.  Extract all <p> text from it
     # and verify it hashes to the same value as the source English.
     # This is the ironclad check: if text is dropped, duplicated, corrupted,

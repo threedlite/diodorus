@@ -27,6 +27,75 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 WORKS_DIR = PROJECT_ROOT / "scripts" / "works"
 
 
+def print_quality_summary():
+    """Print a summary table of alignment quality across all works."""
+    rows = []
+    for d in sorted(WORKS_DIR.iterdir()):
+        config_path = d / "config.json"
+        if not config_path.exists():
+            continue
+        with open(config_path) as f:
+            cfg = json.load(f)
+        align_path = PROJECT_ROOT / cfg["output_dir"] / "entity_validated_alignments.json"
+        gr_path = PROJECT_ROOT / cfg["output_dir"] / "greek_sections.json"
+        en_path = PROJECT_ROOT / cfg["output_dir"] / "english_sections.json"
+        if not align_path.exists():
+            continue
+
+        with open(align_path) as f:
+            aligns = json.load(f)
+        with open(gr_path) as f:
+            gd = json.load(f)
+        with open(en_path) as f:
+            ed = json.load(f)
+
+        gs = gd["sections"] if isinstance(gd, dict) else gd
+        es = ed["sections"] if isinstance(ed, dict) else ed
+        scores = [a.get("combined_score", 0) for a in aligns]
+        n = len(scores)
+        if n == 0:
+            continue
+        avg = sum(scores) / n
+        h = sum(1 for s in scores if s >= 0.5) / n * 100
+        m = sum(1 for s in scores if 0.2 <= s < 0.5) / n * 100
+        l = sum(1 for s in scores if s < 0.2) / n * 100
+        shared = sum(1 for a in aligns if a.get("sharing_penalty"))
+
+        # Component averages (only over sections that have the score)
+        def avg_field(field):
+            vals = [a.get(field, 0) for a in aligns if a.get(field) is not None]
+            return sum(vals) / len(vals) if vals else 0.0
+
+        cos = avg_field("similarity")
+        lex = avg_field("lexical_score")
+        ent = avg_field("entity_overlap_score")
+        lrt = avg_field("length_ratio_score")
+        spk = avg_field("speaker_score")
+
+        rows.append((avg, cfg["name"], cfg["author"][:20], len(gs), len(es),
+                      avg, h, m, l, cos, lex, ent, lrt, spk, shared))
+
+    rows.sort(reverse=True)
+
+    hdr = (f"{'Work':<28s} {'Author':<20s} {'Gr':>5s} {'En':>5s} "
+           f"{'Avg':>5s} {'H%':>5s} {'L%':>5s} "
+           f"{'Emb':>5s} {'Lex':>5s} {'Ent':>5s} {'Len':>5s} {'Spk':>5s} {'Shrd':>5s}")
+    sep = "-" * len(hdr)
+    print(f"\n{sep}")
+    print(f"  ALIGNMENT QUALITY SUMMARY")
+    print(sep)
+    print(hdr)
+    print(sep)
+    for (_, name, author, n_gr, n_en, avg, h, m, l,
+         cos, lex, ent, lrt, spk, shared) in rows:
+        spk_str = f"{spk:5.2f}" if spk > 0 else "    -"
+        ent_str = f"{ent:5.2f}" if ent > 0 else "    -"
+        print(f"{name:<28s} {author:<20s} {n_gr:5d} {n_en:5d} "
+              f"{avg:5.3f} {h:5.1f} {l:5.1f} "
+              f"{cos:5.2f} {lex:5.3f} {ent_str} {lrt:5.2f} {spk_str} {shared:5d}")
+    print(sep)
+
+
 def load_previous_metrics():
     """Load the last published quality metrics from final/quality_metrics.json."""
     prev_path = PROJECT_ROOT / "final" / "quality_metrics.json"
@@ -100,9 +169,9 @@ def save_metrics(work_name, out_dir, build_time=None, previous_metrics=None):
         **source_info,
         "xml_files": xml_files,
         "sections": n,
-        "high_pct": round(sum(1 for s in scores if s >= 0.6) / n * 100, 1),
-        "med_pct": round(sum(1 for s in scores if 0.3 <= s < 0.6) / n * 100, 1),
-        "low_pct": round(sum(1 for s in scores if s < 0.3) / n * 100, 1),
+        "high_pct": round(sum(1 for s in scores if s >= 0.5) / n * 100, 1),
+        "med_pct": round(sum(1 for s in scores if 0.2 <= s < 0.5) / n * 100, 1),
+        "low_pct": round(sum(1 for s in scores if s < 0.2) / n * 100, 1),
         "avg": round(sum(scores) / n, 3),
         "build_time_seconds": round(build_time, 1) if build_time else None,
         "timestamp": datetime.now().isoformat(),
@@ -266,6 +335,8 @@ def main():
         word_count_script = PROJECT_ROOT / "scripts" / "word_count_report.py"
         if word_count_script.exists():
             subprocess.run([sys.executable, str(word_count_script)], cwd=str(PROJECT_ROOT))
+        # Print quality summary table
+        print_quality_summary()
         return
 
     prev = load_previous_metrics()

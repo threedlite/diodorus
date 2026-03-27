@@ -9,6 +9,9 @@ avoid quick fixes; make fixes as general as possible
 never run rm -rf
 
 
+CRITICAL: Never lose or reorder any Greek or English text. This is an absolute rule.
+
+
 ## Project goal
 Add English translations to ancient Greek works that currently only have Greek
 text in Perseus and First1KGreek. We use Gutenberg and Wikisource as the source of public domain/CC-BY-SA
@@ -42,23 +45,30 @@ extract → align → score → generate outputs → integrity check → publish
 
 ```
 lex_norm = min(1.0, lexical_score / 0.25)
+emb_pos = max(embedding_cosine, 0)
 
-score = (1 - ent_weight) × (0.4 × embedding_cosine
-                           + 0.3 × lex_norm
-                           + 0.3 × length_ratio_penalty)
-      + ent_weight × entity_overlap
+base = sqrt(emb_pos × length_ratio) × (0.5 + 0.5 × lex_norm)
+     + entity_bonus + speaker_bonus
 
-if non-1:1 and not refined: score *= 1/sqrt(sharing_count)
-combined_score = min(1.0, score)
+if non-1:1 and not refined: base *= 1/sqrt(sharing_count)
+if length_ratio < 0.1 and entity_score < 0.3 and not CTS/refined: score = 0 (no_match)
+combined_score = min(1.0, base)
 ```
 
-- **embedding_cosine**: cross-lingual embedding similarity (custom ancient-greek model)
-- **lex_norm**: PMI-weighted bilingual word overlap (from global lexicon, 40K entries)
-- **length_ratio_penalty**: Gaussian on char-ratio deviation from expected
-- **entity_overlap**: proper name transliteration matching (evidence-adaptive weight)
-- **sharing penalty**: 1/sqrt(N) for non-1:1 mappings not split by refinement
+The geometric mean of embedding × length ensures BOTH must be positive for a
+nonzero score — a single strong signal can't mask a zero on another. The lexical
+overlap acts as a multiplier (0.5-1.0) that rewards vocabulary agreement.
 
-Thresholds: green ≥ 0.50, yellow ≥ 0.25, red < 0.25
+- **embedding_cosine**: cross-lingual embedding similarity
+- **length_ratio**: Gaussian penalty on char-count ratio deviation
+- **lex_norm**: PMI-weighted bilingual word overlap (multiplier, not averaged)
+- **entity_bonus**: up to +0.25 from proper name matches (additive, evidence-adaptive)
+- **speaker_bonus**: +0.10 from speaker name match (dramatic works only)
+- **sharing penalty**: 1/sqrt(N) for non-1:1 unrefined mappings
+- **no_match**: score=0 when length ratio is extreme and no entity evidence
+
+Thresholds: green ≥ 0.50, yellow ≥ 0.20, red < 0.20
+Lexical normalization: auto-calculated P95 per work (no hardcoded divisor)
 
 ### Key files
 

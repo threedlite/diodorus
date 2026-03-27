@@ -128,6 +128,11 @@ for body in bodies:
             chapter_divs = [book_div]
 
         for ch_idx, ch_div in enumerate(chapter_divs):
+            # Use sequential chapter index — Booth's chapter numbers don't
+            # correspond to Greek chapter numbers (different editions, different
+            # divisions) so using them would create false CTS matches.
+            ch_num = str(ch_idx)
+
             # Check for chapter heading in the TEI <head> element
             ch_head = ch_div.find(f"{NS}head")
 
@@ -136,7 +141,7 @@ for body in bodies:
                 if not raw:
                     continue
                 text = normalise(raw)
-                cts_ref = f"{book_str}.{ch_idx}.{p_idx}"
+                cts_ref = f"{book_str}.{ch_num}.{p_idx}"
 
                 # Detect Booth's chapter argument/summary headings:
                 # First paragraph of each chapter, short and terse.

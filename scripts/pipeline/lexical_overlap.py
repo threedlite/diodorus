@@ -11,17 +11,32 @@ Usage:
 """
 
 import math
+import pickle
 import re
 from collections import Counter, defaultdict
+from pathlib import Path
 
 # Word extraction patterns
 GR_WORD_RE = re.compile(r'[\u0370-\u03FF\u1F00-\u1FFF]+', re.UNICODE)
 EN_WORD_RE = re.compile(r'[a-zA-Z]+')
 
-# Greek stopwords — common function words, particles, pronouns, prepositions,
-# forms of εἰμί, common demonstratives. Expanded to cover high-frequency
-# words that appear in >10% of aligned pairs and carry no alignment signal.
-GR_STOPS = frozenset({
+# Stopwords — loaded from cached corpus frequency data if available,
+# otherwise falls back to a minimal bootstrap set.
+# The full sets are computed by build_lexicon.py from corpus word frequencies.
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+_STOPWORDS_PATH = _PROJECT_ROOT / "build" / "stopwords.pkl"
+
+def _load_stopwords():
+    if _STOPWORDS_PATH.exists():
+        with open(_STOPWORDS_PATH, "rb") as f:
+            data = pickle.load(f)
+            return frozenset(data.get("greek", set())), frozenset(data.get("english", set()))
+    # Bootstrap fallback — minimal function words to get started
+    return _BOOTSTRAP_GR_STOPS, _BOOTSTRAP_EN_STOPS
+
+# Minimal bootstrap sets — only the most basic function words.
+# The full corpus-derived sets are in build/stopwords.pkl.
+_BOOTSTRAP_GR_STOPS = frozenset({
     # articles
     'ὁ', 'ἡ', 'τό', 'τὸ', 'τοῦ', 'τῆς', 'τῷ', 'τῇ', 'τόν', 'τὸν',
     'τήν', 'τὴν', 'τῶν', 'τοῖς', 'ταῖς', 'τούς', 'τοὺς', 'τάς', 'τὰς',
@@ -72,108 +87,22 @@ GR_STOPS = frozenset({
     'δεῖ', 'ἔφη',
 })
 
-EN_STOPS = frozenset({
-    # Determiners and articles
-    'the', 'a', 'an',
-    # Conjunctions and prepositions
-    'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with',
-    'by', 'from', 'into', 'upon', 'about', 'after', 'before', 'over',
-    'under', 'between', 'through', 'during', 'without', 'among',
-    # Auxiliary verbs
-    'is', 'are', 'was', 'were', 'be', 'been', 'being',
-    'have', 'has', 'had', 'do', 'does', 'did',
+_BOOTSTRAP_EN_STOPS = frozenset({
+    'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to',
+    'for', 'of', 'with', 'by', 'from', 'is', 'are', 'was', 'were',
+    'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did',
     'will', 'would', 'shall', 'should', 'may', 'might', 'can', 'could',
-    # Pronouns
     'not', 'no', 'nor', 'it', 'its', 'he', 'him', 'his', 'she', 'her',
     'they', 'them', 'their', 'we', 'us', 'our', 'you', 'your', 'i',
-    'my', 'me', 'itself', 'himself', 'herself', 'themselves', 'myself',
-    # Demonstratives and relatives
-    'this', 'that', 'these', 'those', 'which', 'who', 'whom', 'what',
-    # Adverbs (only the most generic ones)
-    'when', 'where', 'how', 'if', 'then', 'than', 'so', 'as',
-    'also', 'too', 'there', 'here', 'now', 'very', 'yet',
-    'both', 'either', 'neither', 'per',
+    'my', 'me', 'this', 'that', 'these', 'those', 'which', 'who',
+    'whom', 'what', 'so', 'as', 'if', 'than',
 })
 
-# Latin stopwords for Latin-source works
-LA_STOPS = frozenset({
-    'et', 'in', 'est', 'non', 'ut', 'cum', 'ad', 'ab', 'ex', 'de',
-    'sed', 'si', 'quod', 'qui', 'quae', 'aut', 'nec', 'atque', 'ac',
-    'per', 'enim', 'nam', 'autem', 'tamen', 'ita', 'iam', 'hoc',
-    'quam', 'nunc', 'quid', 'quo', 'sunt', 'esse', 'eius', 'erat',
-})
-
-LA_WORD_RE = re.compile(r'[a-zA-ZāēīōūĀĒĪŌŪ]+')
+# Load corpus-derived stopwords (or fall back to bootstrap)
+GR_STOPS, EN_STOPS = _load_stopwords()
 
 
-# ---------------------------------------------------------------------------
-# Greek stemming — simple suffix stripping to merge inflected forms
-# ---------------------------------------------------------------------------
-
-# Common Greek nominal/verbal endings to strip, ordered longest first
-_GR_SUFFIXES = [
-    'ομένων', 'ομένους', 'ομένοις', 'ομένας', 'ομένην',
-    'ούντων', 'οῦντες', 'ούσης', 'ούσας', 'ουσῶν',
-    'μένος', 'μένον', 'μένου', 'μένῳ', 'μένην',
-    'ήσεως', 'ήσεις', 'ησάντ',
-    'ίζειν', 'ίζων', 'ίζει',
-    'ώτερ', 'ώτατ',
-    'εσθαι', 'ομαι', 'εται', 'ονται',
-    'ούσι', 'οῦσι', 'ουσι',
-    'ῶσι', 'ωσι',
-    'ίας', 'είας', 'ίαν', 'είαν', 'ίᾳ',
-    'ικός', 'ικὸς', 'ικόν', 'ικὸν', 'ικοῦ', 'ικῷ', 'ικήν', 'ικὴν',
-    'εως', 'έως', 'εῖς', 'εών',
-    'ους', 'οῦς', 'ούς',
-    'ων', 'ῶν', 'ών',
-    'ας', 'ᾶς', 'άς',
-    'ης', 'ῆς', 'ής',
-    'ος', 'ὸς', 'ός',
-    'ον', 'ὸν', 'όν',
-    'ου', 'οῦ', 'ού',
-    'ῳ', 'ῷ',
-    'αι', 'οι',
-    'ις', 'ιν',
-    'ει', 'εῖ',
-    'ην', 'ὴν', 'ήν',
-    'ες', 'ές',
-    'αν', 'ὰν', 'άν',
-    'εν', 'ὲν', 'έν',
-]
-
-_MIN_STEM_LEN = 3  # don't strip below 3 chars
-
-
-def _gr_stem(word):
-    """Simple Greek suffix stripping. Returns a rough stem."""
-    w = word.lower()
-    for suffix in _GR_SUFFIXES:
-        if w.endswith(suffix) and len(w) - len(suffix) >= _MIN_STEM_LEN:
-            return w[:-len(suffix)]
-    return w
-
-
-# Simple English stemmer — strip common suffixes
-_EN_SUFFIXES = ['tion', 'sion', 'ness', 'ment', 'ence', 'ance',
-                'ious', 'eous', 'ible', 'able', 'ally', 'ully',
-                'ling', 'ings', 'edly', 'ness',
-                'ing', 'ied', 'ies', 'ers', 'est', 'ful', 'ous',
-                'ity', 'ive', 'ism', 'ist', 'ish',
-                'ly', 'ed', 'er', 'es', 'en', 'al']
-
-
-def _en_stem(word):
-    """Simple English suffix stripping."""
-    w = word.lower()
-    for suffix in _EN_SUFFIXES:
-        if w.endswith(suffix) and len(w) - len(suffix) >= 3:
-            return w[:-len(suffix)]
-    if w.endswith('s') and len(w) > 4:
-        return w[:-1]
-    return w
-
-
-def extract_gr_words(text, stem=False):
+def extract_gr_words(text):
     """Extract Greek content words from text."""
     words = set()
     for w in GR_WORD_RE.findall(text):
@@ -182,11 +111,11 @@ def extract_gr_words(text, stem=False):
         wl = w.lower()
         if wl in GR_STOPS:
             continue
-        words.add(_gr_stem(wl) if stem else wl)
+        words.add(wl)
     return words
 
 
-def extract_en_words(text, stem=False):
+def extract_en_words(text):
     """Extract English content words from text."""
     words = set()
     for w in EN_WORD_RE.findall(text):
@@ -195,13 +124,12 @@ def extract_en_words(text, stem=False):
         wl = w.lower()
         if wl in EN_STOPS:
             continue
-        words.add(_en_stem(wl) if stem else wl)
+        words.add(wl)
     return words
 
 
 def build_lexical_table(aligned_pairs, min_cooccur=2, max_translations=10,
-                        min_weight=0.01, max_pairs_per_work=None,
-                        idf_cap_percentile=90, use_stemming=True):
+                        min_weight=0.01, idf_cap_percentile=90):
     """Build a source→English word translation table from aligned text pairs.
 
     Args:
@@ -209,10 +137,8 @@ def build_lexical_table(aligned_pairs, min_cooccur=2, max_translations=10,
         min_cooccur: minimum co-occurrence count to keep a pair
         max_translations: max translations to keep per source word
         min_weight: minimum normalized weight to keep a translation
-        max_pairs_per_work: not used here (caller should pre-filter)
         idf_cap_percentile: cap IDF at this percentile to prevent
             rare-word dominance
-        use_stemming: apply Greek/English stemming before counting
 
     Returns:
         src2en: dict mapping source_word → {english_word: normalized_weight}
@@ -225,8 +151,8 @@ def build_lexical_table(aligned_pairs, min_cooccur=2, max_translations=10,
     n_pairs = len(aligned_pairs)
 
     for src_text, en_text in aligned_pairs:
-        src_words = extract_gr_words(src_text, stem=use_stemming)
-        en_words = extract_en_words(en_text, stem=use_stemming)
+        src_words = extract_gr_words(src_text)
+        en_words = extract_en_words(en_text)
 
         for sw in src_words:
             src_df[sw] += 1
@@ -310,8 +236,7 @@ def build_lexical_table(aligned_pairs, min_cooccur=2, max_translations=10,
     return src2en, src_idf, en_idf
 
 
-def lexical_overlap_score(src_text, en_text, src2en, src_idf,
-                          use_stemming=True):
+def lexical_overlap_score(src_text, en_text, src2en, src_idf):
     """Score a source/English text pair by IDF-weighted bilingual word overlap.
 
     For each source content word, check if any of its known English
@@ -320,8 +245,8 @@ def lexical_overlap_score(src_text, en_text, src2en, src_idf,
 
     Returns float in [0, 1].
     """
-    src_words = extract_gr_words(src_text, stem=use_stemming)
-    en_words = extract_en_words(en_text, stem=use_stemming)
+    src_words = extract_gr_words(src_text)
+    en_words = extract_en_words(en_text)
 
     if not src_words or not en_words or not src2en:
         return 0.0
@@ -344,8 +269,7 @@ def lexical_overlap_score(src_text, en_text, src2en, src_idf,
     return weighted_matches / total_weight
 
 
-def build_lexical_matrix(src_sents, en_sents, src2en, src_idf, bandwidth=30,
-                         use_stemming=True):
+def build_lexical_matrix(src_sents, en_sents, src2en, src_idf, bandwidth=30):
     """Build a sentence-level lexical overlap matrix for the DP.
 
     Only computes within a diagonal bandwidth to keep it tractable.
@@ -359,7 +283,7 @@ def build_lexical_matrix(src_sents, en_sents, src2en, src_idf, bandwidth=30,
     matrix = np.zeros((n_src, n_en), dtype=np.float32)
 
     for i in range(n_src):
-        src_words = extract_gr_words(src_sents[i], stem=use_stemming)
+        src_words = extract_gr_words(src_sents[i])
         if not src_words:
             continue
 
@@ -383,7 +307,7 @@ def build_lexical_matrix(src_sents, en_sents, src2en, src_idf, bandwidth=30,
         j_hi = min(n_en, j_center + bandwidth)
 
         for j in range(j_lo, j_hi):
-            en_words = extract_en_words(en_sents[j], stem=use_stemming)
+            en_words = extract_en_words(en_sents[j])
             if not en_words:
                 continue
 

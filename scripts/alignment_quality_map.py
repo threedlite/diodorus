@@ -28,7 +28,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # Confidence thresholds (calibrated for multi-signal combined_score:
 # embedding cosine + lexical TF-IDF + entity overlap + length ratio)
 HIGH = 0.50
-MED = 0.25
+MED = 0.20
 
 # ANSI colors for terminal
 GREEN = "\033[42m"   # high

@@ -78,16 +78,32 @@ def extract_greek(work_id, output_path):
         # Use single book "1" for alignment — entire play is one unit
         book_name = "1"
 
-        # Collect all lines in this section
+        # Collect all lines with speaker info from <sp>/<speaker>/<l> structure
         lines = []
+        for sp_elem in top_div.iter(f"{{{TEI_NS}}}sp"):
+            speaker_elem = sp_elem.find(f"{{{TEI_NS}}}speaker")
+            speaker = speaker_elem.text.strip() if speaker_elem is not None and speaker_elem.text else ""
+            for l_elem in sp_elem.findall(f"{{{TEI_NS}}}l"):
+                line_n = l_elem.get("n", "")
+                if not line_n or not line_n.isdigit():
+                    continue
+                text = " ".join(l_elem.itertext()).strip()
+                text = " ".join(text.split())
+                if text:
+                    lines.append({"line": line_n, "text": text, "speaker": speaker})
+        # Also collect any <l> not inside <sp> (chorus, stage directions)
         for l_elem in top_div.iter(f"{{{TEI_NS}}}l"):
             line_n = l_elem.get("n", "")
             if not line_n or not line_n.isdigit():
                 continue
+            if any(l["line"] == line_n for l in lines):
+                continue  # already collected from <sp>
             text = " ".join(l_elem.itertext()).strip()
             text = " ".join(text.split())
             if text:
-                lines.append({"line": line_n, "text": text})
+                lines.append({"line": line_n, "text": text, "speaker": ""})
+        # Sort by line number
+        lines.sort(key=lambda l: int(l["line"]))
 
         if not lines:
             continue
@@ -99,7 +115,14 @@ def extract_greek(work_id, output_path):
             last_line = passage_lines[-1]["line"]
             text = " ".join(l["text"] for l in passage_lines)
 
-            sections.append({
+            # Collect ordered speaker sequence (deduplicate consecutive)
+            speakers = []
+            for l in passage_lines:
+                spk = l.get("speaker", "")
+                if spk and (not speakers or speakers[-1] != spk):
+                    speakers.append(spk)
+
+            section = {
                 "book": book_name,
                 "section": first_line,
                 "cts_ref": f"{book_name}.{first_line}",
@@ -109,7 +132,10 @@ def extract_greek(work_id, output_path):
                 "dramatic_section": subtype,
                 "first_line": first_line,
                 "last_line": last_line,
-            })
+            }
+            if speakers:
+                section["speakers"] = speakers
+            sections.append(section)
 
         print(f"  {subtype}: {len(lines)} lines → {len(passages)} passages")
 
@@ -210,17 +236,33 @@ def extract_english(work_id, output_path, eng_suffix="ogl-eng2"):
     else:
         paragraphs = raw_texts
 
+    # Extract speaker from CAPS prefix pattern
+    speaker_re = re.compile(
+        r'^([A-Z]{2,}(?:\s+[A-Z]{2,})?)\.\s+'    # SOSIAS. or FIRST WOMAN.
+        r'|^([A-Z][a-z]{1,10})\.\s+'               # Sos.
+        r'|^([A-Z][a-z]{1,10})\s+\('               # Sos (stage direction)
+    )
+
     # Build sections — one section per paragraph, all in one "book"
     # (the pipeline treats each play as a single work)
     all_sections = []
     for pi, para in enumerate(paragraphs):
-        all_sections.append({
+        # Extract speaker name from paragraph start
+        speaker = ""
+        m = speaker_re.match(para)
+        if m:
+            speaker = (m.group(1) or m.group(2) or m.group(3) or "").strip()
+
+        section = {
             "book": "1",
             "section": str(pi + 1),
             "cts_ref": f"1.{pi + 1}",
             "text": para,
             "char_count": len(para),
-        })
+        }
+        if speaker:
+            section["speaker"] = speaker
+        all_sections.append(section)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:

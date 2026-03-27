@@ -25,7 +25,33 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 # Confidence thresholds (calibrated for multi-signal combined_score)
 HIGH = 0.50
-MED = 0.25
+MED = 0.20
+
+
+def markup_text(text, entity_words, lexicon_words, is_greek=False):
+    """Add bold/italic spans for entity names and lexicon-matched words.
+
+    entity_words: set of words to bold (lowercased)
+    lexicon_words: set of words to italicize (lowercased)
+    """
+    import re
+    if is_greek:
+        # Match Greek words
+        pattern = re.compile(r'([\u0370-\u03FF\u1F00-\u1FFF]+)', re.UNICODE)
+    else:
+        # Match English words
+        pattern = re.compile(r'(\b[A-Za-z]{3,}\b)')
+
+    def replace_word(m):
+        word = m.group(1)
+        wl = word.lower()
+        if wl in entity_words:
+            return f'<span class="ent-name">{word}</span>'
+        elif wl in lexicon_words:
+            return f'<span class="lex-word">{word}</span>'
+        return word
+
+    return pattern.sub(replace_word, text)
 
 
 def load_config(work_name):
@@ -44,9 +70,11 @@ def score_color(score):
         return "#ffebee"  # light red
 
 
+from html import escape as _html_escape
+
 def esc(s):
     """HTML-escape."""
-    return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    return _html_escape(str(s))
 
 
 def render_with_footnotes(text, notes=None):
@@ -79,7 +107,7 @@ CSS = """
     margin: 1.5cm;
 }
 body {
-    font-family: "Georgia", "Times New Roman", serif;
+    font-family: "Helvetica Neue", "Arial", "Segoe UI", sans-serif;
     font-size: 11pt;
     line-height: 1.5;
     margin: 0;
@@ -111,7 +139,6 @@ td {
     vertical-align: top;
     padding: 6px 10px;
     border-bottom: 1px solid #e0e0e0;
-    width: 48%;
 }
 td.ref {
     width: 4%;
@@ -121,11 +148,37 @@ td.ref {
     padding-right: 4px;
     vertical-align: top;
 }
+td.scores {
+    width: 8%;
+    font-size: 7pt;
+    color: #888;
+    vertical-align: top;
+    padding: 6px 4px;
+}
+.bar-row { display: flex; align-items: center; margin: 1px 0; }
+.bar-label { width: 10px; font-weight: bold; color: #999; }
+.bar-bg { width: 40px; height: 6px; background: #eee; border-radius: 2px; margin-left: 2px; }
+.bar-fill { height: 100%; border-radius: 2px; }
+.bar-fill.high { background: #4caf50; }
+.bar-fill.med { background: #ff9800; }
+.bar-fill.low { background: #f44336; }
+.ent-name { font-weight: bold; }
+.lex-word { font-style: italic; }
+td.glossary {
+    width: 12%;
+    font-size: 7pt;
+    color: #666;
+    vertical-align: top;
+    padding: 6px 4px;
+    line-height: 1.3;
+}
 td.source {
     font-size: 10.5pt;
+    width: 33%;
 }
 td.english {
     font-size: 10.5pt;
+    width: 40%;
 }
 td.empty {
     color: #ccc;
@@ -198,6 +251,17 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
     gr_by_ref = {s["cts_ref"]: s for s in greek_data["sections"]}
     en_by_ref = {str(s["cts_ref"]): s for s in english_data["sections"]}
 
+    # Load lexicon for word highlighting
+    import pickle
+    from entity_anchors import extract_greek_names, extract_english_names
+    from lexical_overlap import extract_gr_words, extract_en_words
+    lexicon = {}
+    lex_path = PROJECT_ROOT / "build" / "global_lexical_table.pkl"
+    if lex_path.exists():
+        with open(lex_path, "rb") as lf:
+            lex_data = pickle.load(lf)
+            lexicon = lex_data.get("src2en", {})
+
     # For multi-work, map work_id to work names using Greek sections
     wid_to_work_names = {}
     if len(work_ids) > 1:
@@ -216,6 +280,11 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
     for a in alignments:
         by_book[a["book"]].append(a)
 
+    # Compute lexical P95 for bar graph normalization
+    import numpy as np
+    all_lex = [a.get("lexical_score", 0) for a in alignments if a.get("lexical_score", 0) > 0]
+    lex_p95_display = float(np.percentile(all_lex, 95)) if all_lex else 0.25
+
     for wid in work_ids:
         cts_stem = f"{tlg_id}.{wid}.perseus-eng80"
         out_path = out_dir / f"{cts_stem}.html"
@@ -233,7 +302,12 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
         lines.append(f'<div class="meta">')
         lines.append(f"{lang_label}: {cts_stem}<br>")
         lines.append(f"English: {esc(translator)} ({en_date})<br>")
-        lines.append(f"Alignment: CTS ref matching + embedding DP + lexical TF-IDF + entity anchoring")
+        lines.append(f"Score columns: "
+                     f"<b>E</b>=embedding cosine "
+                     f"<b>L</b>=lexical overlap "
+                     f"<b>N</b>=entity names "
+                     f"<b>R</b>=length ratio "
+                     f"<b>S</b>=speaker match")
         lines.append("</div>")
 
         # Determine which books belong to this work_id
@@ -307,26 +381,108 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
                     en_text = en_section.get("text_for_embedding", en_section["text"])
                     en_notes = en_section.get("notes")
                     en_heading = en_section.get("heading_text")
+                    # Strip heading from text if it's a prefix (avoid duplication)
+                    if en_heading and en_text.startswith(en_heading):
+                        en_text = en_text[len(en_heading):].lstrip()
                     seen_en.add(en_ref)
                     show_english = True
 
-                # Build row
+                # Extract entity and lexicon words for highlighting + glossary
+                gr_entity_words = set()
+                gr_lexicon_words = set()
+                en_entity_words = set()
+                en_lexicon_words = set()
+                glossary_entities = []  # (greek_name, english_name)
+                glossary_lexicon = []   # (greek_word, english_word)
+
+                if gr_text:
+                    gr_names = extract_greek_names(gr_text)
+                    for name, lat in gr_names:
+                        gr_entity_words.add(name.lower())
+                    for gw in extract_gr_words(gr_text):
+                        if gw in lexicon:
+                            gr_lexicon_words.add(gw)
+
+                en_display = en_text or ""
+                if en_display:
+                    en_names_list = extract_english_names(en_display)
+                    for name in en_names_list:
+                        en_entity_words.add(name)
+                    en_words_set = extract_en_words(en_display)
+
+                    # Build entity glossary
+                    if gr_text:
+                        from rapidfuzz import fuzz as _fuzz
+                        for name, lat in gr_names:
+                            for en in en_names_list:
+                                if len(lat) >= 4 and len(en) >= 4 and _fuzz.partial_ratio(lat, en) > 75:
+                                    glossary_entities.append((name, en))
+                                    break
+
+                    # Build lexicon glossary
+                    for gw in gr_lexicon_words:
+                        if gw in lexicon:
+                            for ew, _ in sorted(lexicon[gw].items(),
+                                                key=lambda x: -x[1]):
+                                if ew in en_words_set:
+                                    en_lexicon_words.add(ew)
+                                    glossary_lexicon.append((gw, ew))
+                                    break
+
+                # Build row with markup
                 score_str = f'<span class="score">{score:.2f}</span>' if score > 0 else ""
 
-                gr_cell = f'<td class="source">{esc(gr_text)}{score_str}</td>' if gr_text else '<td class="empty">—</td>'
+                if gr_text:
+                    marked_gr = markup_text(esc(gr_text), gr_entity_words, gr_lexicon_words, is_greek=True)
+                    gr_cell = f'<td class="source">{marked_gr}{score_str}</td>'
+                else:
+                    gr_cell = '<td class="empty">—</td>'
+
                 if show_english:
                     heading_html = ""
                     if en_heading:
                         heading_html = f'<span class="heading-text">{esc(en_heading)}</span>'
-                    en_cell = f'<td class="english">{heading_html}{render_with_footnotes(en_text, en_notes)}</td>'
+                    rendered_en = render_with_footnotes(en_text, en_notes)
+                    marked_en = markup_text(rendered_en, en_entity_words, en_lexicon_words, is_greek=False)
+                    en_cell = f'<td class="english">{heading_html}{marked_en}</td>'
                 elif en_ref and en_ref in seen_en:
-                    en_cell = '<td class="empty">↑</td>'  # points up to the English above
+                    en_cell = '<td class="empty">↑</td>'
                 else:
                     en_cell = '<td class="empty">—</td>'
+
+                # Score component columns as bar graphs
+                def _bar(label, val):
+                    val = max(0, min(1, val))
+                    pct = int(val * 100)
+                    cls = 'high' if val >= 0.5 else ('med' if val >= 0.2 else 'low')
+                    return (f'<div class="bar-row"><span class="bar-label">{label}</span>'
+                            f'<div class="bar-bg"><div class="bar-fill {cls}" '
+                            f'style="width:{pct}%"></div></div></div>')
+
+                emb = max(a.get("similarity", 0), 0)
+                lex_s = min(a.get("lexical_score", 0) / max(lex_p95_display, 0.01), 1.0)
+                ent_s = a.get("entity_overlap_score", 0)
+                len_s = a.get("length_ratio_score", 0)
+                spk_s = a.get("speaker_score", 0)
+
+                bars = _bar('E', emb) + _bar('L', lex_s) + _bar('N', ent_s) + _bar('R', len_s)
+                if spk_s > 0:
+                    bars += _bar('S', spk_s)
+                scores_cell = f'<td class="scores">{bars}</td>'
+
+                # Glossary column: matched entity and lexicon pairs
+                gloss_parts = []
+                for gn, en in glossary_entities[:5]:
+                    gloss_parts.append(f'<b>{esc(gn)}</b>={esc(en)}')
+                for gw, ew in glossary_lexicon[:8]:
+                    gloss_parts.append(f'<i>{esc(gw)}</i>={esc(ew)}')
+                gloss_html = '<br>'.join(gloss_parts) if gloss_parts else ''
+                gloss_cell = f'<td class="glossary">{gloss_html}</td>'
+
                 section_id = (gr_ref or en_ref or "").replace(".", "-")
                 ref_cell = f'<td class="ref">{esc(gr_ref or en_ref or "")}</td>'
 
-                lines.append(f'<tr class="{css_class}" id="s{section_id}">{ref_cell}{gr_cell}{en_cell}</tr>')
+                lines.append(f'<tr class="{css_class}" id="s{section_id}">{ref_cell}{gr_cell}{en_cell}{scores_cell}{gloss_cell}</tr>')
 
             lines.append("</table>")
 

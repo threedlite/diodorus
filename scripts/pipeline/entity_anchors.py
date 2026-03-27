@@ -43,19 +43,26 @@ def greek_to_latin(text):
 
 
 def extract_greek_names(text):
-    words = re.findall(r"\b[\u0391-\u03A9][\u03b1-\u03c9\u03ac-\u03ce]{2,}\b", text)
+    # Match words starting with any Greek capital (basic or extended/polytonic)
+    # followed by lowercase Greek letters (basic, accented, or extended)
+    words = re.findall(
+        r"\b[\u0391-\u03A9\u1F08-\u1F0F\u1F18-\u1F1D\u1F28-\u1F2F\u1F38-\u1F3F"
+        r"\u1F48-\u1F4D\u1F59-\u1F5F\u1F68-\u1F6F\u1F88-\u1F8F\u1F98-\u1F9F"
+        r"\u1FA8-\u1FAF\u1FB8-\u1FBC\u1FC8-\u1FCC\u1FD8-\u1FDB\u1FE8-\u1FEC"
+        r"\u1FF8-\u1FFC]"
+        r"[\u03b1-\u03c9\u03ac-\u03ce\u1F00-\u1FFF]{2,}\b", text)
     return [(w, greek_to_latin(w)) for w in words]
 
 
 def extract_english_names(text):
-    stopwords = {"The", "But", "And", "For", "With", "From", "This", "That",
-                 "What", "When", "Where", "How", "Who", "Not", "All", "Every",
-                 "Such", "Let", "Are", "His", "Her", "Its", "Has", "Have",
-                 "May", "Can", "Will", "Shall", "Should", "Would", "Could",
-                 "Now", "Then", "There", "Here", "Thus", "Yet", "Still",
-                 "First", "Second", "Third", "Much", "Many", "Other"}
-    words = re.findall(r"\b[A-Z][a-z]{2,}\b", text)
-    return [w.lower() for w in words if w not in stopwords]
+    """Extract likely proper names from English text.
+
+    Filters out common English words using corpus-derived stopwords
+    (words appearing in >30% of sections are not distinctive names).
+    """
+    from lexical_overlap import EN_STOPS
+    words = re.findall(r"\b[A-Z][a-z]{4,}\b", text)
+    return [w.lower() for w in words if w.lower() not in EN_STOPS]
 
 
 def load_config(work_name):
@@ -136,17 +143,31 @@ def main(work_name):
         if src2en:
             print(f"  Per-work lexical table: {len(src2en)} words")
 
-    # Compute expected char ratio for length penalty
-    total_gr = sum(len(greek_by_ref.get(a.get("greek_cts_ref", ""), {}).get("text", ""))
-                   for a in alignments if a.get("greek_cts_ref"))
-    total_en = sum(len(english_by_ref.get(str(a.get("english_cts_ref", "")), {}).get("text", ""))
-                   for a in alignments if a.get("english_cts_ref"))
+    # Compute expected char ratio for length penalty.
+    # Count each section only once (avoid inflating when multiple alignments
+    # share the same English section).
+    total_gr = sum(len(s.get("text", "")) for s in greek_data["sections"])
+    total_en = sum(len(s.get("text", "")) for s in english_data["sections"])
     expected_ratio = total_gr / total_en if total_en > 0 else 1.0
+
+    # Build English name document frequency — names that appear in many
+    # sections are common nouns (capitalized in archaic English), not
+    # distinctive proper names. Exclude names appearing in >10% of sections.
+    from collections import Counter
+    en_name_df = Counter()
+    for s in english_data["sections"]:
+        for name in set(extract_english_names(s.get("text", ""))):
+            en_name_df[name] += 1
+    n_en_sections = len(english_data["sections"])
+    common_en_names = {name for name, df in en_name_df.items()
+                       if df > n_en_sections * 0.10}
+    if common_en_names:
+        print(f"  Filtered {len(common_en_names)} common English names "
+              f"(appear in >10% of sections)")
 
     # Count how many Greek sections point to each English section.
     # Non-1:1 mappings should be penalized — they indicate the alignment
     # couldn't find a unique match.
-    from collections import Counter
     en_ref_counts = Counter()
     for a in alignments:
         en_ref = a.get("english_cts_ref")
@@ -156,6 +177,23 @@ def main(work_name):
     print("Validating alignments with entity anchors + lexical overlap...")
 
     import math
+    import numpy as np
+
+    # First pass: compute lexical scores to find P95 for normalization
+    all_lex_scores = []
+    for a in alignments:
+        if a.get("match_type") == "unmatched_english" or a.get("greek_cts_ref") is None:
+            continue
+        gr_text = greek_by_ref.get(a["greek_cts_ref"], {}).get("text", "")
+        en_key = a.get("english_cts_ref", a.get("english_section", ""))
+        en_text = english_by_ref.get(str(en_key), {}).get("text", "")
+        if gr_text and en_text:
+            ls = lexical_overlap_score(gr_text, en_text, src2en, src_idf)
+            all_lex_scores.append(ls)
+    lex_p95 = float(np.percentile(all_lex_scores, 95)) if all_lex_scores else 0.25
+    print(f"  Lexical score P95: {lex_p95:.3f} (used for normalization)")
+
+    # Second pass: compute all scores
     for a in alignments:
         if a.get("match_type") == "unmatched_english" or a.get("greek_cts_ref") is None:
             a["entity_overlap_score"] = 0.0
@@ -173,10 +211,17 @@ def main(work_name):
         gr_names = extract_greek_names(gr_text)
         en_names = extract_english_names(en_text)
 
+        # Filter out common English "names" (frequent nouns, not proper names)
+        en_names = [n for n in en_names if n not in common_en_names]
+
         matches = 0
         total = max(len(gr_names), 1)
         for _, gn_lat in gr_names:
+            if len(gn_lat) < 4:
+                continue
             for en in en_names:
+                if len(en) < 4:
+                    continue
                 if fuzz.partial_ratio(gn_lat, en) > 75:
                     matches += 1
                     break
@@ -189,9 +234,33 @@ def main(work_name):
         lex_score = lexical_overlap_score(gr_text, en_text, src2en, src_idf)
         a["lexical_score"] = round(lex_score, 3)
 
-        # 3. Length ratio penalty
+        # 3. Speaker overlap (for dramatic works)
+        gr_section = greek_by_ref.get(a["greek_cts_ref"], {})
+        en_section = english_by_ref.get(str(en_key), {})
+        gr_speakers = gr_section.get("speakers", [])
+        en_speaker = en_section.get("speaker", "")
+        speaker_score = 0.0
+        has_speakers = False
+        if gr_speakers and en_speaker:
+            has_speakers = True
+            # Check if English speaker matches any Greek speaker in this section
+            en_spk_lower = en_speaker.lower().strip()
+            # greek_to_latin is defined in this module
+            for gs in gr_speakers:
+                gs_lat = greek_to_latin(gs)
+                if (gs_lat.startswith(en_spk_lower) or
+                        en_spk_lower.startswith(gs_lat) or
+                        fuzz.ratio(gs_lat, en_spk_lower) >= 60):
+                    speaker_score = 1.0
+                    break
+        a["speaker_score"] = round(speaker_score, 3)
+
+        # 4. Length ratio penalty
+        # For refined sections, use the refined piece length (not the full
+        # English section) since that's what's actually paired.
         gr_chars = len(gr_text)
-        en_chars = len(en_text)
+        refined_text = a.get("english_refined_text", "")
+        en_chars = len(refined_text) if refined_text else len(en_text)
         if en_chars > 0 and expected_ratio > 0:
             ratio = (gr_chars / en_chars) / expected_ratio
             length_pen = math.exp(-0.5 * (ratio - 1.0) ** 2)
@@ -203,19 +272,33 @@ def main(work_name):
         # then weighted average.
         cos_sim = min(a.get("similarity", 0), 1.0)  # clamp CTS 1.0 overrides
 
-        # Normalize lexical score: P5=0.004, P95=0.218 → stretch to 0-1
-        lex_norm = min(1.0, max(0.0, lex_score / 0.25))
+        # Normalize lexical score to 0-1 range using P95 computed from this work
+        lex_norm = min(1.0, max(0.0, lex_score / lex_p95)) if lex_p95 > 0 else 0.0
 
-        # Weights: embedding 0.4, lexical 0.3, length 0.2, entity 0.1
-        # Entity weight scales with evidence
-        if gr_names and entity_score > 0:
-            ent_w = min(0.15, 0.05 * len(gr_names))
+        # Combined score.
+        # Entity/lexical/speaker are the primary signals. Embedding is a
+        # tiebreaker when the primary signals are ambiguous.
+        # Length ratio vetoes: mismatched sizes = wrong pair.
+        #
+        # Entity requires ≥2 matches to be strong evidence — a single
+        # common name like "Egypt" is not distinctive.
+
+        emb_signal = max(cos_sim, 0.0)
+        lex_signal = lex_norm
+        ent_signal = entity_score if gr_names and matches >= 2 else entity_score * 0.3
+        spk_signal = speaker_score if has_speakers else 0.0
+
+        # Primary: best of entity, lexical, speaker
+        primary = max(ent_signal, lex_signal, spk_signal)
+
+        # If primary signals are weak (<0.3), use embedding as tiebreaker
+        if primary < 0.3:
+            content = max(primary, emb_signal * 0.5)  # embedding at half weight
         else:
-            ent_w = 0.0
-        remaining = 1.0 - ent_w
+            content = primary
 
-        score = (remaining * (0.4 * cos_sim + 0.3 * lex_norm + 0.3 * length_pen)
-                 + ent_w * entity_score)
+        # Length ratio vetoes — wrong size = wrong pair
+        score = content * length_pen
 
         # Penalize non-1:1 mappings: if N Greek sections share the same
         # English section, each one's score is reduced. A 2:1 mapping gets
@@ -228,6 +311,19 @@ def main(work_name):
             a["sharing_penalty"] = sharing
 
         a["combined_score"] = round(min(1.0, score), 4)
+
+        # Mark as effectively unmatched when the length ratio is extreme
+        # AND no entity evidence supports the match. A length ratio < 0.1
+        # means the Greek/English sizes are wildly mismatched — the DP
+        # drifted and paired unrelated sections. Entity matches override
+        # this because proper names are a definitive signal.
+        # Don't apply to CTS-matched or refined sections (length ratio is
+        # misleading when a subsection shares a larger English section).
+        is_cts = cos_sim >= 0.99  # CTS matches have similarity=1.0
+        is_refined = a.get("match_type") == "dp_refined"
+        if length_pen < 0.1 and entity_score < 0.3 and not is_cts and not is_refined:
+            a["combined_score"] = 0.0
+            a["match_quality"] = "no_match"
 
     low_conf = sum(1 for a in alignments if a.get("combined_score", 0) < 0.3)
     print(f"  Total: {len(alignments)}, Low confidence: {low_conf}")
