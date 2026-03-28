@@ -148,10 +148,17 @@ for filename, book_nums in VOLUMES:
 
             # Split into paragraphs
             paragraphs = re.split(r'\n\s*\n', ch_text)
-            for pi, para in enumerate(paragraphs):
-                para = " ".join(para.split())
-                if len(para) < 30:
-                    continue
+            real_paragraphs = [" ".join(p.split()) for p in paragraphs
+                               if len(" ".join(p.split())) >= 30]
+
+            # Skip index/appendix chapters: real chapters have <50 paragraphs.
+            # The Dewing text ends each volume with an index that gets parsed
+            # as a chapter with 400+ short entries.
+            if len(real_paragraphs) > 50:
+                print(f"    Skipping chapter {ch_num} ({len(real_paragraphs)} paragraphs — likely index)")
+                continue
+
+            for pi, para in enumerate(real_paragraphs):
                 all_sections.append({
                     "book": str(book_num),
                     "section": f"{ch_num}.{pi}",

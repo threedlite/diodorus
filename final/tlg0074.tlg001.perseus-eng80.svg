@@ -18,10 +18,10 @@
 <rect x="300" y="50" width="12" height="12" fill="#c9493b" rx="2"/>
 <text x="316" y="60" class="legend-text">Low (&lt;0.2)</text>
 <text x="20" y="92" class="label">Book 1</text>
-<text x="988" y="92" class="stats">n=248  avg=0.767  H=99%  M=0%  L=1%</text>
-<a href="tlg0074.tlg001.perseus-eng80.html#s1-pr-1"><title>1.pr.1 (0.35)</title><rect x="180" y="80" width="4" height="15" fill="#e8b83d"/></a>
-<a href="tlg0074.tlg001.perseus-eng80.html#s1-pr-2"><title>1.pr.2 (0.12)</title><rect x="184" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0074.tlg001.perseus-eng80.html#s1-pr-3"><title>1.pr.3 (0.17)</title><rect x="188" y="80" width="4" height="15" fill="#c9493b"/></a>
+<text x="988" y="92" class="stats">n=248  avg=0.768  H=99%  M=1%  L=0%</text>
+<a href="tlg0074.tlg001.perseus-eng80.html#s1-pr-1"><title>1.pr.1 (0.37)</title><rect x="180" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0074.tlg001.perseus-eng80.html#s1-pr-2"><title>1.pr.2 (0.22)</title><rect x="184" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0074.tlg001.perseus-eng80.html#s1-pr-3"><title>1.pr.3 (0.21)</title><rect x="188" y="80" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0074.tlg001.perseus-eng80.html#s1-1-1"><title>1.1.1 (0.97)</title><rect x="192" y="80" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0074.tlg001.perseus-eng80.html#s1-1-2"><title>1.1.2 (0.85)</title><rect x="196" y="80" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0074.tlg001.perseus-eng80.html#s1-1-3"><title>1.1.3 (0.97)</title><rect x="200" y="80" width="4" height="15" fill="#2d8a4e"/></a>
@@ -1440,6 +1440,6 @@
 <line x1="20" y1="287" x2="1200" y2="287" stroke="#ccc" stroke-width="1"/>
 <text x="20" y="307" class="total">TOTAL: 1406 sections   avg=0.758   High=100%   Med=0%   Low=0%</text>
 <rect x="20" y="314" width="1177.4822190611665" height="10" fill="#2d8a4e" rx="2"/>
-<rect x="1197.4822190611665" y="314" width="0.8392603129445235" height="10" fill="#e8b83d"/>
-<rect x="1198.321479374111" y="314" width="1.678520625889047" height="10" fill="#c9493b" rx="2"/>
+<rect x="1197.4822190611665" y="314" width="2.5177809388335706" height="10" fill="#e8b83d"/>
+<rect x="1200.0" y="314" width="0.0" height="10" fill="#c9493b" rx="2"/>
 </svg>

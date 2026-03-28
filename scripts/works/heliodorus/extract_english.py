@@ -113,10 +113,49 @@ for item_type, item in all_p_elements:
         if len(text) >= 20:
             books.setdefault(current_book, []).append(text)
 
-# Build sections
+# Merge English paragraphs to match Greek section count per book.
+# The English has 1.5-4x more paragraphs than Greek sections. CTS matches
+# by section number, so English 1.34 has no Greek counterpart if Greek only
+# goes to 1.33. Merging consecutive paragraphs proportionally by character
+# count ensures 1:1 correspondence.
+import math
+
+greek_path = PROJECT_ROOT / "build" / "heliodorus" / "greek_sections.json"
+gr_counts = {}
+if greek_path.exists():
+    with open(greek_path) as f:
+        gr_data = json.load(f)
+    from collections import Counter
+    gr_counts = Counter(s.get("book", "") for s in gr_data["sections"])
+    print(f"  Greek section counts: {dict(sorted(gr_counts.items(), key=lambda x: int(x[0])))}")
+
 all_sections = []
 for book_num in sorted(books.keys(), key=int):
     paragraphs = books[book_num]
+    target_n = gr_counts.get(book_num, len(paragraphs))
+
+    if len(paragraphs) > target_n and target_n > 0:
+        # Merge: distribute paragraphs into exactly target_n groups.
+        # Assign ceil(n_paras/target_n) paragraphs per group, adjusting
+        # the last groups to absorb any remainder.
+        n = len(paragraphs)
+        per_group = max(1, n // target_n)
+        merged = []
+        idx = 0
+        for g in range(target_n):
+            # How many paragraphs for this group?
+            remaining_groups = target_n - g
+            remaining_paras = n - idx
+            count = max(1, remaining_paras // remaining_groups)
+            group_text = " ".join(paragraphs[idx:idx + count])
+            merged.append(group_text)
+            idx += count
+        # Any leftover paragraphs go into the last group
+        if idx < n:
+            merged[-1] += " " + " ".join(paragraphs[idx:])
+        paragraphs = merged
+        print(f"  Book {book_num}: merged {len(books[book_num])} → {len(paragraphs)} paragraphs (target {target_n})")
+
     for pi, para in enumerate(paragraphs):
         all_sections.append({
             "book": book_num,

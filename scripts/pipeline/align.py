@@ -829,6 +829,7 @@ def run_dp_alignment(config, greek_data, english_data, model):
         # use CTS matches as the base and run DP only on gaps between
         # CTS anchors. This replaces the old 100%-only override.
         cts_pct = len(cts_matches) / max(len(greek_secs), 1)
+        trailing_en_indices = set()  # English sections beyond last Greek, per book
         if cts_pct > 0.5:
             sorted_gi = sorted(cts_matches.keys())
 
@@ -864,17 +865,24 @@ def run_dp_alignment(config, greek_data, english_data, model):
             # Gap after last CTS match
             last_gi = sorted_gi[-1]
             last_ei = cts_matches[last_gi]
-            if last_gi + 1 < len(greek_secs):
+            trailing_gr = len(greek_secs) - (last_gi + 1)
+            trailing_en = len(english_secs) - (last_ei + 1)
+            if trailing_gr > 0 or trailing_en > 0:
                 en_start = min(last_ei + 1, len(english_secs))
                 en_end = len(english_secs)
-                if en_start < en_end:
-                    gaps.append((last_gi + 1, len(greek_secs), en_start, en_end))
-                else:
-                    # No English left — these Greek sections are unmatched.
-                    # Add a dummy gap pointing to the last English section
-                    # so they get force-matched (with low scores).
-                    gaps.append((last_gi + 1, len(greek_secs),
+                gr_start = last_gi + 1
+                gr_end = len(greek_secs)
+                if trailing_gr > 0 and trailing_en > 0:
+                    gaps.append((gr_start, gr_end, en_start, en_end))
+                elif trailing_gr > 0:
+                    # Trailing Greek, no trailing English — force-match
+                    gaps.append((gr_start, gr_end,
                                  max(0, len(english_secs) - 1), len(english_secs)))
+                elif trailing_en > 0:
+                    # Trailing English, no trailing Greek — these English
+                    # sections are finer subdivisions beyond the last Greek
+                    # section. Track them to suppress unmatched emission later.
+                    trailing_en_indices = set(range(en_start, en_end))
 
             # Run DP on each gap to fill in un-CTS-matched sections.
             # Small gaps (≤3 Greek sections) are assigned to the nearest
@@ -932,7 +940,7 @@ def run_dp_alignment(config, greek_data, english_data, model):
             groups_result = new_groups
 
         # Build records — ensure every English section appears
-        en_used = set()
+        en_used = set(trailing_en_indices)  # trailing English beyond last Greek
         for gr_start, gr_end, en_start, en_end, score in groups_result:
             for ej in range(en_start, en_end):
                 en_used.add(ej)

@@ -81,19 +81,28 @@ def print_quality_summary():
            f"{'Avg':>5s} {'H%':>5s} {'L%':>5s} "
            f"{'Emb':>5s} {'Lex':>5s} {'Ent':>5s} {'Len':>5s} {'Spk':>5s} {'Shrd':>5s}")
     sep = "-" * len(hdr)
-    print(f"\n{sep}")
-    print(f"  ALIGNMENT QUALITY SUMMARY")
-    print(sep)
-    print(hdr)
-    print(sep)
+    lines = []
+    lines.append(sep)
+    lines.append("  ALIGNMENT QUALITY SUMMARY")
+    lines.append(sep)
+    lines.append(hdr)
+    lines.append(sep)
     for (_, name, author, n_gr, n_en, avg, h, m, l,
          cos, lex, ent, lrt, spk, shared) in rows:
         spk_str = f"{spk:5.2f}" if spk > 0 else "    -"
         ent_str = f"{ent:5.2f}" if ent > 0 else "    -"
-        print(f"{name:<28s} {author:<20s} {n_gr:5d} {n_en:5d} "
+        lines.append(f"{name:<28s} {author:<20s} {n_gr:5d} {n_en:5d} "
               f"{avg:5.3f} {h:5.1f} {l:5.1f} "
               f"{cos:5.2f} {lex:5.3f} {ent_str} {lrt:5.2f} {spk_str} {shared:5d}")
-    print(sep)
+    lines.append(sep)
+
+    report = "\n".join(lines)
+    print(f"\n{report}")
+
+    report_path = PROJECT_ROOT / "final" / "alignment_quality_summary.txt"
+    with open(report_path, "w") as f:
+        f.write(report + "\n")
+    print(f"Saved: {report_path}")
 
 
 def load_previous_metrics():
@@ -181,17 +190,12 @@ def save_metrics(work_name, out_dir, build_time=None, previous_metrics=None):
     if previous_metrics is not None:
         check_regression(work_name, entry, previous_metrics)
 
-    metrics_path = PROJECT_ROOT / "build" / "quality_metrics.json"
-    if metrics_path.exists():
-        with open(metrics_path) as f:
-            metrics = json.load(f)
-    else:
-        metrics = {"works": {}}
-
-    metrics["works"][work_name] = entry
-
-    with open(metrics_path, "w") as f:
-        json.dump(metrics, f, indent=2)
+    # Write per-work metrics to a separate file to avoid race conditions
+    # when running in parallel. The --all handler merges them after all
+    # workers finish.
+    per_work_path = PROJECT_ROOT / "build" / f"quality_{work_name}.json"
+    with open(per_work_path, "w") as f:
+        json.dump(entry, f, indent=2)
 
 
 def list_works():
@@ -321,16 +325,55 @@ def main():
     if arg == "--all":
         prev = load_previous_metrics()
         works = list_works()
-        for name, _, _, _ in works:
-            run_work(name, previous_metrics=prev)
-        # Copy quality metrics to final/ if all passed
+
+        # Parse --jobs N (default 8)
+        n_jobs = 8
+        if len(sys.argv) > 2 and sys.argv[2].startswith("--jobs"):
+            if "=" in sys.argv[2]:
+                n_jobs = int(sys.argv[2].split("=")[1])
+            elif len(sys.argv) > 3:
+                n_jobs = int(sys.argv[3])
+
+        if n_jobs > 1:
+            from concurrent.futures import ProcessPoolExecutor, as_completed
+            print(f"Running {len(works)} works with {n_jobs} parallel jobs")
+            failed = []
+            with ProcessPoolExecutor(max_workers=n_jobs) as executor:
+                futures = {}
+                for name, _, _, _ in works:
+                    f = executor.submit(run_work, name, previous_metrics=prev)
+                    futures[f] = name
+                for f in as_completed(futures):
+                    name = futures[f]
+                    try:
+                        f.result()
+                    except SystemExit:
+                        failed.append(name)
+                        print(f"\n  FAILED: {name}")
+                    except Exception as e:
+                        failed.append(name)
+                        print(f"\n  ERROR: {name}: {e}")
+            if failed:
+                print(f"\n{len(failed)} works failed: {failed}")
+                sys.exit(1)
+        else:
+            for name, _, _, _ in works:
+                run_work(name, previous_metrics=prev)
+        # Merge per-work metrics into quality_metrics.json
         import shutil
+        metrics = {"works": {}}
+        for name, _, _, _ in works:
+            per_work = PROJECT_ROOT / "build" / f"quality_{name}.json"
+            if per_work.exists():
+                with open(per_work) as f:
+                    metrics["works"][name] = json.load(f)
         metrics_path = PROJECT_ROOT / "build" / "quality_metrics.json"
-        if metrics_path.exists():
-            final_dir = PROJECT_ROOT / "final"
-            final_dir.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(metrics_path, final_dir / "quality_metrics.json")
-            print(f"\nPublished quality_metrics.json to final/")
+        with open(metrics_path, "w") as f:
+            json.dump(metrics, f, indent=2)
+        final_dir = PROJECT_ROOT / "final"
+        final_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(metrics_path, final_dir / "quality_metrics.json")
+        print(f"\nPublished quality_metrics.json to final/")
         # Regenerate word count comparison report
         word_count_script = PROJECT_ROOT / "scripts" / "word_count_report.py"
         if word_count_script.exists():

@@ -592,9 +592,9 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
                 # Glossary column: matched entity and lexicon pairs
                 gloss_parts = []
                 for gn, en in glossary_entities[:5]:
-                    gloss_parts.append(f'<b>{esc(gn)}</b>={esc(en)}')
+                    gloss_parts.append(f'<b>{esc(gn)}</b>: {esc(en)}')
                 for gw, ew in glossary_lexicon[:8]:
-                    gloss_parts.append(f'<i>{esc(gw)}</i>={esc(ew)}')
+                    gloss_parts.append(f'<i>{esc(gw)}</i>: {esc(ew)}')
                 gloss_html = '<br>'.join(gloss_parts) if gloss_parts else ''
                 gloss_cell = f'<td class="glossary">{gloss_html}</td>'
 

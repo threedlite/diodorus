@@ -41,6 +41,38 @@ LETTER_SUBS = [
     (r"\u2223", ""), (r"\u3008.*?\u3009", ""),
 ]
 
+# Short words that legitimately stand alone (not fragments of broken words)
+_SHORT_WORDS = frozenset(
+    "a an as at be by do go he if in is it me my no of oh on or so to up us we "
+    "am an ar be da de di do el en er es go ha he hi ho id il in io is it la le "
+    "li lo ma me mi mo mu my na ne ni no nu od of oh ok on op or os ow ox pa "
+    "pi po re si so st su ta te ti to un up us ut we wo ye".split()
+)
+
+
+def dehyphenate(text):
+    """Rejoin words broken by OCR line-break artifacts.
+
+    The Booth 1700 EEBO/TCP text has words split across print lines where
+    the hyphen was lost in digitisation, leaving e.g. 'Lacedae monians'
+    (Lacedaemonians), 'se cret' (secret), 'involv d' (involved).
+
+    Strategy: when a short fragment (1-3 lowercase chars) appears between
+    two word parts AND it's not a common short English word, join it with
+    its left neighbor.
+    """
+    def _fix(m):
+        left, fragment, right_start = m.group(1), m.group(2), m.group(3)
+        if fragment.lower() in _SHORT_WORDS:
+            return m.group(0)  # keep as-is
+        # Join fragment with left word
+        return left + fragment + " " + right_start
+
+    # Pattern: word-ending lowercase + space + 1-3 lowercase chars + space + next word
+    result = re.sub(r'([a-zA-Z]{2,}) ([a-z]{1,3}) ([a-zA-Z])', _fix, text)
+    return result
+
+
 def normalise(text):
     t = text
     # Long-s normalisation
@@ -58,9 +90,16 @@ def get_text(el):
         parts.append(el.text)
     for child in el:
         tag = etree.QName(child.tag).localname if isinstance(child.tag, str) else ""
-        if tag not in ("note", "gap", "figure", "fw"):
+        if tag == "g" and child.get("ref") == "char:EOLhyphen":
+            # End-of-line hyphen — skip it to rejoin the broken word.
+            # The tail (text after </g>) continues the word.
+            if child.tail:
+                parts.append(child.tail)
+        elif tag not in ("note", "gap", "figure", "fw"):
             parts.append(get_text(child))
-        if child.tail:
+            if child.tail:
+                parts.append(child.tail)
+        elif child.tail:
             parts.append(child.tail)
     return " ".join(parts)
 

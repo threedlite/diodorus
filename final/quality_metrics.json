@@ -11,12 +11,12 @@
         "tlg0096.tlg002.perseus-eng80.xml"
       ],
       "sections": 598,
-      "high_pct": 13.9,
+      "high_pct": 14.0,
       "med_pct": 35.8,
-      "low_pct": 50.3,
+      "low_pct": 50.2,
       "avg": 0.268,
-      "build_time_seconds": 4.5,
-      "timestamp": "2026-03-28T04:06:47.280326"
+      "build_time_seconds": 10.2,
+      "timestamp": "2026-03-28T05:56:23.203885"
     },
     "diodorus": {
       "author": "Diodorus Siculus",
@@ -29,12 +29,12 @@
         "tlg0060.tlg001.perseus-eng80.xml"
       ],
       "sections": 8201,
-      "high_pct": 57.1,
-      "med_pct": 23.2,
-      "low_pct": 19.7,
-      "avg": 0.524,
-      "build_time_seconds": 330.6,
-      "timestamp": "2026-03-28T04:15:47.611352"
+      "high_pct": 63.9,
+      "med_pct": 19.6,
+      "low_pct": 16.5,
+      "avg": 0.59,
+      "build_time_seconds": 621.9,
+      "timestamp": "2026-03-28T06:07:29.833399"
     },
     "dionysius": {
       "author": "Dionysius of Halicarnassus",
@@ -51,8 +51,8 @@
       "med_pct": 0.0,
       "low_pct": 0.0,
       "avg": 0.818,
-      "build_time_seconds": 14.0,
-      "timestamp": "2026-03-28T04:16:01.654369"
+      "build_time_seconds": 33.8,
+      "timestamp": "2026-03-28T05:57:43.917443"
     },
     "hippolytus": {
       "author": "Hippolytus",
@@ -66,11 +66,11 @@
       ],
       "sections": 1679,
       "high_pct": 83.6,
-      "med_pct": 0.1,
-      "low_pct": 16.3,
+      "med_pct": 0.2,
+      "low_pct": 16.1,
       "avg": 0.486,
-      "build_time_seconds": 30.1,
-      "timestamp": "2026-03-28T04:17:48.666191"
+      "build_time_seconds": 103.6,
+      "timestamp": "2026-03-28T05:59:03.066953"
     },
     "iamblichus": {
       "author": "Iamblichus",
@@ -84,12 +84,12 @@
         "tlg2023.tlg006.perseus-eng80.xml"
       ],
       "sections": 462,
-      "high_pct": 36.4,
-      "med_pct": 27.9,
-      "low_pct": 35.7,
-      "avg": 0.37,
-      "build_time_seconds": 268.9,
-      "timestamp": "2026-03-28T04:22:17.582069"
+      "high_pct": 45.2,
+      "med_pct": 21.2,
+      "low_pct": 33.5,
+      "avg": 0.423,
+      "build_time_seconds": 560.9,
+      "timestamp": "2026-03-28T06:06:40.865527"
     },
     "marcus": {
       "author": "Marcus Aurelius",
@@ -106,8 +106,8 @@
       "med_pct": 0.0,
       "low_pct": 0.0,
       "avg": 0.905,
-      "build_time_seconds": 11.7,
-      "timestamp": "2026-03-28T04:22:56.484700"
+      "build_time_seconds": 60.3,
+      "timestamp": "2026-03-28T05:58:44.185846"
     },
     "plotinus": {
       "author": "Plotinus",
@@ -120,12 +120,12 @@
         "tlg2000.tlg001.perseus-eng80.xml"
       ],
       "sections": 796,
-      "high_pct": 54.0,
-      "med_pct": 6.3,
-      "low_pct": 39.7,
-      "avg": 0.542,
-      "build_time_seconds": 23.6,
-      "timestamp": "2026-03-28T04:23:50.184532"
+      "high_pct": 54.3,
+      "med_pct": 6.2,
+      "low_pct": 39.6,
+      "avg": 0.544,
+      "build_time_seconds": 90.4,
+      "timestamp": "2026-03-28T06:00:14.567644"
     },
     "procopius_secret": {
       "author": "Procopius",
@@ -137,13 +137,13 @@
       "xml_files": [
         "tlg4029.tlg002.perseus-eng80.xml"
       ],
-      "sections": 1020,
-      "high_pct": 40.7,
+      "sections": 1019,
+      "high_pct": 44.0,
       "med_pct": 29.6,
-      "low_pct": 29.7,
-      "avg": 0.414,
-      "build_time_seconds": 22.3,
-      "timestamp": "2026-03-28T04:24:12.474711"
+      "low_pct": 26.4,
+      "avg": 0.449,
+      "build_time_seconds": 86.7,
+      "timestamp": "2026-03-28T06:00:26.709328"
     },
     "procopius_wars": {
       "author": "Procopius",
@@ -155,13 +155,13 @@
       "xml_files": [
         "tlg4029.tlg001.perseus-eng80.xml"
       ],
-      "sections": 7530,
-      "high_pct": 16.2,
-      "med_pct": 11.5,
-      "low_pct": 72.2,
-      "avg": 0.187,
-      "build_time_seconds": 136.6,
-      "timestamp": "2026-03-28T04:26:29.150395"
+      "sections": 7256,
+      "high_pct": 28.1,
+      "med_pct": 11.3,
+      "low_pct": 60.6,
+      "avg": 0.278,
+      "build_time_seconds": 346.4,
+      "timestamp": "2026-03-28T06:04:49.477527"
     },
     "statius": {
       "author": "Statius",
@@ -175,12 +175,12 @@
         "phi1020.phi003.perseus-eng80.xml"
       ],
       "sections": 926,
-      "high_pct": 18.3,
-      "med_pct": 55.1,
-      "low_pct": 26.7,
-      "avg": 0.331,
-      "build_time_seconds": 50.8,
-      "timestamp": "2026-03-28T04:27:19.923495"
+      "high_pct": 22.0,
+      "med_pct": 56.2,
+      "low_pct": 21.8,
+      "avg": 0.358,
+      "build_time_seconds": 149.4,
+      "timestamp": "2026-03-28T06:02:10.516058"
     },
     "theophrastus": {
       "author": "Theophrastus",
@@ -193,12 +193,12 @@
         "tlg0093.tlg009.perseus-eng80.xml"
       ],
       "sections": 332,
-      "high_pct": 48.5,
-      "med_pct": 39.5,
-      "low_pct": 12.0,
-      "avg": 0.481,
-      "build_time_seconds": 8.3,
-      "timestamp": "2026-03-28T04:27:58.877816"
+      "high_pct": 52.7,
+      "med_pct": 38.3,
+      "low_pct": 9.0,
+      "avg": 0.515,
+      "build_time_seconds": 33.8,
+      "timestamp": "2026-03-28T06:00:48.351293"
     },
     "aristotle_const_athens": {
       "author": "Aristotle",
@@ -211,12 +211,12 @@
         "tlg0086.tlg003.perseus-eng80.xml"
       ],
       "sections": 299,
-      "high_pct": 87.6,
-      "med_pct": 11.7,
-      "low_pct": 0.7,
-      "avg": 0.713,
-      "build_time_seconds": 13.0,
-      "timestamp": "2026-03-28T04:09:03.955334"
+      "high_pct": 90.3,
+      "med_pct": 9.4,
+      "low_pct": 0.3,
+      "avg": 0.742,
+      "build_time_seconds": 36.1,
+      "timestamp": "2026-03-28T05:57:18.323624"
     },
     "longus": {
       "author": "Longus",
@@ -233,8 +233,8 @@
       "med_pct": 0.0,
       "low_pct": 12.0,
       "avg": 0.512,
-      "build_time_seconds": 14.7,
-      "timestamp": "2026-03-28T04:22:44.738366"
+      "build_time_seconds": 77.4,
+      "timestamp": "2026-03-28T05:59:00.018921"
     },
     "theocritus_idylls": {
       "author": "Theocritus",
@@ -247,12 +247,12 @@
         "tlg0005.tlg001.perseus-eng80.xml"
       ],
       "sections": 301,
-      "high_pct": 73.1,
-      "med_pct": 9.6,
-      "low_pct": 17.3,
-      "avg": 0.589,
-      "build_time_seconds": 26.3,
-      "timestamp": "2026-03-28T04:27:50.588729"
+      "high_pct": 79.1,
+      "med_pct": 5.3,
+      "low_pct": 15.6,
+      "avg": 0.652,
+      "build_time_seconds": 81.5,
+      "timestamp": "2026-03-28T06:01:32.950493"
     },
     "theocritus_epigrams": {
       "author": "Theocritus",
@@ -269,8 +269,8 @@
       "med_pct": 0.0,
       "low_pct": 0.0,
       "avg": 0.854,
-      "build_time_seconds": 4.4,
-      "timestamp": "2026-03-28T04:27:24.285277"
+      "build_time_seconds": 21.4,
+      "timestamp": "2026-03-28T06:00:11.466940"
     },
     "arrian_anabasis": {
       "author": "Arrian",
@@ -284,11 +284,11 @@
       ],
       "sections": 1406,
       "high_pct": 99.8,
-      "med_pct": 0.1,
-      "low_pct": 0.1,
+      "med_pct": 0.2,
+      "low_pct": 0.0,
       "avg": 0.758,
-      "build_time_seconds": 59.0,
-      "timestamp": "2026-03-28T04:10:03.013535"
+      "build_time_seconds": 177.6,
+      "timestamp": "2026-03-28T05:59:41.105098"
     },
     "achilles_tatius": {
       "author": "Achilles Tatius",
@@ -305,8 +305,8 @@
       "med_pct": 0.0,
       "low_pct": 27.7,
       "avg": 0.404,
-      "build_time_seconds": 27.4,
-      "timestamp": "2026-03-28T04:06:42.752218"
+      "build_time_seconds": 66.9,
+      "timestamp": "2026-03-28T05:57:19.910395"
     },
     "heliodorus": {
       "author": "Heliodorus",
@@ -318,13 +318,13 @@
       "xml_files": [
         "tlg0658.tlg001.perseus-eng80.xml"
       ],
-      "sections": 680,
-      "high_pct": 40.4,
+      "sections": 275,
+      "high_pct": 100.0,
       "med_pct": 0.0,
-      "low_pct": 59.6,
-      "avg": 0.258,
-      "build_time_seconds": 9.1,
-      "timestamp": "2026-03-28T04:17:18.517265"
+      "low_pct": 0.0,
+      "avg": 0.852,
+      "build_time_seconds": 24.3,
+      "timestamp": "2026-03-28T05:57:42.628588"
     },
     "aristophanes_peace": {
       "author": "Aristophanes",
@@ -337,12 +337,12 @@
         "tlg0019.tlg005.perseus-eng80.xml"
       ],
       "sections": 163,
-      "high_pct": 5.5,
-      "med_pct": 12.9,
-      "low_pct": 81.6,
-      "avg": 0.119,
-      "build_time_seconds": 6.1,
-      "timestamp": "2026-03-28T04:08:13.977806"
+      "high_pct": 6.1,
+      "med_pct": 11.7,
+      "low_pct": 82.2,
+      "avg": 0.126,
+      "build_time_seconds": 15.6,
+      "timestamp": "2026-03-28T05:56:42.203627"
     },
     "aristophanes_frogs": {
       "author": "Aristophanes",
@@ -355,12 +355,12 @@
         "tlg0019.tlg009.perseus-eng80.xml"
       ],
       "sections": 193,
-      "high_pct": 8.3,
-      "med_pct": 19.7,
-      "low_pct": 72.0,
-      "avg": 0.152,
-      "build_time_seconds": 7.2,
-      "timestamp": "2026-03-28T04:07:41.882153"
+      "high_pct": 9.8,
+      "med_pct": 18.7,
+      "low_pct": 71.5,
+      "avg": 0.16,
+      "build_time_seconds": 18.2,
+      "timestamp": "2026-03-28T05:56:31.270157"
     },
     "aristophanes_ecclesiazusae": {
       "author": "Aristophanes",
@@ -373,12 +373,12 @@
         "tlg0019.tlg010.perseus-eng80.xml"
       ],
       "sections": 142,
-      "high_pct": 14.8,
-      "med_pct": 17.6,
-      "low_pct": 67.6,
-      "avg": 0.207,
-      "build_time_seconds": 6.1,
-      "timestamp": "2026-03-28T04:07:34.641161"
+      "high_pct": 15.5,
+      "med_pct": 19.7,
+      "low_pct": 64.8,
+      "avg": 0.222,
+      "build_time_seconds": 13.5,
+      "timestamp": "2026-03-28T05:56:26.583836"
     },
     "moschus": {
       "author": "Moschus",
@@ -395,12 +395,12 @@
         "tlg0035.tlg005.perseus-eng80.xml"
       ],
       "sections": 63,
-      "high_pct": 19.0,
-      "med_pct": 15.9,
-      "low_pct": 65.1,
-      "avg": 0.216,
-      "build_time_seconds": 30.1,
-      "timestamp": "2026-03-28T04:23:26.626482"
+      "high_pct": 23.8,
+      "med_pct": 6.3,
+      "low_pct": 69.8,
+      "avg": 0.221,
+      "build_time_seconds": 110.5,
+      "timestamp": "2026-03-28T05:59:50.090415"
     },
     "bion": {
       "author": "Bion of Phlossa",
@@ -416,11 +416,11 @@
       ],
       "sections": 34,
       "high_pct": 41.2,
-      "med_pct": 23.5,
-      "low_pct": 35.3,
-      "avg": 0.394,
-      "build_time_seconds": 6.6,
-      "timestamp": "2026-03-28T04:10:16.927880"
+      "med_pct": 26.5,
+      "low_pct": 32.4,
+      "avg": 0.43,
+      "build_time_seconds": 17.9,
+      "timestamp": "2026-03-28T05:57:24.053276"
     },
     "apollonius": {
       "author": "Apollonius Rhodius",
@@ -433,12 +433,12 @@
         "tlg0001.tlg001.perseus-eng80.xml"
       ],
       "sections": 662,
-      "high_pct": 55.4,
-      "med_pct": 15.4,
-      "low_pct": 29.2,
-      "avg": 0.484,
-      "build_time_seconds": 23.1,
-      "timestamp": "2026-03-28T04:07:17.915276"
+      "high_pct": 61.2,
+      "med_pct": 11.5,
+      "low_pct": 27.3,
+      "avg": 0.531,
+      "build_time_seconds": 54.8,
+      "timestamp": "2026-03-28T05:57:07.873762"
     },
     "alciphron": {
       "author": "Alciphron",
@@ -450,13 +450,13 @@
       "xml_files": [
         "tlg0640.tlg001.perseus-eng80.xml"
       ],
-      "sections": 212,
-      "high_pct": 31.1,
-      "med_pct": 1.4,
-      "low_pct": 67.5,
-      "avg": 0.258,
-      "build_time_seconds": 7.5,
-      "timestamp": "2026-03-28T04:06:54.795154"
+      "sections": 179,
+      "high_pct": 44.1,
+      "med_pct": 2.2,
+      "low_pct": 53.6,
+      "avg": 0.364,
+      "build_time_seconds": 21.3,
+      "timestamp": "2026-03-28T05:56:34.385504"
     },
     "julian_helios": {
       "author": "Julian",
@@ -472,9 +472,9 @@
       "high_pct": 71.1,
       "med_pct": 4.4,
       "low_pct": 24.4,
-      "avg": 0.562,
-      "build_time_seconds": 5.0,
-      "timestamp": "2026-03-28T04:22:22.572437"
+      "avg": 0.569,
+      "build_time_seconds": 13.1,
+      "timestamp": "2026-03-28T05:57:37.204015"
     },
     "julian_mother": {
       "author": "Julian",
@@ -490,9 +490,9 @@
       "high_pct": 100.0,
       "med_pct": 0.0,
       "low_pct": 0.0,
-      "avg": 0.779,
-      "build_time_seconds": 7.5,
-      "timestamp": "2026-03-28T04:22:30.065554"
+      "avg": 0.798,
+      "build_time_seconds": 22.4,
+      "timestamp": "2026-03-28T05:57:59.601594"
     },
     "arrian_cynegeticus": {
       "author": "Arrian",
@@ -505,12 +505,12 @@
         "tlg0074.tlg003.perseus-eng80.xml"
       ],
       "sections": 147,
-      "high_pct": 70.1,
-      "med_pct": 23.8,
+      "high_pct": 74.8,
+      "med_pct": 19.0,
       "low_pct": 6.1,
-      "avg": 0.592,
-      "build_time_seconds": 7.3,
-      "timestamp": "2026-03-28T04:10:10.349361"
+      "avg": 0.612,
+      "build_time_seconds": 23.0,
+      "timestamp": "2026-03-28T05:57:19.442993"
     },
     "dionysius_ant": {
       "author": "Dionysius of Halicarnassus",
@@ -524,11 +524,11 @@
       ],
       "sections": 4271,
       "high_pct": 99.6,
-      "med_pct": 0.0,
+      "med_pct": 0.1,
       "low_pct": 0.4,
-      "avg": 0.985,
-      "build_time_seconds": 67.7,
-      "timestamp": "2026-03-28T04:17:09.367585"
+      "avg": 0.986,
+      "build_time_seconds": 225.6,
+      "timestamp": "2026-03-28T06:00:55.821356"
     },
     "aristophanes_acharnians": {
       "author": "Aristophanes",
@@ -541,12 +541,12 @@
         "tlg0019.tlg001.perseus-eng80.xml"
       ],
       "sections": 466,
-      "high_pct": 4.9,
-      "med_pct": 3.9,
+      "high_pct": 5.2,
+      "med_pct": 3.6,
       "low_pct": 91.2,
-      "avg": 0.055,
-      "build_time_seconds": 10.6,
-      "timestamp": "2026-03-28T04:07:28.490127"
+      "avg": 0.057,
+      "build_time_seconds": 22.9,
+      "timestamp": "2026-03-28T05:56:35.920181"
     },
     "aristophanes_knights": {
       "author": "Aristophanes",
@@ -559,12 +559,12 @@
         "tlg0019.tlg002.perseus-eng80.xml"
       ],
       "sections": 541,
-      "high_pct": 4.6,
+      "high_pct": 4.8,
       "med_pct": 3.9,
-      "low_pct": 91.5,
-      "avg": 0.054,
-      "build_time_seconds": 12.5,
-      "timestamp": "2026-03-28T04:07:54.341602"
+      "low_pct": 91.3,
+      "avg": 0.057,
+      "build_time_seconds": 30.4,
+      "timestamp": "2026-03-28T05:56:43.420497"
     },
     "aristophanes_lysistrata": {
       "author": "Aristophanes",
@@ -577,12 +577,12 @@
         "tlg0019.tlg007.perseus-eng80.xml"
       ],
       "sections": 543,
-      "high_pct": 5.0,
-      "med_pct": 1.7,
+      "high_pct": 5.2,
+      "med_pct": 1.5,
       "low_pct": 93.4,
-      "avg": 0.049,
-      "build_time_seconds": 13.5,
-      "timestamp": "2026-03-28T04:08:07.848488"
+      "avg": 0.051,
+      "build_time_seconds": 33.2,
+      "timestamp": "2026-03-28T05:56:56.411958"
     },
     "aristophanes_plutus": {
       "author": "Aristophanes",
@@ -599,8 +599,8 @@
       "med_pct": 2.5,
       "low_pct": 94.1,
       "avg": 0.037,
-      "build_time_seconds": 14.5,
-      "timestamp": "2026-03-28T04:08:28.478364"
+      "build_time_seconds": 38.9,
+      "timestamp": "2026-03-28T05:57:10.179845"
     },
     "aristophanes_thesmophoriazusae": {
       "author": "Aristophanes",
@@ -613,12 +613,12 @@
         "tlg0019.tlg008.perseus-eng80.xml"
       ],
       "sections": 507,
-      "high_pct": 4.3,
-      "med_pct": 2.8,
-      "low_pct": 92.9,
-      "avg": 0.045,
-      "build_time_seconds": 12.0,
-      "timestamp": "2026-03-28T04:08:40.442584"
+      "high_pct": 5.1,
+      "med_pct": 2.2,
+      "low_pct": 92.7,
+      "avg": 0.048,
+      "build_time_seconds": 35.7,
+      "timestamp": "2026-03-28T05:57:10.068731"
     },
     "aristophanes_wasps": {
       "author": "Aristophanes",
@@ -631,12 +631,12 @@
         "tlg0019.tlg004.perseus-eng80.xml"
       ],
       "sections": 386,
-      "high_pct": 15.8,
-      "med_pct": 6.5,
+      "high_pct": 16.3,
+      "med_pct": 6.0,
       "low_pct": 77.7,
-      "avg": 0.159,
-      "build_time_seconds": 10.5,
-      "timestamp": "2026-03-28T04:08:50.937098"
+      "avg": 0.167,
+      "build_time_seconds": 30.3,
+      "timestamp": "2026-03-28T05:57:06.190600"
     }
   }
 }

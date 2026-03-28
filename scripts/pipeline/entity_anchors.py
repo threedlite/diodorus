@@ -315,8 +315,12 @@ def main(work_name):
 
             score = max(score, 0.5)  # CTS floor: never below yellow
         else:
-            # DP-only match: original scoring formula
+            # DP-only match: best signal + agreement bonus
             primary = max(ent_signal, lex_signal, spk_signal)
+            n_above = sum(1 for s in [ent_signal, lex_signal, spk_signal] if s > 0.2)
+            if n_above >= 2:
+                primary += 0.1  # agreement bonus, no dilution
+
             if primary >= 0.3:
                 content = primary
             elif primary > 0:
@@ -324,12 +328,18 @@ def main(work_name):
             else:
                 content = emb_signal  # no other signals; embedding is primary
 
-            score = content * length_pen
+            # Refined sections have inherently skewed length ratios (each piece
+            # is smaller than the full English section). Use sqrt to soften.
+            is_refined = match_type == "dp_refined"
+            if is_refined:
+                score = content * math.sqrt(length_pen)
+            else:
+                score = content * length_pen
 
             # Penalize non-1:1 mappings
             en_ref = str(a.get("english_cts_ref", ""))
             sharing = en_ref_counts.get(en_ref, 1)
-            if sharing > 1 and match_type != "dp_refined":
+            if sharing > 1 and not is_refined:
                 score *= 1.0 / math.sqrt(sharing)
                 a["sharing_penalty"] = sharing
 

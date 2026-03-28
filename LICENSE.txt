@@ -132,7 +132,6 @@ Last updated: 2026-03-21
 This project's alignment outputs are licensed under CC BY-SA 4.0,
 consistent with the ShareAlike requirement of the Perseus and Wikisource sources.
 
-Any derivative works must maintain CC BY-SA 4.0 or a compatible license.
 
 #### F.C. Legge — Philosophumena of Hippolytus (1921)
 - Path: data-sources/gutenberg/hippolytus/

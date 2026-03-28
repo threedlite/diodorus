@@ -67,10 +67,51 @@ for div in body.iter(f"{{{TEI_NS}}}div"):
                 "char_count": len(text),
             })
 
-print(f"Extracted {len(all_sections)} English sections across {chapter_num} chapters")
+# Remap English books to match Greek book numbering.
+# The English translation reorganizes the letters:
+#   English 1 = scholarly introduction (not translation) → drop
+#   English 3 = fishermen's letters = Greek book 1
+#   English 4 = courtesans' letters = Greek book 4
+#   English 5 = mixed: fishermen + farmers + parasites = Greek books 1-3
+#   English 6 = index → drop
+#   English 7 = bibliography → drop
+# English book 2 is missing (no farmers/parasites in their own chapter).
+#
+# For books 3 and 4, we can remap directly. Book 5 contains a mix that
+# the DP will need to sort out — assign it to book 3 (parasites) since
+# Greek book 3 has no other English source.
+BOOK_REMAP = {
+    "1": None,     # introduction, not translation
+    "3": "1",      # fishermen → Greek book 1
+    "4": "4",      # courtesans → Greek book 4
+    "5": "3",      # mixed letters → Greek book 3 (parasites, closest match)
+    "6": None,     # index
+    "7": None,     # bibliography
+}
+
+remapped = []
+for s in all_sections:
+    new_book = BOOK_REMAP.get(s["book"])
+    if new_book is None:
+        continue  # drop non-translation sections
+    s["book"] = new_book
+    remapped.append(s)
+
+# Sort by new book number and re-number sections within each book
+remapped.sort(key=lambda s: (int(s["book"]), int(s["section"])))
+from collections import Counter
+book_counters = Counter()
+for s in remapped:
+    book_counters[s["book"]] += 1
+    s["section"] = str(book_counters[s["book"]])
+    s["cts_ref"] = f"{s['book']}.{s['section']}"
+
+all_sections = remapped
+
+print(f"Extracted {len(all_sections)} English sections (after remap)")
 for book in sorted(set(s["book"] for s in all_sections), key=int):
     n = sum(1 for s in all_sections if s["book"] == book)
-    print(f"  Chapter {book}: {n} sections")
+    print(f"  Book {book}: {n} sections")
 
 with open(OUTPUT, "w", encoding="utf-8") as f:
     json.dump({"sections": all_sections}, f, ensure_ascii=False, indent=2)
