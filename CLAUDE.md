@@ -33,42 +33,44 @@ extract → align → score → generate outputs → integrity check → publish
 
 ### Alignment algorithm (`scripts/pipeline/align.py`)
 
-1. **CTS ref matching** — match by section number (exact → parent → split-from → prefix)
-2. **Two-pass embedding DP** — segmental DP with entity + lexical matrix
+1. **CTS ref matching** — match by section number (exact → parent → split-from →
+   prefix → chapter-sibling). Chapter-sibling: when Greek `11.8.2` has no match,
+   checks if there's exactly one English section in chapter `11.8.*`.
+2. **CTS-first alignment** — when CTS covers >50% of a book:
+   - CTS matches become fixed pairs (match_type: `cts_aligned`)
+   - Gaps between CTS anchors are filled by DP sub-problems
+   - Small gaps (≤3 sections) are assigned to nearest English, not DP'd
+   - Replaces the old 100%-only CTS override
+3. **Two-pass embedding DP** (for books with <50% CTS):
    - First pass: embedding cosine + entity overlap
    - Build PMI-weighted Greek→English lexical table from first-pass alignment
    - Second pass: embedding + combined entity/lexical matrix
-3. **Refinement** — split English text at sentence boundaries to match multiple Greek sections
-4. **CTS override** — when CTS covers 100%, use it instead of DP
+4. **Refinement** — split English text at sentence boundaries to match multiple
+   Greek sections. Match_type tagged as `cts_refined` or `dp_refined`.
 
 ### Scoring formula (`scripts/pipeline/entity_anchors.py`)
 
+Two paths depending on match provenance:
+
+**CTS-confirmed matches** (`cts_aligned` / `cts_refined`):
 ```
-lex_norm = min(1.0, lexical_score / 0.25)
-emb_pos = max(embedding_cosine, 0)
-
-base = sqrt(emb_pos × length_ratio) × (0.5 + 0.5 × lex_norm)
-     + entity_bonus + speaker_bonus
-
-if non-1:1 and not refined: base *= 1/sqrt(sharing_count)
-if length_ratio < 0.1 and entity_score < 0.3 and not CTS/refined: score = 0 (no_match)
-combined_score = min(1.0, base)
+content = max(primary, embedding_cosine)    # full embedding weight
+score = content × length_penalty
+score = max(score, 0.5)                     # CTS floor: never below yellow
+No sharing penalty, no length veto
 ```
 
-The geometric mean of embedding × length ensures BOTH must be positive for a
-nonzero score — a single strong signal can't mask a zero on another. The lexical
-overlap acts as a multiplier (0.5-1.0) that rewards vocabulary agreement.
-
-- **embedding_cosine**: cross-lingual embedding similarity
-- **length_ratio**: Gaussian penalty on char-count ratio deviation
-- **lex_norm**: PMI-weighted bilingual word overlap (multiplier, not averaged)
-- **entity_bonus**: up to +0.25 from proper name matches (additive, evidence-adaptive)
-- **speaker_bonus**: +0.10 from speaker name match (dramatic works only)
-- **sharing penalty**: 1/sqrt(N) for non-1:1 unrefined mappings
-- **no_match**: score=0 when length ratio is extreme and no entity evidence
+**DP-only matches** (`dp_aligned` / `dp_refined`):
+```
+primary = max(entity, lexical, speaker)
+content = primary if ≥0.3, else max(primary, embedding×0.5), else embedding
+score = content × length_penalty
+if non-1:1 and not refined: score *= 1/sqrt(sharing_count)
+if length_pen < 0.1 and entity < 0.3 and sim < 0.99: score = 0 (no_match)
+```
 
 Thresholds: green ≥ 0.50, yellow ≥ 0.20, red < 0.20
-Lexical normalization: auto-calculated P95 per work (no hardcoded divisor)
+Lexical normalization: auto-calculated P95 per work
 
 ### Key files
 

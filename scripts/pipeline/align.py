@@ -284,6 +284,20 @@ def _refine_group(model, en_text, n_gr, gr_embs, gr_texts=None):
     if best_sentences is None or len(best_sentences) < 2:
         return None
 
+    # Cap sentences to avoid combinatorial explosion in _optimal_split.
+    # For very large English sections (30K+ chars), splitting produces 200+
+    # sentences. The DP is O(sentences² × n_gr) which becomes minutes per group.
+    # Cap at 80 sentences — merge excess into their neighbors proportionally.
+    MAX_SENTENCES = 80
+    if len(best_sentences) > MAX_SENTENCES:
+        # Merge from the end to reduce to MAX_SENTENCES
+        while len(best_sentences) > MAX_SENTENCES:
+            # Find shortest sentence and merge with neighbor
+            min_idx = min(range(1, len(best_sentences)),
+                          key=lambda i: len(best_sentences[i]))
+            best_sentences[min_idx - 1] += " " + best_sentences[min_idx]
+            del best_sentences[min_idx]
+
     sentences = best_sentences
 
     # If fewer sentences than Greek sections, assign each sentence to exactly
@@ -506,9 +520,16 @@ def try_cts_match(greek_secs, english_secs):
         ref = gs.get("cts_ref", "")
         parts = ref.split(".")
 
-        # Exact match
+        # Exact match — if the English section was split by the pipeline,
+        # redirect to the first split piece so all Greek sub-sections
+        # consolidate onto one English target for refinement.
         if ref in en_by_ref:
-            matches[gi] = en_by_ref[ref]
+            ei = en_by_ref[ref]
+            sf = english_secs[ei].get("split_from")
+            if sf and sf in en_by_split_from:
+                matches[gi] = en_by_split_from[sf]
+            else:
+                matches[gi] = ei
             continue
 
         # Parent match (book.chapter.section → book.chapter)
@@ -532,6 +553,17 @@ def try_cts_match(greek_secs, english_secs):
             prefix = ".".join(parts[:2])
             if prefix in en_by_ref:
                 matches[gi] = en_by_ref[prefix]
+                continue
+
+        # Chapter-sibling match: for 3-part refs like 11.8.2, find all
+        # English sections in the same chapter (11.8.*). If there's exactly
+        # one, map to it — no ambiguity. This handles the common case where
+        # Greek has sub-sections (11.8.1-5) but English has just one (11.8.1).
+        if len(parts) >= 3:
+            chapter_prefix = ".".join(parts[:2]) + "."
+            siblings = [r for r in en_by_ref if r.startswith(chapter_prefix)]
+            if len(siblings) == 1:
+                matches[gi] = en_by_ref[siblings[0]]
                 continue
 
     # Remove crossings: if Greek order and English order disagree,
@@ -793,24 +825,95 @@ def run_dp_alignment(config, greek_data, english_data, model):
                 )
                 print(f"  DP pass 2: {len(groups_result)} groups")
 
-        # If CTS matched 100%, override DP with CTS results
-        if len(cts_matches) == len(greek_secs):
-            print(f"  Using CTS matches (100% coverage)")
-            # Convert CTS matches to DP group format
-            # Group consecutive Greek sections that map to the same English section
-            groups_result = []
+        # CTS-first alignment: when CTS covers >50% of Greek sections,
+        # use CTS matches as the base and run DP only on gaps between
+        # CTS anchors. This replaces the old 100%-only override.
+        cts_pct = len(cts_matches) / max(len(greek_secs), 1)
+        if cts_pct > 0.5:
+            sorted_gi = sorted(cts_matches.keys())
+
+            # Build CTS groups: consolidate consecutive Greek sections that
+            # map to the same English section (for refinement later)
+            cts_groups = []
             prev_ei = None
-            group_gs = 0
-            for gi in range(len(greek_secs)):
+            group_gs = sorted_gi[0]
+            for gi in sorted_gi:
                 ei = cts_matches[gi]
                 if prev_ei is not None and ei != prev_ei:
-                    groups_result.append((group_gs, gi, prev_ei, prev_ei + 1,
-                                          1.0))
+                    cts_groups.append((group_gs, gi, prev_ei, prev_ei + 1, 1.0))
                     group_gs = gi
                 prev_ei = ei
             if prev_ei is not None:
-                groups_result.append((group_gs, len(greek_secs), prev_ei,
-                                      prev_ei + 1, 1.0))
+                cts_groups.append((group_gs, sorted_gi[-1] + 1, prev_ei,
+                                   prev_ei + 1, 1.0))
+
+            # Identify gaps: Greek sections between CTS anchors with no match
+            gaps = []
+            # Gap before first CTS match — include as prefix group even if
+            # there's no English before the first CTS anchor. The gap DP
+            # will match these to the nearest English, or they'll be unmatched.
+            if sorted_gi[0] > 0:
+                en_bound = max(cts_matches[sorted_gi[0]], 1)  # at least en[0:1]
+                gaps.append((0, sorted_gi[0], 0, en_bound))
+            # Gaps between consecutive CTS matches
+            for i in range(len(sorted_gi) - 1):
+                gi1, gi2 = sorted_gi[i], sorted_gi[i + 1]
+                ei1, ei2 = cts_matches[gi1], cts_matches[gi2]
+                if gi2 - gi1 > 1 and ei2 - ei1 > 0:
+                    gaps.append((gi1 + 1, gi2, ei1 + 1, ei2))
+            # Gap after last CTS match
+            last_gi = sorted_gi[-1]
+            last_ei = cts_matches[last_gi]
+            if last_gi + 1 < len(greek_secs):
+                en_start = min(last_ei + 1, len(english_secs))
+                en_end = len(english_secs)
+                if en_start < en_end:
+                    gaps.append((last_gi + 1, len(greek_secs), en_start, en_end))
+                else:
+                    # No English left — these Greek sections are unmatched.
+                    # Add a dummy gap pointing to the last English section
+                    # so they get force-matched (with low scores).
+                    gaps.append((last_gi + 1, len(greek_secs),
+                                 max(0, len(english_secs) - 1), len(english_secs)))
+
+            # Run DP on each gap to fill in un-CTS-matched sections.
+            # Small gaps (≤3 Greek sections) are assigned to the nearest
+            # English section as a single group — DP on tiny sub-problems
+            # produces degenerate results with no context.
+            gap_groups = []
+            for gs, ge, es, ee in gaps:
+                g_len = ge - gs
+                e_len = ee - es
+                if g_len == 0 or e_len == 0:
+                    continue
+                if g_len <= 3 or e_len <= 1:
+                    # Small gap: assign all Greek sections to first English
+                    gap_groups.append((gs, ge, es, min(es + 1, ee), 0.5))
+                else:
+                    # Large gap: run DP (cap max_source to avoid explosion)
+                    gap_max_source = min(max(max_source, g_len), 20)
+                    p_ratio = (sum(greek_lens[gs:ge]) /
+                               max(sum(english_lens[es:ee]), 1))
+                    p_spk_src = source_speakers[gs:ge] if source_speakers else None
+                    p_spk_tgt = target_speakers[es:ee] if target_speakers else None
+                    p_ent = entity_matrix[gs:ge, es:ee] if entity_matrix is not None else None
+                    sub = segmental_dp_align(
+                        greek_embs[gs:ge], english_embs[es:ee],
+                        greek_lens[gs:ge], english_lens[es:ee],
+                        p_ratio, max_source=gap_max_source, max_target=max_target,
+                        source_speakers=p_spk_src, target_speakers=p_spk_tgt,
+                        entity_matrix=p_ent,
+                    )
+                    for s_s, s_e, t_s, t_e, sc in sub:
+                        gap_groups.append((s_s + gs, s_e + gs,
+                                           t_s + es, t_e + es, sc))
+
+            # Merge CTS groups + gap DP results, sorted by Greek position
+            groups_result = sorted(cts_groups + gap_groups)
+            n_gap_gr = sum(ge - gs for gs, ge, _, _, _ in gap_groups)
+            print(f"  CTS-first: {len(cts_groups)} CTS groups + "
+                  f"{len(gap_groups)} gap groups ({len(gaps)} gaps, "
+                  f"{n_gap_gr} Greek sections in gaps)")
 
         print(f"  Final: {len(groups_result)} alignment groups")
 
@@ -833,8 +936,22 @@ def run_dp_alignment(config, greek_data, english_data, model):
         for gr_start, gr_end, en_start, en_end, score in groups_result:
             for ej in range(en_start, en_end):
                 en_used.add(ej)
+                # If this English section was split, mark all siblings as used
+                # (their text is included in the refinement via concatenation)
+                sf = english_secs[ej].get("split_from")
+                if sf:
+                    for other_ej, other_es in enumerate(english_secs):
+                        if other_es.get("split_from") == sf:
+                            en_used.add(other_ej)
 
         en_skipped = len(english_secs) - len(en_used)
+
+        # Build CTS lookup: for each Greek index, which English index did CTS assign?
+        # Used to tag match_type as "cts_aligned" / "cts_refined" when the DP
+        # result agrees with CTS structural matching.
+        cts_en_for_gr = {}  # greek_idx → english_idx from CTS
+        for gi, ei in cts_matches.items():
+            cts_en_for_gr[gi] = ei
 
         en_to_greek = {}
         refined_count = 0
@@ -849,6 +966,17 @@ def run_dp_alignment(config, greek_data, english_data, model):
                 ej = en_start
                 es = english_secs[ej]
                 en_text = es.get("text_for_embedding", es["text"])
+                # If this English section was split by the pipeline, concatenate
+                # all split siblings' text so refinement sees the full content.
+                sf = es.get("split_from")
+                if sf:
+                    sibling_texts = []
+                    for other_es in english_secs:
+                        if other_es.get("split_from") == sf:
+                            sibling_texts.append(
+                                other_es.get("text_for_embedding", other_es["text"]))
+                    if sibling_texts:
+                        en_text = " ".join(sibling_texts)
                 gr_emb_group = greek_embs[gr_start:gr_end]
 
                 gr_texts_group = [greek_secs[gi].get("text_for_embedding",
@@ -862,7 +990,10 @@ def run_dp_alignment(config, greek_data, english_data, model):
                     if ej not in en_to_greek:
                         en_to_greek[ej] = []
                     for gi_offset, entry in enumerate(refined):
-                        gs = greek_secs[gr_start + gi_offset]
+                        gi_abs = gr_start + gi_offset
+                        gs = greek_secs[gi_abs]
+                        is_cts_match = (gi_abs in cts_en_for_gr and
+                                        cts_en_for_gr[gi_abs] == ej)
                         if entry is not None:
                             sub_text, sub_sim = entry
                             en_to_greek[ej].append({
@@ -878,7 +1009,7 @@ def run_dp_alignment(config, greek_data, english_data, model):
                                 "group_id": group_id,
                                 "group_size_gr": 1,
                                 "group_size_en": 1,
-                                "match_type": "dp_refined",
+                                "match_type": "cts_refined" if is_cts_match else "dp_refined",
                                 "refined_part": gi_offset,
                             })
                         else:
@@ -895,7 +1026,7 @@ def run_dp_alignment(config, greek_data, english_data, model):
                                 "group_id": group_id,
                                 "group_size_gr": n_gr,
                                 "group_size_en": 1,
-                                "match_type": "dp_aligned",
+                                "match_type": "cts_aligned" if is_cts_match else "dp_aligned",
                             })
                     continue
 
@@ -906,6 +1037,8 @@ def run_dp_alignment(config, greek_data, english_data, model):
                 for gi in range(gr_start, gr_end):
                     gs = greek_secs[gi]
                     es = english_secs[ej]
+                    is_cts_match = (gi in cts_en_for_gr and
+                                    cts_en_for_gr[gi] == ej)
                     en_to_greek[ej].append({
                         "book": str(book),
                         "greek_cts_ref": gs["cts_ref"],
@@ -918,11 +1051,44 @@ def run_dp_alignment(config, greek_data, english_data, model):
                         "group_id": group_id,
                         "group_size_gr": gr_end - gr_start,
                         "group_size_en": en_end - en_start,
-                        "match_type": "dp_aligned",
+                        "match_type": "cts_aligned" if is_cts_match else "dp_aligned",
                     })
 
         if refined_count > 0:
             print(f"  Refined {refined_count} groups (split English to match Greek)")
+
+        # Link split siblings: if en[15] (1.16.0) is in en_to_greek but
+        # en[16] (1.16.1, same split_from) is not, add en[16] pointing to
+        # the last Greek section in en[15]'s group. This ensures the sibling
+        # appears in the alignment output (integrity requires all English present).
+        split_linked = 0
+        for ej in list(en_to_greek.keys()):
+            sf = english_secs[ej].get("split_from")
+            if not sf:
+                continue
+            for other_ej, other_es in enumerate(english_secs):
+                if other_ej != ej and other_es.get("split_from") == sf and other_ej not in en_to_greek:
+                    # Link sibling: emit as a continuation of its split parent.
+                    # Use greek_cts_ref=None so it's not subject to dedup, and
+                    # match_type="split_continuation" so scoring can handle it.
+                    last_rec = en_to_greek[ej][-1]
+                    en_to_greek[other_ej] = [{
+                        "book": str(book),
+                        "greek_cts_ref": None,
+                        "greek_edition": None,
+                        "english_cts_ref": other_es["cts_ref"],
+                        "english_section": other_es.get("section", ""),
+                        "similarity": last_rec.get("similarity", 0),
+                        "greek_preview": "",
+                        "english_preview": other_es["text"][:80],
+                        "group_id": last_rec.get("group_id"),
+                        "group_size_gr": 0,
+                        "group_size_en": 1,
+                        "match_type": "split_continuation",
+                    }]
+                    split_linked += 1
+        if split_linked > 0:
+            print(f"  Linked {split_linked} split siblings")
 
         emitted_gr = set()
         for ej in range(len(english_secs)):

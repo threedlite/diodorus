@@ -195,7 +195,17 @@ def main(work_name):
 
     # Second pass: compute all scores
     for a in alignments:
-        if a.get("match_type") == "unmatched_english" or a.get("greek_cts_ref") is None:
+        mt = a.get("match_type", "")
+        if mt == "split_continuation":
+            # Split sibling: its text was included in the parent's refinement.
+            # Give it the CTS floor score since the pairing is structural.
+            a["entity_overlap_score"] = 0.0
+            a["entity_match_count"] = 0
+            a["lexical_score"] = 0.0
+            a["length_ratio_score"] = 1.0
+            a["combined_score"] = 0.5
+            continue
+        if mt == "unmatched_english" or a.get("greek_cts_ref") is None:
             a["entity_overlap_score"] = 0.0
             a["entity_match_count"] = 0
             a["lexical_score"] = 0.0
@@ -288,44 +298,50 @@ def main(work_name):
         ent_signal = entity_score if gr_names and matches >= 2 else entity_score * 0.3
         spk_signal = speaker_score if has_speakers else 0.0
 
-        # Primary: best of entity, lexical, speaker
-        primary = max(ent_signal, lex_signal, spk_signal)
+        match_type = a.get("match_type", "")
+        is_cts = "cts" in match_type
 
-        # If primary signals are available, use them; embedding is tiebreaker.
-        # If ALL primary signals are zero (e.g. Latin works with no lexicon),
-        # use embedding at full weight — it's the only evidence we have.
-        if primary >= 0.3:
-            content = primary
-        elif primary > 0:
-            content = max(primary, emb_signal * 0.5)  # embedding at half weight
+        if is_cts:
+            # CTS structural match: the pairing is confirmed by section
+            # numbering. Embedding is a confirmation signal, not a guess.
+            # Use it at full weight and floor at 0.5.
+            primary = max(ent_signal, lex_signal, spk_signal)
+            content = max(primary, emb_signal)  # full embedding weight
+            score = content * length_pen
+
+            # No sharing penalty for CTS-confirmed groups — many-to-one
+            # mappings are structural (e.g. Greek 1.7.1-3 → English 1.7),
+            # not DP drift.
+
+            score = max(score, 0.5)  # CTS floor: never below yellow
         else:
-            content = emb_signal  # no other signals; embedding is primary
+            # DP-only match: original scoring formula
+            primary = max(ent_signal, lex_signal, spk_signal)
+            if primary >= 0.3:
+                content = primary
+            elif primary > 0:
+                content = max(primary, emb_signal * 0.5)  # embedding at half weight
+            else:
+                content = emb_signal  # no other signals; embedding is primary
 
-        # Length ratio vetoes — wrong size = wrong pair
-        score = content * length_pen
+            score = content * length_pen
 
-        # Penalize non-1:1 mappings: if N Greek sections share the same
-        # English section, each one's score is reduced. A 2:1 mapping gets
-        # ~70% of the score, 3:1 gets ~58%, etc. Refined splits (where
-        # English was actually divided) are not penalized.
-        en_ref = str(a.get("english_cts_ref", ""))
-        sharing = en_ref_counts.get(en_ref, 1)
-        if sharing > 1 and a.get("match_type") != "dp_refined":
-            score *= 1.0 / math.sqrt(sharing)
-            a["sharing_penalty"] = sharing
+            # Penalize non-1:1 mappings
+            en_ref = str(a.get("english_cts_ref", ""))
+            sharing = en_ref_counts.get(en_ref, 1)
+            if sharing > 1 and match_type != "dp_refined":
+                score *= 1.0 / math.sqrt(sharing)
+                a["sharing_penalty"] = sharing
 
         a["combined_score"] = round(min(1.0, score), 4)
 
         # Mark as effectively unmatched when the length ratio is extreme
-        # AND no entity evidence supports the match. A length ratio < 0.1
-        # means the Greek/English sizes are wildly mismatched — the DP
-        # drifted and paired unrelated sections. Entity matches override
-        # this because proper names are a definitive signal.
-        # Don't apply to CTS-matched or refined sections (length ratio is
-        # misleading when a subsection shares a larger English section).
-        is_cts = cos_sim >= 0.99  # CTS matches have similarity=1.0
-        is_refined = a.get("match_type") == "dp_refined"
-        if length_pen < 0.1 and entity_score < 0.3 and not is_cts and not is_refined:
+        # AND no entity evidence supports the match. Never apply to CTS
+        # matches or high-similarity DP matches (cos_sim >= 0.99 means
+        # the DP is very confident, even without CTS tagging).
+        is_refined = match_type in ("dp_refined", "cts_refined")
+        is_high_sim = cos_sim >= 0.99
+        if not is_cts and not is_high_sim and length_pen < 0.1 and entity_score < 0.3 and not is_refined:
             a["combined_score"] = 0.0
             a["match_quality"] = "no_match"
 

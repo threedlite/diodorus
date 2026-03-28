@@ -120,6 +120,23 @@ for book_num, book_text in books:
         if sec:
             all_sections.append(sec)
 
+# Merge English sections where the Greek source combines them into one.
+# Perseus 12.17.1 contains both sections 17 and 18 (the Greek numeral ιη′
+# marks the boundary inline). Merge English 12.18 into 12.17 so CTS matches.
+MERGE_INTO = {
+    ("12", "18"): ("12", "17"),  # 12.18 → append to 12.17
+}
+for (src_book, src_sec), (dst_book, dst_sec) in MERGE_INTO.items():
+    src = [s for s in all_sections if s["book"] == src_book and s["section"] == src_sec]
+    dst = [s for s in all_sections if s["book"] == dst_book and s["section"] == dst_sec]
+    if src and dst:
+        dst[0]["text"] += " " + src[0]["text"]
+        dst[0]["text_for_embedding"] += " " + src[0]["text_for_embedding"]
+        dst[0]["char_count"] = len(dst[0]["text"])
+        dst[0]["notes"].extend(src[0].get("notes", []))
+        all_sections.remove(src[0])
+        print(f"  Merged {src_book}.{src_sec} into {dst_book}.{dst_sec}")
+
 # Sort
 all_sections.sort(key=lambda s: (int(s["book"]), int(s["section"])))
 

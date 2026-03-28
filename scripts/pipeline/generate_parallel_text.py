@@ -322,13 +322,11 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
 
         # Determine which books belong to this work_id
         # For single-work configs, include all books
-        # For multi-work, filter by work name
+        # For multi-work, filter by work name. Alignment entries use the
+        # work name as the book key (e.g. 'Thebaid', 'De Vita Pythagorica'),
+        # not numeric book IDs, so relevant_books must contain work names.
         if len(work_ids) > 1 and wid in wid_to_work_names:
-            work_names = wid_to_work_names[wid]
-            relevant_books = set()
-            for s in greek_data["sections"]:
-                if s.get("work", "") in work_names:
-                    relevant_books.add(s["book"])
+            relevant_books = wid_to_work_names[wid]
         else:
             relevant_books = set(by_book.keys())
 
@@ -432,8 +430,9 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
                 pair_key = f"{gr_key}|{en_key}"
 
                 # Determine CSS class
-                if match_type in ("unmatched_english", "unmatched_target", "unmatched"):
-                    css_class = "unmatched"
+                if match_type in ("unmatched_english", "unmatched_target",
+                                  "unmatched_greek", "unmatched_source", "unmatched"):
+                    css_class = "low"
                 elif score >= HIGH:
                     css_class = "high"
                 elif score >= MED:
@@ -453,7 +452,29 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
                 show_english = False
                 en_heading = None
 
-                if gr_ref and gr_ref in xml_en_by_gr_ref and gr_ref not in seen_en:
+                refined_text = a.get("english_refined_text", "")
+                if refined_text:
+                    # Refined sections show their specific piece of the English,
+                    # not the full TEI paragraph (which would duplicate text).
+                    en_text = refined_text
+                    show_english = True
+                    seen_en.add(gr_ref)
+                    if en_ref and en_ref in en_by_ref:
+                        en_notes = en_by_ref[en_ref].get("notes")
+                elif en_ref and str(en_ref) in en_by_ref and gr_ref not in seen_en:
+                    # Use English section text from the sections JSON. This is
+                    # more precise than the TEI paragraph, which may merge
+                    # multiple sections into one <p> element.
+                    en_section = en_by_ref[str(en_ref)]
+                    en_text = en_section.get("text_for_embedding", en_section["text"])
+                    en_notes = en_section.get("notes")
+                    en_heading = en_section.get("heading_text")
+                    if en_heading and en_text.startswith(en_heading):
+                        en_text = en_text[len(en_heading):].lstrip()
+                    show_english = True
+                    seen_en.add(gr_ref)
+                    seen_en.add(en_ref)
+                elif gr_ref and gr_ref in xml_en_by_gr_ref and gr_ref not in seen_en:
                     # Show English text from XML for this Greek section
                     en_text = xml_en_by_gr_ref[gr_ref]
                     show_english = True
@@ -546,6 +567,7 @@ def generate_html(work_name, config, alignments, greek_data, english_data):
                     en_cell = '<td class="empty">↑</td>'
                 else:
                     en_cell = '<td class="empty">—</td>'
+                    css_class = "low"  # no English text = always red
 
                 # Score component columns as bar graphs
                 def _bar(label, val):
