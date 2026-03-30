@@ -1138,8 +1138,29 @@ def run_dp_alignment(config, greek_data, english_data, model):
     return all_alignments
 
 
+def _load_concordance(config):
+    """Load concordance.json from the work directory if it exists.
+
+    Returns dict mapping greek_section → english_section, or empty dict.
+    """
+    work_name = config["name"]
+    concordance_path = (PROJECT_ROOT / "scripts" / "works" / work_name
+                        / "concordance.json")
+    if concordance_path.exists():
+        with open(concordance_path) as f:
+            return json.load(f)
+    return {}
+
+
 def run_pairwise_alignment(config, greek_data, english_data, model):
-    """Run pairwise embedding matching."""
+    """Run pairwise embedding matching, with concordance-based forced matches.
+
+    If a concordance.json exists for this work, its mappings are used as
+    forced matches (match_type: concordance). Embedding similarity is still
+    computed for all pairs so it can be reported, but the concordance takes
+    precedence. Remaining unmatched sections fall back to embedding-based
+    pairwise_top1 matching.
+    """
     greek_secs = greek_data["sections"]
     english_secs = english_data["sections"]
 
@@ -1157,8 +1178,44 @@ def run_pairwise_alignment(config, greek_data, english_data, model):
         many_to_one=many_to_one
     )
 
-    matched = sum(1 for m in matches if m["match_type"] == "pairwise_top1")
-    print(f"  Matched: {matched}, Unmatched: {len(matches) - matched}")
+    # Load concordance (title-based forced matches)
+    concordance = _load_concordance(config)
+    if concordance:
+        # Build lookup indices: section string → list index
+        en_sec_to_idx = {}
+        for j, es in enumerate(english_secs):
+            en_sec_to_idx[str(es.get("section", ""))] = j
+            en_sec_to_idx[str(es.get("cts_ref", ""))] = j
+
+        conc_applied = 0
+        for i, gs in enumerate(greek_secs):
+            g_sec = gs.get("section", "")
+            if g_sec not in concordance:
+                continue
+            e_sec = str(concordance[g_sec])
+            j = en_sec_to_idx.get(e_sec)
+            if j is None:
+                continue
+            # Override the embedding-based match with the concordance match
+            sim = float(sim_matrix[i, j]) if sim_matrix is not None else 0.0
+            matches[i] = {
+                "source_idx": i,
+                "target_idx": j,
+                "similarity": sim,
+                "runner_up_similarity": matches[i].get("runner_up_similarity", 0.0),
+                "match_type": "concordance",
+            }
+            conc_applied += 1
+
+        print(f"  Concordance: {conc_applied} forced matches "
+              f"(from {len(concordance)} entries)")
+
+    matched = sum(1 for m in matches
+                  if m["match_type"] in ("pairwise_top1", "concordance"))
+    conc_count = sum(1 for m in matches if m["match_type"] == "concordance")
+    emb_count = matched - conc_count
+    print(f"  Matched: {matched} (concordance={conc_count}, "
+          f"embedding={emb_count}), Unmatched: {len(matches) - matched}")
 
     alignments = []
     for m in matches:

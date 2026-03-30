@@ -299,7 +299,7 @@ def main(work_name):
         spk_signal = speaker_score if has_speakers else 0.0
 
         match_type = a.get("match_type", "")
-        is_cts = "cts" in match_type
+        is_cts = "cts" in match_type or match_type == "concordance"
 
         if is_cts:
             # CTS structural match: the pairing is confirmed by section
