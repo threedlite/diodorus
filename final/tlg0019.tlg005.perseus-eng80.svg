@@ -18,7 +18,7 @@
 <rect x="300" y="50" width="12" height="12" fill="#c9493b" rx="2"/>
 <text x="316" y="60" class="legend-text">Low (&lt;0.2)</text>
 <text x="20" y="92" class="label">Book 1</text>
-<text x="988" y="92" class="stats">n=163  avg=0.126  H=6%  M=12%  L=82%</text>
+<text x="988" y="92" class="stats">n=163  avg=0.124  H=6%  M=13%  L=82%</text>
 <a href="tlg0019.tlg005.perseus-eng80.html#s1-1"><title>1.1 (0.50)</title><rect x="180" y="80" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg005.perseus-eng80.html#s1-9"><title>1.9 (0.03)</title><rect x="184" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg005.perseus-eng80.html#s1-17"><title>1.17 (0.00)</title><rect x="188" y="80" width="4" height="15" fill="#c9493b"/></a>
@@ -158,11 +158,11 @@
 <a href="tlg0019.tlg005.perseus-eng80.html#s1-1119"><title>1.1119 (0.11)</title><rect x="724" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg005.perseus-eng80.html#s1-1127"><title>1.1127 (0.70)</title><rect x="728" y="80" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg005.perseus-eng80.html#sen:1-46"><title>en:1.46 (0.00)</title><rect x="732" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg005.perseus-eng80.html#s1-1140"><title>1.1140 (0.12)</title><rect x="736" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg005.perseus-eng80.html#s1-1149"><title>1.1149 (0.63)</title><rect x="740" y="80" width="4" height="15" fill="#2d8a4e"/></a>
-<a href="tlg0019.tlg005.perseus-eng80.html#s1-1159"><title>1.1159 (0.93)</title><rect x="744" y="80" width="4" height="15" fill="#2d8a4e"/></a>
-<a href="tlg0019.tlg005.perseus-eng80.html#s1-1170"><title>1.1170 (0.00)</title><rect x="748" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg005.perseus-eng80.html#s1-1182"><title>1.1182 (0.00)</title><rect x="752" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg005.perseus-eng80.html#s1-1140"><title>1.1140 (0.10)</title><rect x="736" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg005.perseus-eng80.html#s1-1149"><title>1.1149 (0.51)</title><rect x="740" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg005.perseus-eng80.html#s1-1159"><title>1.1159 (0.47)</title><rect x="744" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg005.perseus-eng80.html#s1-1170"><title>1.1170 (0.33)</title><rect x="748" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg005.perseus-eng80.html#s1-1182"><title>1.1182 (0.01)</title><rect x="752" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg005.perseus-eng80.html#s1-1191"><title>1.1191 (0.23)</title><rect x="756" y="80" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0019.tlg005.perseus-eng80.html#s1-1202"><title>1.1202 (0.41)</title><rect x="760" y="80" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0019.tlg005.perseus-eng80.html#s1-1210"><title>1.1210 (0.46)</title><rect x="764" y="80" width="4" height="15" fill="#e8b83d"/></a>
@@ -186,8 +186,8 @@
 <text x="180" y="121" class="warn">⚠ 1.871 → 1.1032  (22 sections, avg=0.032)</text>
 <text x="180" y="135" class="warn">⚠ 1.617 → 1.739  (16 sections, avg=0.048)</text>
 <line x1="20" y1="149" x2="1200" y2="149" stroke="#ccc" stroke-width="1"/>
-<text x="20" y="169" class="total">TOTAL: 163 sections   avg=0.126   High=6%   Med=12%   Low=82%</text>
-<rect x="20" y="176" width="72.39263803680981" height="10" fill="#2d8a4e" rx="2"/>
-<rect x="92.39263803680981" y="176" width="137.54601226993864" height="10" fill="#e8b83d"/>
-<rect x="229.93865030674846" y="176" width="970.0613496932516" height="10" fill="#c9493b" rx="2"/>
+<text x="20" y="169" class="total">TOTAL: 163 sections   avg=0.124   High=6%   Med=13%   Low=82%</text>
+<rect x="20" y="176" width="65.15337423312883" height="10" fill="#2d8a4e" rx="2"/>
+<rect x="85.15337423312883" y="176" width="152.0245398773006" height="10" fill="#e8b83d"/>
+<rect x="237.17791411042944" y="176" width="962.8220858895705" height="10" fill="#c9493b" rx="2"/>
 </svg>
