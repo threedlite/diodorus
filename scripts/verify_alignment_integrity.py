@@ -283,106 +283,112 @@ def verify(work_name):
     # and verify it hashes to the same value as the source English.
     # This is the ironclad check: if text is dropped, duplicated, corrupted,
     # or reordered in the output, the hash will differ.
+    #
+    # Skip for xml_div_per_source_section works (e.g. Aesop): the TEI has
+    # one <p> per Greek section (many-to-one duplicates, different count/order).
     config_path = PROJECT_ROOT / "scripts" / "works" / work_name / "config.json"
     if config_path.exists():
         with open(config_path) as cf:
             cfg = json.load(cf)
-        gr_source = cfg.get("greek_source", {})
-        tlg_id = gr_source.get("tlg_id", gr_source.get("phi_id", ""))
-        work_id = gr_source.get("work_id", "")
-        work_ids = gr_source.get("work_ids", [work_id] if work_id else [])
+        if cfg.get("xml_div_per_source_section", False):
+            print(f"  ⊘ TEI hash check skipped (xml_div_per_source_section mode)")
+        else:
+            gr_source = cfg.get("greek_source", {})
+            tlg_id = gr_source.get("tlg_id", gr_source.get("phi_id", ""))
+            work_id = gr_source.get("work_id", "")
+            work_ids = gr_source.get("work_ids", [work_id] if work_id else [])
 
-        # For multi-work configs, build a mapping from work_id to work names
-        # using the Greek/Latin sections, same logic as generate_perseus_tei.py.
-        wid_to_work_names = {}
-        if len(work_ids) > 1:
-            gr_path = out_dir / "greek_sections.json"
-            if gr_path.exists():
-                with open(gr_path) as gf:
-                    gr_data = json.load(gf)
-                for s in gr_data["sections"]:
-                    w = s.get("work", "")
-                    sid = s.get("work_id", "")
-                    if not sid and s.get("edition", ""):
-                        parts = s["edition"].split(".")
-                        if len(parts) >= 2:
-                            sid = parts[1]
-                    if sid and w:
-                        wid_to_work_names.setdefault(sid, set()).add(w)
+            # For multi-work configs, build a mapping from work_id to work names
+            # using the Greek/Latin sections, same logic as generate_perseus_tei.py.
+            wid_to_work_names = {}
+            if len(work_ids) > 1:
+                gr_path = out_dir / "greek_sections.json"
+                if gr_path.exists():
+                    with open(gr_path) as gf:
+                        gr_data = json.load(gf)
+                    for s in gr_data["sections"]:
+                        w = s.get("work", "") or s.get("book", "")
+                        sid = s.get("work_id", "")
+                        if not sid and s.get("edition", ""):
+                            parts = s["edition"].split(".")
+                            if len(parts) >= 2:
+                                sid = parts[1]
+                        if sid and w:
+                            wid_to_work_names.setdefault(sid, set()).add(w)
 
-        for wid in work_ids:
-            tei_path = out_dir / f"{tlg_id}.{wid}.perseus-eng80.xml"
-            if not tei_path.exists():
-                print(f"  ✗ TEI XML not found: {tei_path.name}")
-                ok = False
-                continue
-
-            # Build expected hash: filter English sections for this work
-            if len(work_ids) > 1 and wid in wid_to_work_names:
-                work_names = wid_to_work_names[wid]
-                filtered = [s for s in english_data["sections"]
-                            if s.get("work", "") in work_names]
-            else:
-                filtered = english_data["sections"]
-            en_texts_normalized = [normalize_ws(s["text"]) for s in filtered]
-            en_expected_hash = sha256("\n".join(en_texts_normalized))
-
-            try:
-                from lxml import etree
-                TEI_NS = "http://www.tei-c.org/ns/1.0"
-                tree = etree.parse(str(tei_path))
-
-                # Extract text from all <p n="..."> elements in document order.
-                # Reconstruct original text by converting <note> elements back
-                # to their [marker] form, since the TEI generator transforms
-                # [A] markers into <note n="A"> elements.
-                p_elems = tree.findall(f".//{{{TEI_NS}}}p[@n]")
-                tei_texts = []
-                for p in p_elems:
-                    parts = []
-                    if p.text:
-                        parts.append(p.text)
-                    for child in p:
-                        tag = etree.QName(child.tag).localname if isinstance(child.tag, str) else ""
-                        if tag == "note":
-                            # Reconstruct [marker] + note body from <note n="marker">
-                            marker = child.get("n", "")
-                            if marker:
-                                parts.append(f"[{marker}]")
-                            # Include note body text (footnote content)
-                            note_body = child.text or ""
-                            if note_body:
-                                parts.append(f" {note_body}")
-                        else:
-                            # Include other element text
-                            parts.append("".join(child.itertext()))
-                        if child.tail:
-                            parts.append(child.tail)
-                    full = normalize_ws("".join(parts))
-                    tei_texts.append(full)
-
-                tei_hash = sha256("\n".join(tei_texts))
-
-                if tei_hash != en_expected_hash:
-                    print(f"  ✗ TEI output hash MISMATCH for {tei_path.name}")
-                    print(f"    Source English: {en_expected_hash[:16]}... ({len(en_texts_normalized)} sections)")
-                    print(f"    TEI XML:       {tei_hash[:16]}... ({len(tei_texts)} <p> elements)")
-                    # Find first difference
-                    for i, (src, tei) in enumerate(zip(en_texts_normalized, tei_texts)):
-                        if src != tei:
-                            print(f"    First diff at section {i}:")
-                            print(f"      Source: {src[:80]}...")
-                            print(f"      TEI:    {tei[:80]}...")
-                            break
-                    if len(en_texts_normalized) != len(tei_texts):
-                        print(f"    Section count mismatch: source={len(en_texts_normalized)} TEI={len(tei_texts)}")
+            for wid in work_ids:
+                tei_path = out_dir / f"{tlg_id}.{wid}.perseus-eng80.xml"
+                if not tei_path.exists():
+                    print(f"  ✗ TEI XML not found: {tei_path.name}")
                     ok = False
-                else:
-                    print(f"  ✓ TEI output hash: {tei_hash[:16]}... ({tei_path.name})")
+                    continue
 
-            except Exception as e:
-                print(f"  ✗ TEI XML parse error: {e}")
-                ok = False
+                # Build expected hash: filter English sections for this work
+                if len(work_ids) > 1 and wid in wid_to_work_names:
+                    work_names = wid_to_work_names[wid]
+                    filtered = [s for s in english_data["sections"]
+                                if (s.get("work", "") or s.get("book", "")) in work_names]
+                else:
+                    filtered = english_data["sections"]
+                en_texts_normalized = [normalize_ws(s["text"]) for s in filtered]
+                en_expected_hash = sha256("\n".join(en_texts_normalized))
+
+                try:
+                    from lxml import etree
+                    TEI_NS = "http://www.tei-c.org/ns/1.0"
+                    tree = etree.parse(str(tei_path))
+
+                    # Extract text from all <p n="..."> elements in document order.
+                    # Reconstruct original text by converting <note> elements back
+                    # to their [marker] form, since the TEI generator transforms
+                    # [A] markers into <note n="A"> elements.
+                    p_elems = tree.findall(f".//{{{TEI_NS}}}p[@n]")
+                    tei_texts = []
+                    for p in p_elems:
+                        parts = []
+                        if p.text:
+                            parts.append(p.text)
+                        for child in p:
+                            tag = etree.QName(child.tag).localname if isinstance(child.tag, str) else ""
+                            if tag == "note":
+                                # Reconstruct [marker] + note body from <note n="marker">
+                                marker = child.get("n", "")
+                                if marker:
+                                    parts.append(f"[{marker}]")
+                                # Include note body text (footnote content)
+                                note_body = child.text or ""
+                                if note_body:
+                                    parts.append(f" {note_body}")
+                            else:
+                                # Include other element text
+                                parts.append("".join(child.itertext()))
+                            if child.tail:
+                                parts.append(child.tail)
+                        full = normalize_ws("".join(parts))
+                        tei_texts.append(full)
+
+                    tei_hash = sha256("\n".join(tei_texts))
+
+                    if tei_hash != en_expected_hash:
+                        print(f"  ✗ TEI output hash MISMATCH for {tei_path.name}")
+                        print(f"    Source English: {en_expected_hash[:16]}... ({len(en_texts_normalized)} sections)")
+                        print(f"    TEI XML:       {tei_hash[:16]}... ({len(tei_texts)} <p> elements)")
+                        # Find first difference
+                        for i, (src, tei) in enumerate(zip(en_texts_normalized, tei_texts)):
+                            if src != tei:
+                                print(f"    First diff at section {i}:")
+                                print(f"      Source: {src[:80]}...")
+                                print(f"      TEI:    {tei[:80]}...")
+                                break
+                        if len(en_texts_normalized) != len(tei_texts):
+                            print(f"    Section count mismatch: source={len(en_texts_normalized)} TEI={len(tei_texts)}")
+                        ok = False
+                    else:
+                        print(f"  ✓ TEI output hash: {tei_hash[:16]}... ({tei_path.name})")
+
+                except Exception as e:
+                    print(f"  ✗ TEI XML parse error: {e}")
+                    ok = False
 
     # --- 6. No duplicate refined text ---
     # For each English section that was refined, check that no two Greek

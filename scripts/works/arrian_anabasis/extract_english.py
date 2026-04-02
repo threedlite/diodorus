@@ -35,9 +35,32 @@ if start != -1:
 if end != -1:
     text = text[:end]
 
-# Find main text start (BOOK I.)
+# Extract Arrian's preface (before BOOK I.) as a section
 book1_pos = text.find("\nBOOK I.\n")
+preface_section = None
 if book1_pos != -1:
+    preamble = text[:book1_pos]
+    pref_marker = preamble.find("ARRIAN'S PREFACE")
+    if pref_marker == -1:
+        pref_marker = preamble.find("ARRIAN\u2019S PREFACE")
+    if pref_marker != -1:
+        # Extract text after the "ARRIAN'S PREFACE." heading
+        pref_text = preamble[pref_marker:]
+        # Skip the heading line itself
+        pref_text = pref_text[pref_text.find("\n") + 1:].strip()
+        pref_clean, pref_notes = strip_notes(pref_text)
+        pref_clean = " ".join(pref_clean.split())
+        pref_full = " ".join(pref_text.split())
+        if len(pref_clean) > 50:
+            preface_section = {
+                "book": "1",
+                "section": "pr",
+                "cts_ref": "1.pr",
+                "text": pref_full,
+                "text_for_embedding": pref_clean,
+                "notes": pref_notes,
+                "char_count": len(pref_full),
+            }
     text = text[book1_pos:]
 
 # Remove footnotes section at end
@@ -139,6 +162,10 @@ for bi, bm in enumerate(book_matches):
             entry["heading_text"] = heading
 
         all_sections.append(entry)
+
+# Insert Arrian's preface if extracted
+if preface_section:
+    all_sections.append(preface_section)
 
 # Sort
 def sort_key(s):

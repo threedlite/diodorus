@@ -108,6 +108,13 @@ for div in edition_div:
 print(f"Found {len(longus_divs)} Longus divs")
 
 # Process Longus divs — combine preface + main text
+# Skip epigraph divs (e.g. Shakespeare quote) that appear before the preface.
+# The preface div has type="commentary" subtype="preface"; anything before it
+# is decorative front matter, not part of the translation.
+preface_idx = next((i for i, d in enumerate(longus_divs)
+                     if d.get("type") == "commentary" or d.get("subtype") == "preface"), 0)
+longus_divs = longus_divs[preface_idx:]
+
 all_p_elements = []
 for div in longus_divs:
     div_type = div.get("type", "")

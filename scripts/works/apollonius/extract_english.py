@@ -60,13 +60,19 @@ for div in body.iter(f"{{{TEI_NS}}}div"):
         book_divs.append((div, titles))
 
 # Determine book boundaries from titles
+# Skip front-matter chapters (TOC, biography, arguments) before the first BOOK marker
 current_book = "1"
+seen_book_marker = False
 for div, titles in book_divs:
     # Check for BOOK markers
     for t in titles:
         m = re.match(r'BOOK\s+([IVXL]+)', t)
         if m and m.group(1) in ROMAN:
             current_book = str(ROMAN[m.group(1)])
+            seen_book_marker = True
+
+    if not seen_book_marker:
+        continue  # skip front matter before first BOOK marker
 
     # Skip preface/commentary divs
     div_type = div.get("type", "")

@@ -143,7 +143,7 @@ def main(work_name):
             with open(gr_path) as gf:
                 gr_data = json.load(gf)
             for s in gr_data["sections"]:
-                w = s.get("work", "")
+                w = s.get("work", "") or s.get("book", "")
                 # Try work_id field first, then extract from edition
                 sid = s.get("work_id", "")
                 if not sid and s.get("edition", ""):
@@ -207,65 +207,121 @@ def main(work_name):
         trans_div.set(f"{{{XML_NS}}}lang", "eng")
         trans_div.set("n", urn)
 
-        # Group English sections by book
-        from collections import defaultdict
-        en_by_book = defaultdict(list)
-        for s in english_data["sections"]:
-            # Only include sections from this work (for multi-work configs)
-            if len(work_ids) > 1 and wid in wid_to_work_names:
-                s_work = s.get("work", "")
-                if s_work and s_work not in wid_to_work_names[wid]:
-                    continue  # skip sections belonging to a different work
-            en_by_book[s["book"]].append(s)
+        div_per_source = config.get("xml_div_per_source_section", False)
 
-        # Build alignment lookup: english cts_ref -> list of greek cts_refs
-        # Multiple Greek sections can map to the same English section
-        # (via refinement), so collect all of them.
-        en_to_gr_list = {}
-        for a in alignments:
-            en_ref = a.get("english_cts_ref", a.get("english_section", ""))
-            gr_ref = a.get("greek_cts_ref")
-            if en_ref and gr_ref:
-                en_to_gr_list.setdefault(str(en_ref), []).append(gr_ref)
+        if div_per_source:
+            # One <div> per source (Greek) section that has a matched English
+            # translation.  The div n= is the Greek fable/section number.
+            # Unmatched Greek sections produce no div at all.
 
-        for book_key in sorted(en_by_book.keys(),
-                                key=lambda x: int(x) if x.isdigit() else x):
-            book_secs = en_by_book[book_key]
+            # Build lookup: greek_cts_ref -> english section data
+            en_by_ref = {}
+            for s in english_data["sections"]:
+                en_by_ref[str(s.get("cts_ref", s.get("section", "")))] = s
 
-            book_div = etree.SubElement(trans_div, f"{{{TEI_NS}}}div")
-            book_div.set("type", "textpart")
-            book_div.set("subtype", "book")
-            book_div.set("n", str(book_key))
+            # Build alignment lookup: greek_cts_ref -> english_cts_ref
+            gr_to_en = {}
+            for a in alignments:
+                gr_ref = a.get("greek_cts_ref")
+                en_ref = a.get("english_cts_ref", a.get("english_section", ""))
+                if gr_ref and en_ref:
+                    gr_to_en[str(gr_ref)] = str(en_ref)
 
-            for s in book_secs:
-                sec_n = s.get("section", s.get("cts_ref", ""))
+            # Load Greek sections to iterate in source order
+            gr_path = out_dir / "greek_sections.json"
+            with open(gr_path) as gf:
+                gr_data = json.load(gf)
+            gr_sections = gr_data if isinstance(gr_data, list) else gr_data.get("sections", [])
 
-                # Add milestones for all Greek references aligned to this section
-                gr_refs = en_to_gr_list.get(str(s.get("cts_ref", "")), [])
-                for gr_ref in gr_refs:
-                    ms = etree.SubElement(book_div, f"{{{TEI_NS}}}milestone")
-                    ms.set("unit", "section")
-                    ms.set("n", str(gr_ref))
+            emitted = 0
+            for gs in gr_sections:
+                gr_ref = str(gs.get("cts_ref", gs.get("section", "")))
+                en_ref = gr_to_en.get(gr_ref)
+                if not en_ref:
+                    continue
+                en_sec = en_by_ref.get(en_ref)
+                if not en_sec:
+                    continue
 
-                # Emit chapter heading if present
-                heading_text = s.get("heading_text")
-                if heading_text:
-                    head = etree.SubElement(book_div, f"{{{TEI_NS}}}head")
-                    head.text = heading_text
+                fable_div = etree.SubElement(trans_div, f"{{{TEI_NS}}}div")
+                fable_div.set("type", "textpart")
+                fable_div.set("subtype", "book")
+                fable_div.set("n", str(gr_ref))
 
-                p = etree.SubElement(book_div, f"{{{TEI_NS}}}p")
-                p.set("n", str(sec_n))
+                p = etree.SubElement(fable_div, f"{{{TEI_NS}}}p")
+                p.set("n", "1")
 
-                # Build mixed content with <note> elements for footnotes.
-                # The text field has footnote bodies inline after markers;
-                # text_for_embedding has markers stripped. We need text with
-                # markers but WITHOUT footnote bodies for the <p> content,
-                # then insert note bodies as <note> children.
-                section_notes = s.get("notes", [])
+                section_notes = en_sec.get("notes", [])
                 if section_notes:
-                    _build_p_with_notes(p, s["text"], section_notes, TEI_NS)
+                    _build_p_with_notes(p, en_sec["text"], section_notes, TEI_NS)
                 else:
-                    _build_p_with_inline_notes(p, s["text"], TEI_NS)
+                    _build_p_with_inline_notes(p, en_sec["text"], TEI_NS)
+
+                emitted += 1
+
+            print(f"  Emitted {emitted} fable divs (of {len(gr_sections)} Greek sections)")
+
+        else:
+            # Default: group English sections by book, with milestone markers
+            # linking to Greek CTS references.
+            from collections import defaultdict
+            en_by_book = defaultdict(list)
+            for s in english_data["sections"]:
+                # Only include sections from this work (for multi-work configs)
+                if len(work_ids) > 1 and wid in wid_to_work_names:
+                    s_work = s.get("work", "") or s.get("book", "")
+                    if s_work and s_work not in wid_to_work_names[wid]:
+                        continue  # skip sections belonging to a different work
+                en_by_book[s["book"]].append(s)
+
+            # Build alignment lookup: english cts_ref -> list of greek cts_refs
+            # Multiple Greek sections can map to the same English section
+            # (via refinement), so collect all of them.
+            en_to_gr_list = {}
+            for a in alignments:
+                en_ref = a.get("english_cts_ref", a.get("english_section", ""))
+                gr_ref = a.get("greek_cts_ref")
+                if en_ref and gr_ref:
+                    en_to_gr_list.setdefault(str(en_ref), []).append(gr_ref)
+
+            for book_key in sorted(en_by_book.keys(),
+                                    key=lambda x: int(x) if x.isdigit() else x):
+                book_secs = en_by_book[book_key]
+
+                book_div = etree.SubElement(trans_div, f"{{{TEI_NS}}}div")
+                book_div.set("type", "textpart")
+                book_div.set("subtype", "book")
+                book_div.set("n", str(book_key))
+
+                for s in book_secs:
+                    sec_n = s.get("section", s.get("cts_ref", ""))
+
+                    # Add milestones for all Greek references aligned to this section
+                    gr_refs = en_to_gr_list.get(str(s.get("cts_ref", "")), [])
+                    for gr_ref in gr_refs:
+                        ms = etree.SubElement(book_div, f"{{{TEI_NS}}}milestone")
+                        ms.set("unit", "section")
+                        ms.set("n", str(gr_ref))
+
+                    # Emit chapter heading if present
+                    heading_text = s.get("heading_text")
+                    if heading_text:
+                        head = etree.SubElement(book_div, f"{{{TEI_NS}}}head")
+                        head.text = heading_text
+
+                    p = etree.SubElement(book_div, f"{{{TEI_NS}}}p")
+                    p.set("n", str(sec_n))
+
+                    # Build mixed content with <note> elements for footnotes.
+                    # The text field has footnote bodies inline after markers;
+                    # text_for_embedding has markers stripped. We need text with
+                    # markers but WITHOUT footnote bodies for the <p> content,
+                    # then insert note bodies as <note> children.
+                    section_notes = s.get("notes", [])
+                    if section_notes:
+                        _build_p_with_notes(p, s["text"], section_notes, TEI_NS)
+                    else:
+                        _build_p_with_inline_notes(p, s["text"], TEI_NS)
 
         # Write
         tree = etree.ElementTree(tei)

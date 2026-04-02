@@ -26,6 +26,7 @@ root = tree.getroot()
 TEI_NS = "http://www.tei-c.org/ns/1.0"
 
 ROMAN = {r: i for i, r in enumerate(["I","II","III","IV","V","VI","VII"], 1)}
+ROMAN["IY"] = 4  # OCR typo for IV in theocritus_1878
 
 
 def extract_p_text(p_elem):
@@ -58,9 +59,9 @@ for div in edition_div:
 
     if any("MOSCHUS" in t and "SYRACUSAN" in t for t in title_texts):
         in_moschus = True
-    # Stop at metrical section or Epitaph of Bion (by Moschus, last idyll)
-    if in_moschus and any("BION" in t and "SMYRN" in t for t in title_texts):
-        in_moschus = False  # metrical section
+    elif in_moschus:
+        # The prose translations live in a single div; stop when we leave it.
+        break
 
     if not in_moschus: continue
 
@@ -68,7 +69,7 @@ for div in edition_div:
         elem_tag = etree.QName(elem.tag).localname if isinstance(elem.tag, str) else ""
         if elem_tag == "title" and elem.get("type") == "sub":
             title_text = (elem.text or "").strip()
-            m = re.match(r'IDYLL\s+([IVXL]+)', title_text)
+            m = re.match(r'IDYLL\s+([IVXLY]+)', title_text)
             if m and m.group(1) in ROMAN:
                 if current_idyll and current_paragraphs:
                     all_sections.append({

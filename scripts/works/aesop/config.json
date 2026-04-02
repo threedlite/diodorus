@@ -17,5 +17,6 @@
     "date": 1867
   },
   "output_dir": "build/aesop",
-  "cts_urn_prefix": "urn:cts:greekLit:tlg0096.tlg002"
+  "cts_urn_prefix": "urn:cts:greekLit:tlg0096.tlg002",
+  "xml_div_per_source_section": true
 }
