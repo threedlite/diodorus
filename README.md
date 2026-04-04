@@ -51,6 +51,25 @@ Create three files in `scripts/works/<name>/`:
 
 Then run: `python scripts/pipeline/run.py <name>`
 
+## Greek-English Concordance
+
+The alignment pipeline also produces a Greek-English concordance with
+synthetic lemma groupings — a statistically-derived bilingual dictionary
+built from all parallel text in the corpus.
+
+```bash
+python scripts/build_lexicon.py            # lexical table from 575 works
+python scripts/build_greek_contexts.py     # distributional vectors (351K words)
+python scripts/build_synthetic_lemmas.py   # unsupervised lemma groups
+python scripts/export_concordance.py       # CSV export (86K headwords, 580K+ rows)
+python scripts/lookup.py love              # reverse lookup tool
+```
+
+Output: `greek_english_concordance.csv` — every Greek content word with
+weighted English translation candidates, synthetic lemma assignments, and
+confidence scores. See [concordance_pipeline.md](concordance_pipeline.md)
+for full documentation.
+
 ## Full Documentation
 
 See [PROJECT_DOCUMENTATION.md](PROJECT_DOCUMENTATION.md) for complete details on

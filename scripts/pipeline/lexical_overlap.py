@@ -237,6 +237,43 @@ def build_lexical_table(aligned_pairs, min_cooccur=2, max_translations=10,
     return src2en, src_idf, en_idf, cooccur
 
 
+def build_reverse_index(aligned_pairs, min_cooccur=3):
+    """Build English→Greek co-occurrence index without English stopword filtering.
+
+    Used by the lookup tool to answer "what are the Greek words for X?"
+    for common English words (death, war, city) that are filtered from
+    the alignment-oriented src2en table.
+
+    Greek stopwords are still filtered (articles, particles, etc. aren't
+    useful lookup results).
+
+    Returns:
+        en2gr: dict mapping english_word → {greek_word: count}
+    """
+    from collections import defaultdict
+
+    cooccur = Counter()
+    for src_text, en_text in aligned_pairs:
+        src_words = extract_gr_words(src_text)
+        # Extract English words WITHOUT stopword filtering
+        en_words = set()
+        for w in EN_WORD_RE.findall(en_text):
+            if len(w) <= 2:
+                continue
+            en_words.add(w.lower())
+
+        for sw in src_words:
+            for ew in en_words:
+                cooccur[(sw, ew)] += 1
+
+    en2gr = defaultdict(dict)
+    for (sw, ew), count in cooccur.items():
+        if count >= min_cooccur:
+            en2gr[ew][sw] = count
+
+    return dict(en2gr)
+
+
 def lexical_overlap_score(src_text, en_text, src2en, src_idf):
     """Score a source/English text pair by IDF-weighted bilingual word overlap.
 

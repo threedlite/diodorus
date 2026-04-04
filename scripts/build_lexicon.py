@@ -24,7 +24,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "scripts" / "pipeline"))
 
-from lexical_overlap import build_lexical_table
+from lexical_overlap import build_lexical_table, build_reverse_index
 
 TEI_NS = "{http://www.tei-c.org/ns/1.0}"
 
@@ -259,6 +259,19 @@ def main():
     print(f"Stopwords: {len(gr_stops)} Greek, {len(en_stops)} English "
           f"(>{threshold:.0%} of {n_pairs_count} sections)")
     print(f"Saved: {stopwords_path}")
+
+    # Build unfiltered English→Greek reverse index for lookup tool.
+    # This includes common English words (death, war, city) that are
+    # filtered from the alignment-oriented src2en table.
+    print("\nBuilding reverse lookup index (no English stopwords)...")
+    en2gr = build_reverse_index(pairs, min_cooccur=3)
+    n_en = len(en2gr)
+    n_pairs_rev = sum(len(v) for v in en2gr.values())
+    reverse_path = PROJECT_ROOT / "build" / "en2gr_index.pkl"
+    with open(reverse_path, "wb") as f:
+        pickle.dump(en2gr, f)
+    print(f"Reverse index: {n_en} English words, {n_pairs_rev} pairs")
+    print(f"Saved: {reverse_path}")
 
 
 if __name__ == "__main__":

@@ -75,7 +75,22 @@ Lexical normalization: auto-calculated P95 per work
 ### Key files
 
 - `scripts/pipeline/lexical_overlap.py` — PMI-based bilingual lexical overlap
-- `scripts/build_lexicon.py` — builds `build/global_lexical_table.pkl` (40K Greek words)
+- `scripts/build_lexicon.py` — builds `build/global_lexical_table.pkl` (86K+ Greek words)
 - `scripts/word_count_report.py` — generates `final/word_count_comparison.md`
 - `scripts/alignment_quality_map.py` — clickable SVG quality maps
 - `plans/` — design docs, analysis, rollout notes
+
+### Concordance pipeline
+
+Separate pipeline that builds a Greek-English concordance with synthetic
+lemma groupings. See `concordance_pipeline.md` for full documentation.
+
+```bash
+python scripts/build_lexicon.py            # lexical table + reverse index
+python scripts/build_greek_contexts.py     # distributional vectors
+python scripts/build_synthetic_lemmas.py   # synthetic lemma groups
+python scripts/export_concordance.py       # CSV export
+python scripts/lookup.py <english_word>    # reverse lookup
+```
+
+Output: `greek_english_concordance.csv` (86K headwords, 580K+ rows, synthetic lemmas)
