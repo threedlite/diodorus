@@ -144,6 +144,7 @@ def build_lexical_table(aligned_pairs, min_cooccur=2, max_translations=10,
         src2en: dict mapping source_word → {english_word: normalized_weight}
         src_idf: dict mapping source_word → idf_weight
         en_idf: dict mapping english_word → idf_weight
+        cooccur: Counter mapping (source_word, english_word) → raw count
     """
     cooccur = Counter()
     src_df = Counter()
@@ -233,7 +234,7 @@ def build_lexical_table(aligned_pairs, min_cooccur=2, max_translations=10,
             normed = {ew: w / total2 for ew, w in normed.items()}
             src2en[sw] = normed
 
-    return src2en, src_idf, en_idf
+    return src2en, src_idf, en_idf, cooccur
 
 
 def lexical_overlap_score(src_text, en_text, src2en, src_idf):

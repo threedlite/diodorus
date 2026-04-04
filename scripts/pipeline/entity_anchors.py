@@ -139,7 +139,7 @@ def main(work_name):
             if gr_text and en_text:
                 aligned_pairs.append((gr_text, en_text))
 
-        src2en, src_idf, _ = build_lexical_table(aligned_pairs) if aligned_pairs else ({}, {}, {})
+        src2en, src_idf, *_ = build_lexical_table(aligned_pairs) if aligned_pairs else ({}, {}, {}, {})
         if src2en:
             print(f"  Per-work lexical table: {len(src2en)} words")
 

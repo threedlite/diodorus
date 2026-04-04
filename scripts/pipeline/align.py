@@ -804,7 +804,7 @@ def run_dp_alignment(config, greek_data, english_data, model):
             aligned_pairs.append((gr_text, en_text))
 
         if aligned_pairs:
-            src2en, src_idf, _ = build_lexical_table(aligned_pairs)
+            src2en, src_idf, *_ = build_lexical_table(aligned_pairs)
             if src2en:
                 print(f"  Lexical table: {len(src2en)} words")
                 # Build lexical matrix

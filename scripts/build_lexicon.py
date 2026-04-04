@@ -2,7 +2,8 @@
 """
 Build the global Greek→English lexical dictionary from:
 1. All parallel Greek-English works in Perseus (500+ works, ~30K section pairs)
-2. Our 35 aligned works (~22K section pairs)
+2. All parallel Greek-English works in First1KGreek (~40 works)
+3. Our 35 aligned works (~22K section pairs)
 
 Uses PMI (pointwise mutual information) to learn which Greek words
 translate to which English words based on co-occurrence in aligned text.
@@ -28,73 +29,90 @@ from lexical_overlap import build_lexical_table
 TEI_NS = "{http://www.tei-c.org/ns/1.0}"
 
 
-def collect_perseus_pairs():
-    """Collect (greek_text, english_text) pairs from all of Perseus.
+def _extract_by_chapter(xml_path):
+    """Extract text sections from a TEI XML file, keyed by CTS-style reference.
 
-    Extracts text at the chapter/section level from paired Greek-English
-    TEI XML files and matches them by CTS reference structure.
+    Shared by Perseus and First1KGreek collectors.
     """
     from lxml import etree
 
-    perseus_dir = PROJECT_ROOT / "data-sources" / "perseus" / "canonical-greekLit" / "data"
-    if not perseus_dir.exists():
-        return []
+    try:
+        tree = etree.parse(str(xml_path))
+    except Exception:
+        return {}
+    root = tree.getroot()
+    chapters = {}
+    for div in root.iter(f"{TEI_NS}div"):
+        subtype = div.get("subtype", "")
+        n = div.get("n", "")
+        if not n:
+            continue
+        parent = div.getparent()
+        book_n = ""
+        while parent is not None:
+            if isinstance(parent.tag, str) and parent.tag.endswith("div"):
+                if parent.get("subtype", "") == "book" and parent.get("n", ""):
+                    book_n = parent.get("n", "")
+                    break
+            parent = parent.getparent()
+        if subtype in ("chapter", "section", "card"):
+            text = " ".join(div.itertext()).strip()[:2000]
+            if len(text) > 30:
+                key = f"{book_n}.{n}" if book_n else n
+                chapters[key] = text
+    return chapters
 
-    def extract_by_chapter(xml_path):
-        try:
-            tree = etree.parse(str(xml_path))
-        except Exception:
-            return {}
-        root = tree.getroot()
-        chapters = {}
-        for div in root.iter(f"{TEI_NS}div"):
-            subtype = div.get("subtype", "")
-            n = div.get("n", "")
-            if not n:
-                continue
-            parent = div.getparent()
-            book_n = ""
-            while parent is not None:
-                if isinstance(parent.tag, str) and parent.tag.endswith("div"):
-                    if parent.get("subtype", "") == "book" and parent.get("n", ""):
-                        book_n = parent.get("n", "")
-                        break
-                parent = parent.getparent()
-            if subtype in ("chapter", "section", "card"):
-                text = " ".join(div.itertext()).strip()[:2000]
-                if len(text) > 30:
-                    key = f"{book_n}.{n}" if book_n else n
-                    chapters[key] = text
-        return chapters
+
+def _collect_parallel_pairs(corpus_dir, grc_glob, eng_glob, label):
+    """Collect (greek_text, english_text) pairs from a TEI corpus directory.
+
+    Walks author/work subdirectories looking for paired Greek-English XML files.
+    """
+    if not corpus_dir.exists():
+        print(f"  {label}: directory not found, skipping")
+        return []
 
     pairs = []
     works = 0
-    for author_dir in sorted(perseus_dir.iterdir()):
+    for author_dir in sorted(corpus_dir.iterdir()):
         if not author_dir.is_dir():
             continue
         for work_dir in sorted(author_dir.iterdir()):
             if not work_dir.is_dir():
                 continue
-            grc = [f for f in work_dir.glob("*grc*.xml") if f.name != "__cts__.xml"]
-            eng = [f for f in work_dir.glob("*eng*.xml") if f.name != "__cts__.xml"]
+            grc = [f for f in work_dir.glob(grc_glob) if f.name != "__cts__.xml"]
+            eng = [f for f in work_dir.glob(eng_glob) if f.name != "__cts__.xml"]
             if not grc or not eng:
                 continue
-            gr = extract_by_chapter(grc[0])
-            en = extract_by_chapter(eng[0])
+            gr = _extract_by_chapter(grc[0])
+            en = _extract_by_chapter(eng[0])
             common = set(gr.keys()) & set(en.keys())
             if len(common) >= 3:
                 works += 1
                 for key in common:
                     pairs.append((gr[key], en[key]))
 
-    print(f"  Perseus: {works} works, {len(pairs)} pairs")
-    return pairs
+    print(f"  {label}: {works} works, {len(pairs)} pairs")
+    return pairs, works
+
+
+def collect_perseus_pairs():
+    """Collect (greek_text, english_text) pairs from all of Perseus."""
+    perseus_dir = PROJECT_ROOT / "data-sources" / "perseus" / "canonical-greekLit" / "data"
+    return _collect_parallel_pairs(perseus_dir, "*grc*.xml", "*eng*.xml", "Perseus")
+
+
+def collect_first1k_pairs():
+    """Collect (greek_text, english_text) pairs from First1KGreek."""
+    f1k_dir = PROJECT_ROOT / "data-sources" / "greek_corpus" / "First1KGreek" / "data"
+    return _collect_parallel_pairs(f1k_dir, "*grc*.xml", "*eng*.xml", "First1KGreek")
 
 
 def collect_aligned_pairs(min_score=0.2):
     """Collect (greek_text, english_text) pairs from all works."""
     works_dir = PROJECT_ROOT / "scripts" / "works"
     pairs = []
+    works = 0
 
     for config_path in sorted(works_dir.glob("*/config.json")):
         with open(config_path) as f:
@@ -137,9 +155,10 @@ def collect_aligned_pairs(min_score=0.2):
                 work_count += 1
 
         if work_count:
+            works += 1
             print(f"  {cfg['name']}: {work_count} pairs")
 
-    return pairs
+    return pairs, works
 
 
 def quality_check(src2en):
@@ -175,15 +194,25 @@ def main():
     print("Building global lexical dictionary...\n")
 
     # Collect from Perseus (500+ parallel works)
-    perseus_pairs = collect_perseus_pairs()
+    perseus_pairs, perseus_works = collect_perseus_pairs()
+
+    # Collect from First1KGreek (~40 parallel works)
+    first1k_pairs, first1k_works = collect_first1k_pairs()
 
     # Collect from our aligned works
-    our_pairs = collect_aligned_pairs(min_score=0.2)
+    our_pairs, our_works = collect_aligned_pairs(min_score=0.2)
 
-    pairs = perseus_pairs + our_pairs
-    print(f"\nTotal pairs: {len(pairs)} ({len(perseus_pairs)} Perseus + {len(our_pairs)} ours)")
+    source_stats = [
+        {"source": "Perseus", "works": perseus_works, "pairs": len(perseus_pairs)},
+        {"source": "First1KGreek", "works": first1k_works, "pairs": len(first1k_pairs)},
+        {"source": "Project aligned works", "works": our_works, "pairs": len(our_pairs)},
+    ]
 
-    src2en, src_idf, en_idf = build_lexical_table(
+    pairs = perseus_pairs + first1k_pairs + our_pairs
+    print(f"\nTotal pairs: {len(pairs)} "
+          f"({len(perseus_pairs)} Perseus + {len(first1k_pairs)} First1KGreek + {len(our_pairs)} ours)")
+
+    src2en, src_idf, en_idf, raw_cooccur = build_lexical_table(
         pairs,
         min_cooccur=3,
         max_translations=10,
@@ -202,7 +231,8 @@ def main():
     out_path = PROJECT_ROOT / "build" / "global_lexical_table.pkl"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "wb") as f:
-        pickle.dump({"src2en": src2en, "src_idf": src_idf, "en_idf": en_idf}, f)
+        pickle.dump({"src2en": src2en, "src_idf": src_idf, "en_idf": en_idf,
+                     "cooccur": raw_cooccur, "source_stats": source_stats}, f)
     print(f"\nSaved: {out_path}")
 
     # Compute corpus-derived stopwords from word frequencies.
