@@ -18,13 +18,13 @@
 <rect x="300" y="50" width="12" height="12" fill="#c9493b" rx="2"/>
 <text x="316" y="60" class="legend-text">Low (&lt;0.2)</text>
 <text x="20" y="92" class="label">Book 1</text>
-<text x="988" y="92" class="stats">n=466  avg=0.057  H=5%  M=4%  L=91%</text>
+<text x="988" y="92" class="stats">n=466  avg=0.056  H=5%  M=3%  L=91%</text>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-1"><title>1.1 (0.50)</title><rect x="180" y="80" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-2"><title>en:1.2 (0.00)</title><rect x="184" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-3"><title>en:1.3 (0.00)</title><rect x="188" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-4"><title>en:1.4 (0.00)</title><rect x="192" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-5"><title>en:1.5 (0.00)</title><rect x="196" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-9"><title>1.9 (0.13)</title><rect x="200" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-9"><title>1.9 (0.10)</title><rect x="200" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-17"><title>1.17 (0.06)</title><rect x="204" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-7"><title>en:1.7 (0.00)</title><rect x="208" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-28"><title>1.28 (0.75)</title><rect x="212" y="80" width="4" height="15" fill="#2d8a4e"/></a>
@@ -48,7 +48,7 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-26"><title>en:1.26 (0.00)</title><rect x="284" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-27"><title>en:1.27 (0.00)</title><rect x="288" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-28"><title>en:1.28 (0.00)</title><rect x="292" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-80"><title>1.80 (0.29)</title><rect x="296" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-80"><title>1.80 (0.24)</title><rect x="296" y="80" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-30"><title>en:1.30 (0.00)</title><rect x="300" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-31"><title>en:1.31 (0.00)</title><rect x="304" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-88"><title>1.88 (0.00)</title><rect x="308" y="80" width="4" height="15" fill="#c9493b"/></a>
@@ -57,7 +57,7 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-35"><title>en:1.35 (0.00)</title><rect x="320" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-36"><title>en:1.36 (0.00)</title><rect x="324" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-37"><title>en:1.37 (0.00)</title><rect x="328" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-96"><title>1.96 (0.16)</title><rect x="332" y="80" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-96"><title>1.96 (0.12)</title><rect x="332" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-39"><title>en:1.39 (0.00)</title><rect x="336" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-40"><title>en:1.40 (0.00)</title><rect x="340" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-41"><title>en:1.41 (0.00)</title><rect x="344" y="80" width="4" height="15" fill="#c9493b"/></a>
@@ -68,7 +68,7 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-46"><title>en:1.46 (0.00)</title><rect x="364" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-47"><title>en:1.47 (0.00)</title><rect x="368" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-48"><title>en:1.48 (0.00)</title><rect x="372" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-113"><title>1.113 (0.92)</title><rect x="376" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-113"><title>1.113 (0.90)</title><rect x="376" y="80" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-122"><title>1.122 (0.00)</title><rect x="380" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-51"><title>en:1.51 (0.00)</title><rect x="384" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-130"><title>1.130 (0.00)</title><rect x="388" y="80" width="4" height="15" fill="#c9493b"/></a>
@@ -88,7 +88,7 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-66"><title>en:1.66 (0.00)</title><rect x="444" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-67"><title>en:1.67 (0.00)</title><rect x="448" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-68"><title>en:1.68 (0.00)</title><rect x="452" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-165"><title>1.165 (0.64)</title><rect x="456" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-165"><title>1.165 (0.66)</title><rect x="456" y="80" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-173"><title>1.173 (0.05)</title><rect x="460" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-71"><title>en:1.71 (0.00)</title><rect x="464" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-72"><title>en:1.72 (0.00)</title><rect x="468" y="80" width="4" height="15" fill="#c9493b"/></a>
@@ -101,9 +101,9 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-79"><title>en:1.79 (0.00)</title><rect x="496" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-80"><title>en:1.80 (0.00)</title><rect x="500" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-81"><title>en:1.81 (0.00)</title><rect x="504" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-199"><title>1.199 (0.40)</title><rect x="508" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-199"><title>1.199 (0.34)</title><rect x="508" y="80" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-83"><title>en:1.83 (0.00)</title><rect x="512" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-204"><title>1.204 (0.76)</title><rect x="516" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-204"><title>1.204 (0.60)</title><rect x="516" y="80" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-219"><title>1.219 (0.00)</title><rect x="520" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-86"><title>en:1.86 (0.00)</title><rect x="524" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-87"><title>en:1.87 (0.00)</title><rect x="528" y="80" width="4" height="15" fill="#c9493b"/></a>
@@ -147,10 +147,10 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-125"><title>en:1.125 (0.00)</title><rect x="680" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-126"><title>en:1.126 (0.00)</title><rect x="684" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-127"><title>en:1.127 (0.00)</title><rect x="688" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-368"><title>1.368 (0.40)</title><rect x="692" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-368"><title>1.368 (0.45)</title><rect x="692" y="80" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-377"><title>1.377 (0.30)</title><rect x="696" y="80" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-130"><title>en:1.130 (0.00)</title><rect x="700" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-385"><title>1.385 (0.31)</title><rect x="704" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-385"><title>1.385 (0.35)</title><rect x="704" y="80" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-132"><title>en:1.132 (0.00)</title><rect x="708" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-396"><title>1.396 (0.00)</title><rect x="712" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-134"><title>en:1.134 (0.00)</title><rect x="716" y="80" width="4" height="15" fill="#c9493b"/></a>
@@ -194,10 +194,10 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-172"><title>en:1.172 (0.00)</title><rect x="868" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-173"><title>en:1.173 (0.00)</title><rect x="872" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-174"><title>en:1.174 (0.00)</title><rect x="876" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-470"><title>1.470 (0.56)</title><rect x="880" y="80" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-470"><title>1.470 (0.66)</title><rect x="880" y="80" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-479"><title>1.479 (0.00)</title><rect x="884" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-177"><title>en:1.177 (0.00)</title><rect x="888" y="80" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-490"><title>1.490 (0.46)</title><rect x="892" y="80" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-490"><title>1.490 (0.64)</title><rect x="892" y="80" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-179"><title>en:1.179 (0.00)</title><rect x="896" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-500"><title>1.500 (0.01)</title><rect x="900" y="80" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-181"><title>en:1.181 (0.00)</title><rect x="904" y="80" width="4" height="15" fill="#c9493b"/></a>
@@ -235,16 +235,16 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-213"><title>en:1.213 (0.00)</title><rect x="232" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-626"><title>1.626 (0.00)</title><rect x="236" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-636"><title>1.636 (1.00)</title><rect x="240" y="96" width="4" height="15" fill="#2d8a4e"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-646"><title>1.646 (0.73)</title><rect x="244" y="96" width="4" height="15" fill="#2d8a4e"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-655"><title>1.655 (0.77)</title><rect x="248" y="96" width="4" height="15" fill="#2d8a4e"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-665"><title>1.665 (0.21)</title><rect x="252" y="96" width="4" height="15" fill="#e8b83d"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-683"><title>1.683 (0.76)</title><rect x="256" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-646"><title>1.646 (0.63)</title><rect x="244" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-655"><title>1.655 (1.00)</title><rect x="248" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-665"><title>1.665 (0.36)</title><rect x="252" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-683"><title>1.683 (0.71)</title><rect x="256" y="96" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-692"><title>1.692 (0.04)</title><rect x="260" y="96" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-706"><title>1.706 (0.93)</title><rect x="264" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-706"><title>1.706 (0.85)</title><rect x="264" y="96" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-719"><title>1.719 (1.00)</title><rect x="268" y="96" width="4" height="15" fill="#2d8a4e"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-727"><title>1.727 (0.91)</title><rect x="272" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-727"><title>1.727 (0.65)</title><rect x="272" y="96" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-220"><title>en:1.220 (0.00)</title><rect x="276" y="96" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-735"><title>1.735 (0.33)</title><rect x="280" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-735"><title>1.735 (0.45)</title><rect x="280" y="96" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-744"><title>1.744 (0.00)</title><rect x="284" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-223"><title>en:1.223 (0.00)</title><rect x="288" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-224"><title>en:1.224 (0.00)</title><rect x="292" y="96" width="4" height="15" fill="#c9493b"/></a>
@@ -311,7 +311,7 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-285"><title>en:1.285 (0.00)</title><rect x="536" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-845"><title>1.845 (0.91)</title><rect x="540" y="96" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-854"><title>1.854 (0.19)</title><rect x="544" y="96" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-860"><title>1.860 (0.12)</title><rect x="548" y="96" width="4" height="15" fill="#c9493b"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-860"><title>1.860 (0.14)</title><rect x="548" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-868"><title>1.868 (0.24)</title><rect x="552" y="96" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-290"><title>en:1.290 (0.00)</title><rect x="556" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-291"><title>en:1.291 (0.00)</title><rect x="560" y="96" width="4" height="15" fill="#c9493b"/></a>
@@ -319,7 +319,7 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-293"><title>en:1.293 (0.00)</title><rect x="568" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-294"><title>en:1.294 (0.00)</title><rect x="572" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-295"><title>en:1.295 (0.00)</title><rect x="576" y="96" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-885"><title>1.885 (0.65)</title><rect x="580" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-885"><title>1.885 (0.58)</title><rect x="580" y="96" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-893"><title>1.893 (0.00)</title><rect x="584" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-298"><title>en:1.298 (0.00)</title><rect x="588" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-299"><title>en:1.299 (0.00)</title><rect x="592" y="96" width="4" height="15" fill="#c9493b"/></a>
@@ -361,11 +361,11 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-959"><title>1.959 (0.00)</title><rect x="736" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-336"><title>en:1.336 (0.00)</title><rect x="740" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-337"><title>en:1.337 (0.00)</title><rect x="744" y="96" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-967"><title>1.967 (0.68)</title><rect x="748" y="96" width="4" height="15" fill="#2d8a4e"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-971"><title>1.971 (0.86)</title><rect x="752" y="96" width="4" height="15" fill="#2d8a4e"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-986"><title>1.986 (0.57)</title><rect x="756" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-967"><title>1.967 (0.56)</title><rect x="748" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-971"><title>1.971 (0.74)</title><rect x="752" y="96" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-986"><title>1.986 (0.72)</title><rect x="756" y="96" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-995"><title>1.995 (0.29)</title><rect x="760" y="96" width="4" height="15" fill="#e8b83d"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-1000"><title>1.1000 (0.46)</title><rect x="764" y="96" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-1000"><title>1.1000 (0.34)</title><rect x="764" y="96" width="4" height="15" fill="#e8b83d"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-1008"><title>1.1008 (0.00)</title><rect x="768" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-344"><title>en:1.344 (0.00)</title><rect x="772" y="96" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-345"><title>en:1.345 (0.00)</title><rect x="776" y="96" width="4" height="15" fill="#c9493b"/></a>
@@ -457,10 +457,10 @@
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-431"><title>en:1.431 (0.00)</title><rect x="320" y="112" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-432"><title>en:1.432 (0.00)</title><rect x="324" y="112" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-433"><title>en:1.433 (0.00)</title><rect x="328" y="112" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-1162"><title>1.1162 (0.92)</title><rect x="332" y="112" width="4" height="15" fill="#2d8a4e"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-1162"><title>1.1162 (0.74)</title><rect x="332" y="112" width="4" height="15" fill="#2d8a4e"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-1174"><title>1.1174 (0.91)</title><rect x="336" y="112" width="4" height="15" fill="#2d8a4e"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-1182"><title>1.1182 (0.20)</title><rect x="340" y="112" width="4" height="15" fill="#c9493b"/></a>
-<a href="tlg0019.tlg001.perseus-eng80.html#s1-1190"><title>1.1190 (0.40)</title><rect x="344" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-1182"><title>1.1182 (0.40)</title><rect x="340" y="112" width="4" height="15" fill="#e8b83d"/></a>
+<a href="tlg0019.tlg001.perseus-eng80.html#s1-1190"><title>1.1190 (0.20)</title><rect x="344" y="112" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-438"><title>en:1.438 (0.00)</title><rect x="348" y="112" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#sen:1-439"><title>en:1.439 (0.00)</title><rect x="352" y="112" width="4" height="15" fill="#c9493b"/></a>
 <a href="tlg0019.tlg001.perseus-eng80.html#s1-1200"><title>1.1200 (0.00)</title><rect x="356" y="112" width="4" height="15" fill="#c9493b"/></a>
@@ -489,8 +489,8 @@
 <text x="180" y="153" class="warn">⚠ 1.1069 → en:1.433  (56 sections, avg=0.001)</text>
 <text x="180" y="167" class="warn">⚠ 1.1008 → en:1.376  (34 sections, avg=0.000)</text>
 <line x1="20" y1="181" x2="1200" y2="181" stroke="#ccc" stroke-width="1"/>
-<text x="20" y="201" class="total">TOTAL: 466 sections   avg=0.057   High=5%   Med=4%   Low=91%</text>
-<rect x="20" y="208" width="60.772532188841204" height="10" fill="#2d8a4e" rx="2"/>
-<rect x="80.77253218884121" y="208" width="43.047210300429185" height="10" fill="#e8b83d"/>
-<rect x="123.8197424892704" y="208" width="1076.1802575107297" height="10" fill="#c9493b" rx="2"/>
+<text x="20" y="201" class="total">TOTAL: 466 sections   avg=0.056   High=5%   Med=3%   Low=91%</text>
+<rect x="20" y="208" width="63.30472103004292" height="10" fill="#2d8a4e" rx="2"/>
+<rect x="83.30472103004291" y="208" width="40.51502145922747" height="10" fill="#e8b83d"/>
+<rect x="123.81974248927038" y="208" width="1076.1802575107297" height="10" fill="#c9493b" rx="2"/>
 </svg>

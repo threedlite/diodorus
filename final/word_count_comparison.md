@@ -4,41 +4,41 @@ Ranked by how close the source and English word counts are per work (ratio = min
 
 | Rank | Work | Author | Source Words | English Words | Ratio | % Diff |
 |------|------|--------|------------:|-------------:|------:|-------:|
-| 1 | Daphnis and Chloe | Longus | 22,066 | 23,489 | 0.939 | 6.2% |
-| 2 | Fabulae | Aesop | 50,894 | 46,717 | 0.918 | 8.6% |
-| 3 | Leucippe and Clitophon | Achilles Tatius | 47,339 | 53,833 | 0.879 | 12.8% |
-| 4 | Thesmophoriazusae | Aristophanes | 7,709 | 6,655 | 0.863 | 14.7% |
-| 5 | Enneads | Plotinus | 237,109 | 285,963 | 0.829 | 18.7% |
-| 6 | Aethiopica | Heliodorus | 85,005 | 103,772 | 0.819 | 19.9% |
-| 7 | Acharnians | Aristophanes | 7,835 | 6,340 | 0.809 | 21.1% |
-| 8 | Cynegeticus | Arrian | 6,669 | 8,379 | 0.796 | 22.7% |
-| 9 | Epigrams | Theocritus | 1,947 | 1,503 | 0.772 | 25.7% |
-| 10 | Anabasis of Alexander | Arrian | 86,097 | 114,402 | 0.753 | 28.2% |
-| 11 | Roman Antiquities | Dionysius of Halicarnassus | 312,704 | 420,726 | 0.743 | 29.5% |
-| 12 | Characters | Theophrastus | 7,438 | 10,220 | 0.728 | 31.5% |
-| 13 | Lysistrata | Aristophanes | 8,634 | 6,202 | 0.718 | 32.8% |
-| 14 | Knights | Aristophanes | 9,767 | 6,948 | 0.711 | 33.7% |
-| 15 | Constitution of the Athenians | Aristotle | 18,186 | 26,109 | 0.697 | 35.8% |
-| 16 | Hymn to the Mother of the Gods | Julian | 6,323 | 9,095 | 0.695 | 36.0% |
-| 17 | Meditations (Ad Se Ipsum) | Marcus Aurelius | 32,627 | 47,641 | 0.685 | 37.4% |
-| 18 | Hymn to King Helios | Julian | 8,204 | 12,250 | 0.670 | 39.6% |
-| 19 | Argonautica | Apollonius Rhodius | 43,564 | 65,555 | 0.665 | 40.3% |
-| 20 | Bibliotheca Historica | Diodorus Siculus | 419,242 | 632,502 | 0.663 | 40.6% |
-| 21 | Refutatio Omnium Haeresium (Philosophumena) | Hippolytus | 129,199 | 79,839 | 0.618 | 47.2% |
-| 22 | Thebaid / Achilleid | Statius | 70,111 | 120,941 | 0.580 | 53.2% |
-| 23 | Plutus | Aristophanes | 8,641 | 4,986 | 0.577 | 53.6% |
-| 24 | Peace (Pax) | Aristophanes | 8,746 | 15,361 | 0.569 | 54.9% |
-| 25 | Wasps (Vespae) | Aristophanes | 10,730 | 5,866 | 0.547 | 58.6% |
-| 26 | Ecclesiazusae | Aristophanes | 7,937 | 15,812 | 0.502 | 66.3% |
-| 27 | Secret History (Anecdota) | Procopius | 35,151 | 77,010 | 0.456 | 74.6% |
-| 28 | Epistulae | Alciphron | 47,775 | 21,410 | 0.448 | 76.2% |
-| 29 | Frogs (Ranae) | Aristophanes | 9,638 | 21,898 | 0.440 | 77.8% |
-| 30 | De Compositione Verborum | Dionysius of Halicarnassus | 22,891 | 69,647 | 0.329 | 101.1% |
-| 31 | Idylls * | Moschus | 3,794 | 11,549 | 0.329 | 101.1% |
-| 32 | History of the Wars | Procopius | 246,635 | 859,718 | 0.287 | 110.8% |
-| 33 | De Vita Pythagorica / De Mysteriis | Iamblichus | 81,370 | 453,587 | 0.179 | 139.2% |
-| 34 | Idylls * | Bion of Phlossa | 2,022 | 11,301 | 0.179 | 139.3% |
-| 35 | Idylls | Theocritus | 21,796 | 157,945 | 0.138 | 151.5% |
+| 1 | Fabulae | Aesop | 50,382 | 46,995 | 0.933 | 7.0% |
+| 2 | Daphnis and Chloe | Longus | 21,951 | 23,617 | 0.929 | 7.3% |
+| 3 | Leucippe and Clitophon | Achilles Tatius | 47,173 | 54,085 | 0.872 | 13.7% |
+| 4 | Thesmophoriazusae | Aristophanes | 7,632 | 6,655 | 0.872 | 13.7% |
+| 5 | Acharnians | Aristophanes | 7,753 | 6,353 | 0.819 | 19.8% |
+| 6 | Enneads | Plotinus | 234,864 | 287,289 | 0.818 | 20.1% |
+| 7 | Aethiopica | Heliodorus | 84,953 | 104,688 | 0.811 | 20.8% |
+| 8 | Cynegeticus | Arrian | 6,620 | 8,382 | 0.790 | 23.5% |
+| 9 | Epigrams | Theocritus | 1,935 | 1,508 | 0.779 | 24.8% |
+| 10 | Anabasis of Alexander | Arrian | 85,636 | 114,611 | 0.747 | 28.9% |
+| 11 | Roman Antiquities | Dionysius of Halicarnassus | 310,725 | 421,218 | 0.738 | 30.2% |
+| 12 | Lysistrata | Aristophanes | 8,520 | 6,211 | 0.729 | 31.3% |
+| 13 | Knights | Aristophanes | 9,684 | 6,988 | 0.722 | 32.3% |
+| 14 | Characters | Theophrastus | 7,372 | 10,243 | 0.720 | 32.6% |
+| 15 | Hymn to the Mother of the Gods | Julian | 6,299 | 9,085 | 0.693 | 36.2% |
+| 16 | Constitution of the Athenians | Aristotle | 18,032 | 26,141 | 0.690 | 36.7% |
+| 17 | Meditations (Ad Se Ipsum) | Marcus Aurelius | 32,406 | 47,792 | 0.678 | 38.4% |
+| 18 | Hymn to King Helios | Julian | 8,158 | 12,273 | 0.665 | 40.3% |
+| 19 | Argonautica | Apollonius Rhodius | 43,391 | 65,837 | 0.659 | 41.1% |
+| 20 | Bibliotheca Historica | Diodorus Siculus | 417,026 | 633,644 | 0.658 | 41.2% |
+| 21 | Refutatio Omnium Haeresium (Philosophumena) | Hippolytus | 129,601 | 80,275 | 0.619 | 47.0% |
+| 22 | Plutus | Aristophanes | 8,530 | 4,998 | 0.586 | 52.2% |
+| 23 | Thebaid / Achilleid | Statius | 70,111 | 120,941 | 0.580 | 53.2% |
+| 24 | Peace (Pax) | Aristophanes | 8,630 | 15,368 | 0.562 | 56.2% |
+| 25 | Ecclesiazusae | Aristophanes | 7,859 | 14,393 | 0.546 | 58.7% |
+| 26 | Wasps (Vespae) | Aristophanes | 10,571 | 5,736 | 0.543 | 59.3% |
+| 27 | Epistulae | Alciphron | 47,629 | 21,599 | 0.453 | 75.2% |
+| 28 | Frogs (Ranae) | Aristophanes | 9,522 | 21,906 | 0.435 | 78.8% |
+| 29 | Idylls * | Moschus | 3,795 | 9,091 | 0.417 | 82.2% |
+| 30 | Secret History (Anecdota) | Procopius | 34,865 | 85,055 | 0.410 | 83.7% |
+| 31 | De Compositione Verborum | Dionysius of Halicarnassus | 22,782 | 69,807 | 0.326 | 101.6% |
+| 32 | History of the Wars | Procopius | 244,944 | 867,204 | 0.282 | 111.9% |
+| 33 | Idylls * | Bion of Phlossa | 2,011 | 11,313 | 0.178 | 139.6% |
+| 34 | De Vita Pythagorica / De Mysteriis | Iamblichus | 80,914 | 459,158 | 0.176 | 140.1% |
+| 35 | Idylls | Theocritus | 21,649 | 158,073 | 0.137 | 151.8% |
 
 ## Notes
 

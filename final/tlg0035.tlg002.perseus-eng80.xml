@@ -24,6 +24,12 @@
     <body>
       <div type="translation" xml:lang="eng" n="urn:cts:greekLit:tlg0035.tlg002.perseus-eng80">
         <div type="textpart" subtype="book" n="2">
+          <milestone unit="section" n="1.18"/>
+          <milestone unit="section" n="1.26"/>
+          <milestone unit="section" n="2.1"/>
+          <milestone unit="section" n="2.10"/>
+          <milestone unit="section" n="2.18"/>
+          <milestone unit="section" n="2.27"/>
           <milestone unit="section" n="2.37"/>
           <milestone unit="section" n="2.46"/>
           <milestone unit="section" n="2.55"/>
