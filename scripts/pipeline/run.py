@@ -287,6 +287,16 @@ def run_work(work_name, previous_metrics=None):
                  [sys.executable, "scripts/alignment_quality_map.py",
                   "--prefix", cts_stem, align_json])
 
+    # Step 7b: Reading PDF — one per parallel HTML
+    for wid in work_ids:
+        cts_stem = f"{tlg_id}.{wid}.perseus-eng80"
+        html_path = PROJECT_ROOT / out_dir / f"{cts_stem}.html"
+        pdf_path = PROJECT_ROOT / out_dir / f"{cts_stem}.pdf"
+        if html_path.exists():
+            run_step(f"Reading PDF ({cts_stem})",
+                     [sys.executable, "scripts/html_to_pdf.py",
+                      str(html_path), "-o", str(pdf_path)])
+
     # Step 7: Integrity Check
     run_step("Integrity Check",
              [sys.executable, "scripts/verify_alignment_integrity.py", work_name])

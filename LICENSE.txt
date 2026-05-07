@@ -164,3 +164,11 @@ consistent with the ShareAlike requirement of the Perseus and Wikisource sources
 - Translator: Anonymous (Athenian Society, 1896)
 - License: Public domain in the US (published 1896)
 - Contents: Plain text translation of Procopius Secret History (Anecdota)
+
+#### Walter Miller — Cicero, De Officiis (1913)
+- Path: data-sources/gutenberg/cicero_de_officiis/pg47001.txt
+- Source: Project Gutenberg, ebook #47001
+  https://www.gutenberg.org/ebooks/47001
+- Translator: Walter Miller (1864–1949)
+- License: Public domain in the US (published 1913, Loeb Classical Library)
+- Contents: Bilingual Latin/English edition of De Officiis

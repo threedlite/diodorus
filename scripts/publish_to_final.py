@@ -33,10 +33,10 @@ def publish(pipeline_name, output_dir):
 
     # Only publish files matching the documented naming patterns:
     #   *.perseus-eng80.xml        — Perseus-compatible TEI translation
+    #   *.perseus-eng80.html       — parallel-text reading HTML
+    #   *.perseus-eng80.pdf        — parallel-text reading PDF
+    #   *.perseus-eng80.svg        — quality heatmap
     #   __cts__eng80_fragment.xml  — CTS catalog entry
-    #   alignment_*_perseus.xml    — standoff alignment (Perseus source)
-    #   alignment_*_f1k.xml        — standoff alignment (First1KGreek source)
-    #   alignment_quality_map_*.svg — quality heatmap
     copied = 0
     for src in sorted(output_dir.glob("*")):
         name = src.name
@@ -47,6 +47,8 @@ def publish(pipeline_name, output_dir):
         elif name.endswith(".perseus-eng80.svg"):
             publish = True
         elif name.endswith(".perseus-eng80.html"):
+            publish = True
+        elif name.endswith(".perseus-eng80.pdf"):
             publish = True
         elif name.startswith("__cts__eng80") and name.endswith(".xml"):
             publish = True

@@ -1,0 +1,20 @@
+{
+  "name": "cicero_de_officiis",
+  "author": "Cicero",
+  "work_title": "De Officiis",
+  "source_language": "latin",
+  "alignment_mode": "dp",
+  "greek_source": {
+    "type": "perseus",
+    "tlg_id": "phi0474",
+    "work_id": "phi055"
+  },
+  "english_source": {
+    "type": "gutenberg",
+    "ebook_id": 47001,
+    "translator": "Walter Miller",
+    "date": 1913
+  },
+  "output_dir": "build/cicero_de_officiis",
+  "cts_urn_prefix": "urn:cts:latinLit:phi0474.phi055"
+}
